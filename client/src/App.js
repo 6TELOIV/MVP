@@ -1,19 +1,18 @@
 import React from 'react';
 import { Route, Switch, Redirect  } from 'react-router-dom';
-import Home from "./views/Home/Home";
-import NotFound from "./views/NotFound";
-import NavBar from "./components/Header/NavBar";
+import Landing from "./pages/Landing";
+//import NotFound from "./views/NotFound";
 
+//<Route component={NotFound}/>
 const App = () => {
   return (
     <div>
-      <NavBar />
       <Switch>
-        <Route exact path="/Home" component={Home} />
+        <Route exact path="/Landing" component={Landing} />
         <Route exact path="/">
-          <Redirect to="/Home" />
+          <Redirect to="/Landing" />
         </Route>
-        <Route component={NotFound}/>
+        
       </Switch>
     </div>
   );
