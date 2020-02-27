@@ -1,19 +1,26 @@
-import mongoose from 'mongoose';
+import mongoose, { Mongoose } from 'mongoose';
 
 const userSchema = new mongoose.Schema({
-    code: {
-      type: String, 
-      required: true
-    },
     name: {
-      type: String, 
-      required: true
+        type: String, 
+        required: true
     },
-    coordinates: {
-      latitude: mongoose.Number, 
-      longitude: mongoose.Number
+    username: {
+        type: String,
+        required: true
     },
-    address: String
+    house: {
+        type: Mongoogse.Number,
+        required: true,
+        min: 1,
+        max: 12
+    },
+    sign: {
+        type: Mongoose.Number, 
+        required: true,
+        min: 1,
+        max: 12
+    }
 
 });
 
