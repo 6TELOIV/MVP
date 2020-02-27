@@ -1,4 +1,4 @@
-import mongoose, { Mongoose } from 'mongoose';
+import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -10,13 +10,13 @@ const userSchema = new mongoose.Schema({
         required: true
     },
     house: {
-        type: Mongoogse.Number,
+        type: mongoose.Number,
         required: true,
         min: 1,
         max: 12
     },
     sign: {
-        type: Mongoose.Number, 
+        type: mongoose.Number, 
         required: true,
         min: 1,
         max: 12
