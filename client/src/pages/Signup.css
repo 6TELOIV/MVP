@@ -4,6 +4,5 @@ body{
     font-family: sans-serif;
     background-image: url(../assets/tempBG.jpg);
     background-attachment: fixed;
-    background-size: cover;
-    
+    background-size: cover;   
 }
