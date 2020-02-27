@@ -1,6 +1,7 @@
 import swisseph from 'swisseph';
 
 export const signUp = (req, res) => {
+  console.log(req.results);
   res.send(req.body);
 }
 
