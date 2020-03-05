@@ -1,16 +1,15 @@
-import React from 'react';
+import React, { Fragment, useState } from "react";
 import './Signup.css';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import { KeyboardDatePicker } from "@material-ui/pickers";
+import { DatePicker, MuiPickersUtilsProvider, TimePicker } from "@material-ui/pickers";
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import DateFnsUtils from '@date-io/date-fns';
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -38,6 +37,7 @@ const useStyles = makeStyles(theme => ({
 
 function Signup(){
     const classes = useStyles();
+    const [selectedDate, handleDateChange] = useState(new Date());
 
     return(
         <Container component="main" maxWidth="xs" className={classes.ok}>
@@ -73,9 +73,35 @@ function Signup(){
                     autoComplete="email"
                 />
                 </Grid>
+
                 <Grid item xs={12}>
-                
+                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <DatePicker
+                      disableFuture
+                      openTo="year"
+                      format="dd/MM/yyyy"
+                      label="Date of Birth"
+                      views={["year", "month", "date"]}
+                      value={selectedDate}
+                      onChange={handleDateChange}
+                    />
+                  </MuiPickersUtilsProvider>
+                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <TimePicker autoOk label="Time of Birth" value={selectedDate} onChange={handleDateChange} />
+                  </MuiPickersUtilsProvider>
                 </Grid>
+
+                <Grid item xs={12}>
+                  <TextField
+                      variant="outlined"
+                      required
+                      fullWidth
+                      id="place"
+                      label="Birthplace"
+                      name="place"
+                  />
+                </Grid>
+
             </Grid>
             
             <Button
