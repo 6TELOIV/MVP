@@ -1,15 +1,39 @@
 import swisseph from 'swisseph';
 
+/*
+ * req: {
+ *   long,
+ *   lat,
+ *   name,
+ *   email,
+ *   birthday [UTC i.e. Date.getTime() date and time]
+ *     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/getTime
+ * }
+ */
 export const signUp = (req, res) => {
-  console.log(req.results);
+  let flag = swisseph.SEFLG_SPEED | swisseph.SEFLG_MOSEPH;
+
+  let date = new Date(0);
+  date.setUTCSeconds(req.body.birthday);
+  let year = date.getFullYear();
+  let month = date.getMonth() + 1;
+  let day = date.getDate();
+  let hour = date.getHours() + (date.getMinutes() / 60);
+  
+  let julday_ut = swisseph.swe_julday (year, month, day, hour, swisseph.SE_GREG_CAL);
+  console.log ('Julian UT:', julday_ut);
+  let house = swisseph.swe_houses (julday_ut, req.body.lat, req.body.long, 'W').house[0] / 30;
+  console.log('Houses: ' + house);
+  let sunHouse = Math.floor(swisseph.swe_calc_ut(julday_ut, swisseph.SE_SUN, flag).longitude / 30);
+  console.log('Sun House: ' + sunHouse);
   res.send(req.body);
 }
 
+/*
 // Test date
 var date = {year: 1915, month: 3, day: 25, hour: 2.48};
 console.log ('Date:', date);
 
-var flag = swisseph.SEFLG_SPEED | swisseph.SEFLG_MOSEPH;
 
 // path to ephemeris data
 //swisseph.swe_set_ephe_path (__dirname + '/../ephe');
@@ -29,7 +53,7 @@ let logbody = function (name, body) {
     var lang30 = lang - house * 30;
 
 	console.log (name + ':', body.longitude, '|', strtime (lang30), '|', house, body.longitudeSpeed < 0 ? 'R' : '');
-//    console.log (name + ' info:', body);
+    console.log (name + ' info:', body);
 };
 
 // Julian day
@@ -46,7 +70,7 @@ swisseph.swe_julday (date.year, date.month, date.day, date.hour, swisseph.SE_GRE
 	});
 	
 	swisseph.swe_houses (julday_ut, 24.06, 56.57, '0', function (result) {
-		console.log ("Houses:", result);
+		console.log ("Houses: ", result);
 	});
 
 	// Sun position
@@ -79,4 +103,4 @@ swisseph.swe_julday (date.year, date.month, date.day, date.hour, swisseph.SE_GRE
 	swisseph.swe_calc_ut (julday_ut, swisseph.SE_CHIRON, flag, function (body) {
         logbody ('Chiron', body);
 	});
-});
+});*/
