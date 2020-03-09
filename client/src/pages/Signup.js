@@ -82,14 +82,23 @@ function Signup(props){
                       openTo="year"
                       format="dd/MM/yyyy"
                       label="Date of Birth"
-                      views={["year", "month", "date"]}
+                      views={["year", "month", "date"]}                      
+                      id="birthday" 
+                      name="birthday"
                       value={selectedDate}
                       onChange={handleDateChange}
                     />
                   </MuiPickersUtilsProvider>
-                  
+                 
                   <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <TimePicker autoOk label="Time of Birth" value={selectedDate} onChange={handleDateChange} />
+                    <TimePicker 
+                      autoOk
+                      label="Time of Birth"
+                      id="time" 
+                      name="time" 
+                      value={selectedDate} 
+                      onChange={handleDateChange}
+                    />
                   </MuiPickersUtilsProvider>
                 </Grid>
 
