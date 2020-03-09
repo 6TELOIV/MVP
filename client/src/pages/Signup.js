@@ -39,6 +39,9 @@ const useStyles = makeStyles(theme => ({
 function Signup(props){
     const classes = useStyles();
     const [selectedDate, handleDateChange] = useState(new Date());    
+    const [name, changeName] = useState(''); 
+    const [email, changeEmail] = useState(''); 
+    const [birthplace, changeBirthplace] = useState('');
 
     return(
         <Container component="main" maxWidth="xs" className={classes.ok}>
@@ -48,18 +51,18 @@ function Signup(props){
             <Typography component="h1" variant="h5">
               We just need a few more things
             </Typography>
-            <form className={classes.form} validate onSubmit={console.log('submit')}>
+            <form className={classes.form} validate onSubmit={() => console.log(selectedDate)}>
             <Grid container spacing={2}>
 
                 <Grid item xs={12}>
                 <TextField
                     autoComplete="fname"
-                    name="firstName"
                     variant="outlined"                  
-                    fullWidth
-                    id="firstName"
+                    fullWidth                    
                     label="First Name"
                     autoFocus
+                    value={name}
+                    onChange={(e)=>{changeName(e.target.value)}}
                 />
                 </Grid>
                 
@@ -68,10 +71,10 @@ function Signup(props){
                     variant="outlined"
                     required
                     fullWidth
-                    id="email"
                     label="Email Address"
-                    name="email"
                     autoComplete="email"
+                    value={email}
+                    onChange={(e)=>{changeEmail(e.target.value)}}
                 />
                 </Grid>
 
@@ -80,11 +83,9 @@ function Signup(props){
                     <DatePicker
                       disableFuture
                       openTo="year"
-                      format="dd/MM/yyyy"
+                      format="MM/dd/yyyy"
                       label="Date of Birth"
                       views={["year", "month", "date"]}                      
-                      id="birthday" 
-                      name="birthday"
                       value={selectedDate}
                       onChange={handleDateChange}
                     />
@@ -94,8 +95,6 @@ function Signup(props){
                     <TimePicker 
                       autoOk
                       label="Time of Birth"
-                      id="time" 
-                      name="time" 
                       value={selectedDate} 
                       onChange={handleDateChange}
                     />
@@ -107,9 +106,9 @@ function Signup(props){
                       variant="outlined"
                       required
                       fullWidth
-                      id="place"
                       label="Birthplace"
-                      name="place"
+                      value={birthplace} 
+                      onChange={(e)=>{changeBirthplace(e.target.value)}}
                   />
                 </Grid>
 
