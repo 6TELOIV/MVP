@@ -7,7 +7,7 @@ export default (req, res, next) => {
 
         const options = {
             q: addressTemp,
-            key: config.openCage.key,
+            key: process.env.OPENCAGE_KEY || config.openCage.key,
         };
 
         // The below code makes a GET request to the specified URL.
