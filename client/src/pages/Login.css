@@ -1,0 +1,11 @@
+body {
+  font-family: sans-serif;
+  background-image: url(../assets/tempBG.jpg);
+  background-attachment: fixed;
+  background-size: cover; 
+  background-repeat: no-repeat;
+}
+
+button {
+  width: 100px;
+}
