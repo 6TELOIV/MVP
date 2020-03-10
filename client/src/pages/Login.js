@@ -28,7 +28,7 @@ const useStyles = makeStyles(theme => ({
 function Login(props) {
   const classes = useStyles();
   const [email, changeEmail] = useState("");
-  async function loginRequest(e) {
+  async function signInRequest(e) {
     e.preventDefault();
     let profileInfo = {
       email: email
@@ -44,7 +44,7 @@ function Login(props) {
       <div className={classes.paper}>
         <Typography variant="h3">Login</Typography>
 
-        <form className={classes.form} validate onSubmit={e => loginRequest(e)}>
+        <form className={classes.form} validate onSubmit={e => signInRequest(e)}>
           <Grid item xs={12}>
             <TextField
               fullWidth
