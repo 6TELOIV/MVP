@@ -1,37 +1,66 @@
-import React, { useState } from "react";
+import React from "react";
 import "./Login.css";
+import Button from "@material-ui/core/Button";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import TextField from "@material-ui/core/TextField";
+import Grid from "@material-ui/core/Grid";
+import Typography from "@material-ui/core/Typography";
+import { makeStyles } from "@material-ui/core/styles";
+import Container from "@material-ui/core/Container";
 
-function Login() {
-  const [isMousedOver, setMouseOver] = useState(false);
+const useStyles = makeStyles(theme => ({
+  paper: {
+    marginTop: theme.spacing(8),
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center"
+  },
+  submit: {
+    margin: theme.spacing(5, 10, 3),
+    backgroundColor: "#396384"
+  },
+  ok: {
+    backgroundColor: "white",
+    borderRadius: "5%"
+  }
+}));
 
-    //Detects if mouse is over Login button
-    function handleMouseOver() {
-        setMouseOver(true);
-    }
-
-    //Detects if mouse is off of Login button
-    function handleMouseOut() {
-        setMouseOver(false);
-    }
-
-    //Send user to their user settings page (incomplete)
-    function handleClick() {}
+function Login(props) {
+  const classes = useStyles();
 
   return (
-    <div className="container">
-      <h1> Login </h1>
-      <input type="text" placeholder="Username" />
-      <button
-        style={{
-          backgroundColor: isMousedOver ? "grey" : "lightblue"
-        }}
-        onMouseOver={handleMouseOver}
-        onMouseOut={handleMouseOut}
-        onClick={handleClick}
-      >
-        Login
-      </button>
-    </div>
+    <Container component="main" maxWidth="xs" className={classes.ok}>
+      <CssBaseline />
+      <div className={classes.paper}>
+        <Typography variant="h3">Login</Typography>
+
+        <form
+          className={classes.form}
+          validate
+          onSubmit={console.log("submit")}
+        >
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              variant="outlined"
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+            />
+          </Grid>
+
+          <Button
+            type="submit"
+            className={classes.submit}
+            variant="contained"
+            color="primary"
+          >
+            Login
+          </Button>
+        </form>
+      </div>
+    </Container>
   );
 }
 
