@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import "./Login.css";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -27,6 +27,7 @@ const useStyles = makeStyles(theme => ({
 
 function Login(props) {
   const classes = useStyles();
+  const [email, changeEmail] = useState(''); 
 
   return (
     <Container component="main" maxWidth="xs" className={classes.ok}>
@@ -35,18 +36,17 @@ function Login(props) {
         <Typography variant="h3">Login</Typography>
 
         <form
-          className={classes.form}
           validate
-          onSubmit={console.log("submit")}
+          onSubmit={() => {console.log(email)}}
         >
           <Grid item xs={12}>
             <TextField
               fullWidth
               variant="outlined"
-              id="email"
               label="Email Address"
-              name="email"
               autoComplete="email"
+              value = {email}
+              onChange = {(e) => changeEmail(e.target.value)}
             />
           </Grid>
 

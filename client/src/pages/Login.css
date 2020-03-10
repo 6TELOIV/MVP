@@ -1,9 +1,8 @@
 body {
-  width: 100%;
-  height: 100%;
-  background-image: url("../assets/tempBG.jpg");
+  font-family: sans-serif;
+  background-image: url(../assets/tempBG.jpg);
   background-attachment: fixed;
-  background-size: cover;
+  background-size: cover; 
   background-repeat: no-repeat;
 }
 
