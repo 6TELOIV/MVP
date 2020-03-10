@@ -51,7 +51,7 @@ export default function Landing() {
 
         <Typography component="h1" variant="h5" className={classes.headline}>
           Because you are the <br />
-          skies in ecstatic moon
+          skies in ecstatic motion
         </Typography>
         <form className={classes.form} noValidate>
           <TextField
