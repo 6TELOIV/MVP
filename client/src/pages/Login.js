@@ -49,9 +49,7 @@ function Login(props) {
             <TextField
               fullWidth
               variant="outlined"
-              id="email"
               label="Email Address"
-              name="email"
               autoComplete="email"
               onChange={e => {
                 changeEmail(e.target.value);
