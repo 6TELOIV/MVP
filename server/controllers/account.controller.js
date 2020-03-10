@@ -30,7 +30,7 @@ import userModel from '../models/userModel.js';
 				errors: [
 					{
 						location: 'swisseph',
-						msg: 'House/Sign Calclaton Error'
+						msg: 'House/Sign Calculation Error'
 					}
 				]
 			})
