@@ -78,8 +78,13 @@ import userModel from '../models/userModel.js';
 				username: req.body.email
 			});
 			if (found) {
-				//res.found = found;
-				res.status(200).send(found);
+				let foundRevised = {
+					name: found.name,
+					username: found.username,
+					house: found.house,
+					sign: found.sign
+				}
+				res.status(200).send(foundRevised);
 			} else {
 				res.status(500).send({
 					errors: [
