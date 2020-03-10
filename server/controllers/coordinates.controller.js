@@ -16,14 +16,31 @@ export default (req, res, next) => {
             qs: options
         }, async (error, response, body) => {
             //https://opencagedata.com/tutorials/geocode-in-nodejs
-            if(error) console.log("error", error.message);
+            if(error) {
+                console.error(error);
+                res.status(500).send({
+                    errors: [
+                        {
+                            location: 'coordinates',
+                            msg: 'Error getting coordinates'
+                        }
+                    ]
+                });
+            }
 
             body = JSON.parse(body);
-            body = body.results[0].geometry;
-
-            console.log("Coordinates JSON ->  " + JSON.stringify(body));
-            req.results = body;
-
+            if(!body.results[0] || !body.results[0].geometry){
+                res.status(400).send({
+                    errors: [
+                        {
+                            location: 'coordinates',
+                            msg: 'No coordinates found'
+                        }
+                    ]
+                });
+            }
+            req.body.lat = body.results[0].geometry.lat;
+            req.body.long = body.results[0].geometry.lng;
             next();
         });
     } else {

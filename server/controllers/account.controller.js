@@ -1,106 +1,74 @@
 import swisseph from 'swisseph';
+import userModel from '../models/userModel.js';
 
-/*
- * req: {
- *   long,
- *   lat,
- *   name,
- *   email,
- *   birthday [UTC i.e. Date.getTime() date and time]
- *     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/getTime
- * }
- */
-export const signUp = (req, res) => {
-  let flag = swisseph.SEFLG_SPEED | swisseph.SEFLG_MOSEPH;
-
-  let date = new Date(0);
-  date.setUTCSeconds(req.body.birthday);
-  let year = date.getFullYear();
-  let month = date.getMonth() + 1;
-  let day = date.getDate();
-  let hour = date.getHours() + (date.getMinutes() / 60);
-  
-  let julday_ut = swisseph.swe_julday (year, month, day, hour, swisseph.SE_GREG_CAL);
-  console.log ('Julian UT:', julday_ut);
-  let house = swisseph.swe_houses (julday_ut, req.body.lat, req.body.long, 'W').house[0] / 30;
-  console.log('Houses: ' + house);
-  let sunHouse = Math.floor(swisseph.swe_calc_ut(julday_ut, swisseph.SE_SUN, flag).longitude / 30);
-  console.log('Sun House: ' + sunHouse);
-  res.send(req.body);
-}
-
-/*
-// Test date
-var date = {year: 1915, month: 3, day: 25, hour: 2.48};
-console.log ('Date:', date);
-
-
-// path to ephemeris data
-//swisseph.swe_set_ephe_path (__dirname + '/../ephe');
-
-let strtime = function (value) {
-	var hour = Math.floor (value);
-	var minFrac = (value - hour) * 60;
-	var min = Math.floor (minFrac);
-	var sec = Math.floor ((minFrac - min) * 60);
+/* req: {
+	long,
+	lat,
+	name,
+	email,
+	birthday [UTC i.e. let date = new Date(0); date.setUTCSecconds(birthday)]
+		See also: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/getTime}
+*/
+	export const signUp = async (req, res) => {
+		let flag = swisseph.SEFLG_SPEED | swisseph.SEFLG_MOSEPH;
+		
+		let date = new Date(0);
+		date.setUTCSeconds(req.body.birthday);
+		let year = date.getFullYear();
+		let month = date.getMonth() + 1;
+		let day = date.getDate();
+		let hour = date.getHours() + (date.getMinutes() / 60);
+		
+		let julday_ut, house, sunHouse;
+		try {
+			julday_ut = swisseph.swe_julday (year, month, day, hour, swisseph.SE_GREG_CAL);
+			house = swisseph.swe_houses (julday_ut, req.body.lat, req.body.long, 'W').house[0] / 30;
+			sunHouse = Math.floor(swisseph.swe_calc_ut(julday_ut, swisseph.SE_SUN, flag).longitude / 30);
+		} catch (error) {
+			console.error(error);
+			res.status(500).send({
+				errors: [
+					{
+						location: 'swisseph',
+						msg: 'House/Sign Calculation Error'
+					}
+				]
+			})
+		}
+		
+		try {
+			let found = await userModel.findOne({
+				username: req.body.email
+			});
+			if (found) {
+				res.status(400).send({
+					errors: [
+						{
+							location: 'database',
+							msg: 'Username taken'
+						}
+					]
+				})
+			} else {
+				await userModel.create({
+					name: req.body.name,
+					username: req.body.email,
+					house: house + 1,
+					sign: sunHouse + 1
+				});
+			}
+		} catch (error) {
+			console.error(error);
+			res.status(500).send({
+				errors: [
+					{
+						location: 'database',
+						msg: 'Database write error'
+					}
+				]
+			})
+		}
+		
+		res.status(200).end();
+	}
 	
-	return hour + ' ' + min + ' ' + sec;
-};
-
-let logbody = function (name, body) {
-    var lang = body.longitude;
-    var house = Math.floor (lang / 30);
-    var lang30 = lang - house * 30;
-
-	console.log (name + ':', body.longitude, '|', strtime (lang30), '|', house, body.longitudeSpeed < 0 ? 'R' : '');
-    console.log (name + ' info:', body);
-};
-
-// Julian day
-swisseph.swe_julday (date.year, date.month, date.day, date.hour, swisseph.SE_GREG_CAL, function (julday_ut) {
-	console.log ('Julian UT:', julday_ut);
-	
-	swisseph.swe_deltat (julday_ut, function (deltat) {
-	    console.log ('Delta T:', deltat.delta * 60 * 60 * 24);
-	});
-
-	swisseph.swe_sidtime (julday_ut, function (result) {
-	    console.log ('Siderial time (dec):', result.siderialTime);
-	    console.log ('Sidereal time (time):', strtime (result.siderialTime));
-	});
-	
-	swisseph.swe_houses (julday_ut, 24.06, 56.57, '0', function (result) {
-		console.log ("Houses: ", result);
-	});
-
-	// Sun position
-	swisseph.swe_calc_ut (julday_ut, swisseph.SE_SUN, flag, function (body) {
-        logbody ('Sun', body);
-	});
-
-	// Moon position
-	swisseph.swe_calc_ut (julday_ut, swisseph.SE_MOON, flag, function (body) {
-        logbody ('Moon', body);
-	});
-
-	// Mean node position
-	swisseph.swe_calc_ut (julday_ut, swisseph.SE_MEAN_NODE, flag, function (body) {
-        logbody ('Mean node', body);
-	});
-
-	swisseph.swe_calc_ut (julday_ut, swisseph.SE_TRUE_NODE, flag, function (body) {
-        logbody ('True node', body);
-	});
-
-	swisseph.swe_calc_ut (julday_ut, swisseph.SE_MEAN_APOG, flag, function (body) {
-        logbody ('Mean apog', body);
-	});
-
-	swisseph.swe_calc_ut (julday_ut, swisseph.SE_OSCU_APOG, flag, function (body) {
-        logbody ('Oscu apog', body);
-	});
-
-	swisseph.swe_calc_ut (julday_ut, swisseph.SE_CHIRON, flag, function (body) {
-        logbody ('Chiron', body);
-	});
-});*/
