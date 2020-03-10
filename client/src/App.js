@@ -10,7 +10,8 @@ const App = (props) => {
   return (
     <div>
       <Switch>
-        <Route exact path="/Signup" component={Signup}/>
+        <Route exact path="/Signup" component={Signup}
+            email = {props.email}/>
         <Route exact path="/Landing" component={Landing} />
 
         <Route exact path="/">

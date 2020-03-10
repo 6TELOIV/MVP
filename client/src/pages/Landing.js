@@ -1,11 +1,12 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import {TextField} from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
-
-
+import {Link} from "react-router-dom";
+import Container from "@material-ui/core/Container";
+import "./Landing.css";
 
 
 const useStyles = makeStyles(theme => ({
@@ -37,6 +38,10 @@ const useStyles = makeStyles(theme => ({
                     'sans-serif',].join(','),
 
     },
+    ok: {
+        backgroundColor: "white",
+        borderRadius: "5%"
+    },
 
 }));
 
@@ -44,9 +49,12 @@ const useStyles = makeStyles(theme => ({
 export default function Landing(){
 
     const classes = useStyles();
+    const [email, setEmail] = useState('');
 
     return(
-            <div className={classes.paper}>
+        <Container component="main" maxWidth="xs" className={classes.ok}>
+            <div  className={classes.paper}>
+
                 <Avatar className = {classes.avatar}/>
 
                 <Typography component = "h1"  variant="h5"  className={classes.headline} >
@@ -59,20 +67,41 @@ export default function Landing(){
                      margin = "normal"
                      variant= "outlined"
                      size = "small"
+                     value = {email}
+                     onChange = {e => setEmail(e.target.value)}
                     />
                      <br>
                      </br>
-                    <Button className={classes.button}  variant ="outlined" size = "small">
+                    <Link to={
+                        {
+                            pathname: "Signup",
+                            email: email
+                        }
+                        }
+                          style={{ textDecoration: 'none' }}
+                            >
+                        <Button className={classes.button} variant = "outlined" size ="small">
                         Sign up
-                    </Button>
+                        </Button>
+                    </Link>
                     <Typography component="h3" className={classes.headline}>
                     Already have an account?
                     </Typography>
-                    <Button className ={classes.button} variant = "outlined" disableRipple size ="small">
+                     <Link to={
+                         {
+                             pathname: "Login",
+                         }
+                     }
+                           style={{ textDecoration: 'none' }}
+                      >
+                    <Button className ={classes.button} variant = "outlined"  size ="small">
                     Login
                     </Button>
+                     </Link>
                 </form>
+
             </div>
+        </Container>
     );
 }
 
