@@ -71,4 +71,42 @@ import userModel from '../models/userModel.js';
 		
 		res.status(200).end();
 	}
+
+	export const signIn = async(req, res) => {	
+		try {
+			let found = await userModel.findOne({
+				username: req.body.email
+			});
+			if (found) {
+				let foundRevised = {
+					name: found.name,
+					username: found.username,
+					house: found.house,
+					sign: found.sign
+				}
+				res.status(200).send(foundRevised);
+			} else {
+				res.status(500).send({
+					errors: [
+						{
+							location: 'database',
+							msg: 'Username not found'
+						}
+					]
+				})
+			}
+		} catch (error) {
+			console.error(error);
+			res.status(500).send({
+				errors: [
+					{
+						location: 'database',
+						msg: 'Database connection issue'
+					}
+				]
+			})
+		}
+		
+		res.status(200).end();
+	}
 	
