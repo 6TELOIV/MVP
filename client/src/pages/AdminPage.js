@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import AdminDetail from "../components/AdminDetail"
+import HoroscopeList from "../components/HoroscopeList"
 import "./Landing.css";
 
 const useStyles = makeStyles(theme => ({
@@ -9,6 +10,8 @@ const useStyles = makeStyles(theme => ({
 
 export default function Admin() {
   const classes = useStyles();
+    const [filterText, setFilterText] = useState([]);
+    const [selectedHoroscope, setSelectedHoroscope] = useState(0);
     const [horoscopeList, setHoroscopeList] = useState([
         {
           sun: 5,
@@ -45,6 +48,7 @@ export default function Admin() {
   return (
     <div>
         <AdminDetail horoscopeView={horoscopeList[0]}/>
+        <HoroscopeList horoscopeList={horoscopeList} filterText={filterText} selectedHoroscope={selectedHoroscope} />
     </div>
   );
 }
