@@ -25,10 +25,11 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 const AdminDetail = props => {
-  const sun = props.location.state.data.sun;
-  const moon = props.location.state.data.sun;
-  const ascendant = props.location.state.data.ascendant;
-  const horoscope = props.location.state.data.horoscope;
+  const hs = props.horoscopeView;
+  const sun = hs.sun;
+  const moon = hs.moon;
+  const ascendant = hs.ascendant;
+  const horoscope = hs.horoscope;
   const classes = useStyles();
   return (
     <Container maxWidth="xs" className={classes.ok}>
