@@ -25,15 +25,11 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 const AdminDetail = props => {
-  // const sun = props.location.state.data.sun;
-  // const ascendant = props.location.state.data.ascendant;
-  // const horoscope = props.location.state.data.horoscope;
+  const sun = props.location.state.data.sun;
+  const moon = props.location.state.data.sun;
+  const ascendant = props.location.state.data.ascendant;
+  const horoscope = props.location.state.data.horoscope;
   const classes = useStyles();
-  const sun = 4;
-  const ascendant = 1;
-  const moon = 3;
-  const horoscope =
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Eu turpis egestas pretium aenean. Sed cras ornare arcu dui vivamus. Tellus rutrum tellus pellentesque eu tincidunt tortor aliquam nulla. Sed egestas egestas fringilla phasellus faucibus scelerisque. Velit euismod in pellentesque massa placerat. Amet mattis vulputate enim nulla aliquet porttitor lacus luctus. Suscipit adipiscing bibendum est ultricies integer. Elit ut aliquam purus sit amet. Tincidunt eget nullam non nisi est sit amet facilisis magna. Nibh nisl condimentum id venenatis a condimentum vitae sapien pellentesque. Massa sapien faucibus et molestie ac feugiat sed lectus vestibulum. Id donec ultrices tincidunt arcu non sodales. Massa vitae tortor condimentum lacinia quis vel eros donec ac. Quam lacus suspendisse faucibus interdum posuere lorem ipsum dolor. Sit amet massa vitae tortor.";
   return (
     <Container maxWidth="xs" className={classes.ok}>
       <div className={classes.paper}>
