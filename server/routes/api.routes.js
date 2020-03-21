@@ -6,7 +6,7 @@ const apiRouter = express.Router();
 
 apiRouter.post('/signup', coordinatesController, accountController.signUp);
 apiRouter.post('/signin', accountController.signIn)
-apiRouter.get('/admin', adminController.view)
+apiRouter.get('/admin', adminController.getEntries)
 apiRouter.put('/admin', adminController.edit)
 
 export default apiRouter;
