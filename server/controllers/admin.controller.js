@@ -65,4 +65,63 @@ import horoscopeModel from '../models/horoscopeModel.js';
 		}
 		res.send('Edit successful').status(200);
 	}
+
+	export const reset = async (req, res) => {
+		try{
+			if(!(req.body.resetPassword === "Heavenly Writing")) {
+				res.status(500).send({
+					errors: [
+						{
+							location: 'password',
+							msg: 'Incorrect reset password. Reset failed'
+						}
+					]
+				})
+				return;
+				
+			}
+
+			horoscopeModel.deleteMany()
+			.then(() => {
+				let counter = 0;
+				let docArray = [1152];
+				for (let i = 1; i <= 12; i++) {
+					for (let j = 1; j <= 12; j++) {
+						for (let k = 1; k <= 8; k++) {
+							let newEntry = {
+								sign: i, 
+								house: j, 
+								moonPhase: k, 
+								quote: "Placeholder quote",	
+								quoteAuthor: "Placeholder quote author", 
+								quoteSrc: "http://www.placeholderWebsite.com",	
+								summary: "Placeholder summary",
+								bestActivities: "Placeholder best activities",
+								moonThemes: "Placeholder moon themes", 
+								signThemes: "Placeholder sign themes", 
+								houseThemes: "Placeholder house themes"
+							}
+							docArray[counter++] = newEntry;
+						}
+					}	
+				}
+				horoscopeModel.insertMany(docArray)
+				.then(entries => {
+					console.log(entries.length + " Entries reset")
+				})
+				res.send("Success").status(200); //Send all entries in response
+			})
+			
+		} catch (error) {
+			console.error(error);
+			res.status(500).send({
+				errors: [
+					{
+						location: 'database',
+						msg: 'Database write error'
+					}
+				]
+			})
+		} 
+	}
 	

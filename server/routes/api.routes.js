@@ -8,5 +8,6 @@ apiRouter.post('/signup', coordinatesController, accountController.signUp);
 apiRouter.post('/signin', accountController.signIn)
 apiRouter.get('/admin', adminController.getEntries)
 apiRouter.put('/admin', adminController.edit)
+apiRouter.post('/admin', adminController.reset)
 
 export default apiRouter;

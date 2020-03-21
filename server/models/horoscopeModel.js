@@ -31,7 +31,8 @@ const horoscopeSchema = new mongoose.Schema({
     quoteSrc: {
         type: String,
         required: true,
-        validate: /\b(([\w-]+:\/\/?|www[.])[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|\/)))/g
+        //validate: /\b(([\w-]+:\/\/?|www[.])[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|\/)))/g
+        
     }, 
     summary: {
         type: String,
