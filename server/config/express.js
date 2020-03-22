@@ -3,6 +3,8 @@ import express from 'express';
 import mongoose from 'mongoose';
 import morgan from 'morgan';
 import bodyParser from 'body-parser';
+import session from 'express-session';
+
 import apiRouter from '../routes/api.routes.js';
 import config from './config.js';
 
@@ -26,6 +28,17 @@ export const init = () => {
 
     // body parsing middleware
     app.use(bodyParser.json());
+
+    app.use(session({
+        secret: config.session.secret,
+        resave: false,
+        saveUninitialized: false
+    }));
+    
+    app.use((req, res, next) => {
+        console.log('req.session', req.session);
+        next();
+    });
 
     // add a router
     app.use('/api/', apiRouter);
