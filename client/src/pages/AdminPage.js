@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import AdminDetail from "../components/AdminDetail"
+import AdminDetail from "../Components/AdminDetail"
+import Search from "../Components/Search.js"
 import "./Landing.css";
 
 const useStyles = makeStyles(theme => ({
@@ -35,6 +36,8 @@ export default function Admin() {
           horoscope: 'holy mackerl'
         }
       ]);
+  const [FilterText, setFilterText] = useState('');
+
 //   async function getHoroscopes() {
 //     let response = await axios.post("/api/horoscopeList");
 //     if (response.status === 200) {
@@ -42,9 +45,23 @@ export default function Admin() {
 //     }
 //   }
 
+  const filterUpdate = (value) => {
+
+    setFilterText(value);
+
+  };
+
   return (
+    <div>
+    <div>
+    <Search
+    filterUpdate = {filterUpdate}
+    
+    />
+     </div>
     <div>
         <AdminDetail horoscopeView={horoscopeList[0]}/>
     </div>
-  );
+    </div>  
+    );
 }
