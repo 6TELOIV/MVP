@@ -4,7 +4,24 @@ import horoscopeModel from '../models/horoscopeModel.js';
 		try{
 			horoscopeModel.find()
 			.then(entries => {
-				res.send(entries).status(200); //Send all entries in response
+				let revisedArray = [];
+				entries.forEach(entry=>{
+					let revEntry = {
+						sign: entry.sign, 
+						house: entry.house, 
+						moonPhase: entry.moonPhase, 
+						quote: entry.quote,	
+						quoteAuthor: entry.quoteAuthor, 
+						quoteSrc: entry.quoteSrc,	
+						summary: entry.summary,
+						bestActivities: entry.bestActivities,
+						moonThemes: entry.moonThemes, 
+						signThemes: entry.signThemes, 
+						houseThemes: entry.houseThemes
+					}
+					revisedArray = [...revisedArray, revEntry];
+				})
+				res.send(revisedArray).status(200); //Send all entries in response
 			})
 			
 		} catch (error) {
