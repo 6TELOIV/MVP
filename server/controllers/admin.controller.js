@@ -2,6 +2,7 @@ import horoscopeModel from '../models/horoscopeModel.js';
 
 	export const getEntries = async (req, res) => {
 		try{
+			console.log(req.session.passport.user);
 			horoscopeModel.find()
 			.then(entries => {
 				res.send(entries).status(200); //Send all entries in response

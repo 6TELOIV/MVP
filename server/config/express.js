@@ -4,9 +4,15 @@ import mongoose from 'mongoose';
 import morgan from 'morgan';
 import bodyParser from 'body-parser';
 import session from 'express-session';
+import mongoSession from 'connect-mongo';
+import passport from 'passport'
 
+import localStrategy from '../strategies/local.js'
 import apiRouter from '../routes/api.routes.js';
+import userModel from '../models/userModel.js';
 import config from './config.js';
+
+const MongoStore = mongoSession(session);
 
 export const init = () => {
     /* 
@@ -32,12 +38,38 @@ export const init = () => {
     app.use(session({
         secret: config.session.secret,
         resave: false,
-        saveUninitialized: false
+        saveUninitialized: true,
+        store: new MongoStore({ mongooseConnection: mongoose.connection})
     }));
     
     app.use((req, res, next) => {
         console.log('req.session', req.session);
         next();
+    });
+
+    //Passport
+    app.use(passport.initialize());
+    app.use(passport.session()); //calls serializeUser and deserializeUser
+
+    passport.use(localStrategy);
+    passport.serializeUser((user, done) => {
+        console.log('*** serializeUser called, user: ')
+        console.log(user) // the whole raw user object!
+        console.log('---------')
+        done(null, { _id: user._id })
+    });
+    passport.deserializeUser((id, done) => {
+        console.log('DeserializeUser called')
+        userModel.findOne(
+            { _id: id },
+            'username',
+            (err, user) => {
+                console.log('*** Deserialize user, user:')
+                console.log(user)
+                console.log('--------------')
+                done(null, user)
+            }
+        )
     });
 
     // add a router
