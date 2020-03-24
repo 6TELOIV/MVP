@@ -82,6 +82,12 @@ export const signUp = async (req, res) => {
 * }
 */
 export const signIn = async(req, res) => {
-	res.status(200).end();
+	let foundRevised = {
+		name: req.user.name,
+		username: req.user.username,
+		house: req.user.house,
+		sign: req.user.sign
+	}
+	res.status(200).send(foundRevised);
 }
 	
