@@ -30,6 +30,9 @@ const useStyles = makeStyles(theme => ({
 function AdminEdit(props) {
   const classes = useStyles();
 
+  /*States for the Text Fields */
+  /*props.location.data receives the input to be edited from the AdminPage*/
+
   const [quote, changeQuote] = useState(props.location.quote);
   const [quoteAuthor, changeQuoteAuthor] = useState(props.location.quoteAuthor);
   const [quoteSrc, changeQuoteSrc] = useState(props.location.quoteSrc);
@@ -38,17 +41,30 @@ function AdminEdit(props) {
   const [moonThemes, changeMoonThemes] = useState(props.location.moonThemes);
   const [signThemes, changeSignThemes] = useState(props.location.signThemes);
   const [houseThemes, changeHouseThemes] = useState(props.location.houseThemes);
+
+  const [editInfo, setEditInfo] = useState();
   const [redirect, setRedirect] = useState(false);
 
   /*Handles when the save button is clicked */
-  function handleSave(e) {
+  async function handleSave(e) {
     e.preventDefault();
+    let info = {
+      quote:quote,
+      quoteAuthor:quoteAuthor,
+      quoteSrc:quoteSrc,
+      summary:summary,
+      bestActivities:bestActivities,
+      moonThemes:moonThemes,
+      signThemes:signThemes,
+      houseThemes:houseThemes
+    };
+    setEditInfo(info);
     setRedirect(true);
   }
 
   if (redirect) {
     return (
-      <Redirect to={{ pathname: "/AdminPage"}} />
+      <Redirect to={{ pathname: "/AdminPage", state: { data: editInfo }}}/>
     );
   }
 
@@ -58,137 +74,147 @@ function AdminEdit(props) {
         <header>
           <h1 align="center">Admin Edit Page</h1>
         </header>
-        <form onSubmit={e => handleSave(e)}>
+        <form 
+          onSubmit={e => handleSave(e)}>
+
+          {/*Quote Edit Text Field*/}
           <Grid container spacing={1}>
             <Grid item xs={12}>
-            <p>Edit Quote</p>
               <TextField
-                id="outlined-multiline-static"
-                placeholder="Quote"
+                id="quote-edit"
+                label="Quote"
+                value={quote}
                 multiline
-                rows="3"
                 fullWidth
+                margin = "normal"
+                rows="3"
                 variant="outlined"
                 onChange={e => {
                   changeQuote(e.target.value);
                 }}
-                value={quote}
               />
             </Grid>
 
+            {/*Quote Author Edit Text Field*/}
             <Grid item xs={12}>
-              <p>Edit Quote's Author</p>
               <TextField
-                id="outlined-multiline-static"
-                placeholder="Quote's Author"
+                id="quote-author-edit"
+                label="Quote's Author"
+                value={quoteAuthor}
                 multiline
-                rows="1"
                 fullWidth
+                margin = "normal"
+                rows="1"
                 variant="outlined"
                 onChange={e => {
                   changeQuoteAuthor(e.target.value);
                 }}
-                value={quoteAuthor}
               />
             </Grid>
 
+            {/*Quote Source Edit Text Field*/}
             <Grid item xs={12}>
-              <p>Edit Quote's Source </p>
               <TextField
-                id="outlined-multiline-static"
-                placeholder="Quote's Source"
+                id="quote-source-edit"
+                label="Quote's Source"
+                value={quoteSrc}
                 multiline
-                rows="1"
                 fullWidth
+                margin = "normal"
+                rows="1"
                 variant="outlined"
                 onChange={e => {
                   changeQuoteSrc(e.target.value);
                 }}
-                value={quoteSrc}
               />
             </Grid>
 
+            {/*Horoscope Summary Edit Text Field*/}
             <Grid item xs={12}>
-            <p>Edit Horoscope</p>
               <TextField
-                id="outlined-multiline-static"
-                placeholder="Horoscope"
+                id="horoscope-edit"
+                label="Horoscope"
+                value={summary}
                 multiline
-                rows="12"
                 fullWidth
+                margin = "normal"
+                rows="12"
                 variant="outlined"
                 onChange={e => {
                   changeSummary(e.target.value);
                 }}
-                value={summary}
               />
             </Grid>
 
+            {/*Best Activities Edit Text Field*/}
             <Grid item xs={12}>
-            <p>Edit Best Activities</p>
               <TextField
-                id="outlined-multiline-static"
-                placeholder="Best Activities"
+                id="best-activities-edit"
+                label="Best Activities"
+                value={bestActivities}
                 multiline
-                rows="5"
                 fullWidth
+                margin = "normal"
+                rows="5"
                 variant="outlined"
                 onChange={e => {
                   changeBestActivities(e.target.value);
                 }}
-                value={bestActivities}
               />
             </Grid>
-            
+
+            {/*Moon Theme Edit Text Field*/}
             <Grid item xs={12}>
-            <p>Edit Moon Theme</p>
               <TextField
-                id="outlined-multiline-static"
-                placeholder="Moon Theme"
+                id="moon-theme-edit"
+                label="Moon Theme"
+                value={moonThemes}
                 multiline
-                rows="3"
                 fullWidth
+                margin = "normal"
+                rows="3"
                 variant="outlined"
                 onChange={e => {
                   changeMoonThemes(e.target.value);
                 }}
-                value={moonThemes}
               />
             </Grid>
-            
+
+            {/*Sign Theme Edit Text Field*/}
             <Grid item xs={12}>
-            <p>Edit Sign Theme</p>
               <TextField
-                id="outlined-multiline-static"
-                placeholder="Sign Theme"
+                id="sign-theme-edit"
+                label="Sign Theme"
+                value={signThemes}
                 multiline
-                rows="3"
                 fullWidth
+                margin = "normal"
+                rows="3"
                 variant="outlined"
                 onChange={e => {
                   changeSignThemes(e.target.value);
                 }}
-                
-                value={signThemes}
               />
             </Grid>
-            
+
+            {/*House Theme Edit Text Field*/}
             <Grid item xs={12}>
-            <p>Edit House Theme</p>
               <TextField
-                id="outlined-multiline-static"
-                placeholder="House Theme"
+                id="house-theme-edit"
+                label="House Theme"
+                value={houseThemes}
                 multiline
-                rows="3"
                 fullWidth
+                margin = "normal"
+                rows="3"
                 variant="outlined"
                 onChange={e => {
                   changeHouseThemes(e.target.value);
                 }}
-                value={houseThemes}
               />
             </Grid>
-
+            
+            {/*Save Button*/}
             <Grid
               container
               direction="row"
