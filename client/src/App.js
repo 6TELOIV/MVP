@@ -8,6 +8,7 @@ const Login = lazy(() => import("./pages/Login"));
 const Temp = lazy(() => import("./pages/Temp"));
 const Signup = lazy(() => import("./pages/Signup"));
 const AdminPage = lazy(() => import("./pages/AdminPage"));
+const AdminEdit = lazy(() => import("./pages/AdminEdit"));
 //import NotFound from "./views/NotFound";
 
 //<Route component={NotFound}/>
@@ -21,6 +22,7 @@ const App = props => {
           <Route exact path="/Login" component={Login} />
           <Route exact path="/AdminPage" component={AdminPage} />
           <Route exact path="/Temp" component={Temp} />
+          <Route exact path="/AdminEdit" component={AdminEdit} />
           <Route exact path="/">
             <Redirect to="/Landing" />
           </Route>

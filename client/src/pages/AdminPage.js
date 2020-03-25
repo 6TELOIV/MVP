@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import AdminDetail from "../Components/AdminDetail"
 import Search from "../Components/Search.js"
+
 import "./Landing.css";
 
 const useStyles = makeStyles(theme => ({
@@ -10,30 +11,39 @@ const useStyles = makeStyles(theme => ({
 
 export default function Admin() {
   const classes = useStyles();
+  const [filterHoroscope, setFilterHoroscope] = useState(
+        {
+          house: -1,
+          moon: -1,
+          sign: -1,
+          text: 's'
+        }
+      );
+    const [selectedHoroscope, setSelectedHoroscope] = useState([]);
     const [horoscopeList, setHoroscopeList] = useState([
         {
-          sun: 5,
+          house: 5,
           moon: 3,
-          ascendant: 9,
-          horoscope: 'ipsum dolores'
+          sign: 9,
+          text: 'ipsum dolores'
         },
         {
-          sun: 2,
+          house: 2,
           moon: 1,
-          ascendant: 1234,
-          horoscope: 'john cena'
+          sign: 6,
+          text: 'ssdf'
         },
         {
-          sun: 123,
-          moon: 33,
-          ascendant: 4444,
-          horoscope: 'Drury Inn & Suites Gainesville'
+          house: 7,
+          moon: 7,
+          sign: 6,
+          text: 'ok bud'
         },
         {
-          sun: 2,
-          moon: 3,
-          ascendant: 4,
-          horoscope: 'holy mackerl'
+          house: 1,
+          moon: 6,
+          sign: 4,
+          text: 'sssss'
         }
       ]);
   const [FilterText, setFilterText] = useState('');
@@ -61,6 +71,10 @@ export default function Admin() {
      </div>
     <div>
         <AdminDetail horoscopeView={horoscopeList[0]}/>
+        <HoroscopeList horoscopeList={horoscopeList} 
+                       filterHoroscope={filterHoroscope} 
+                       setSelectedHoroscope={setSelectedHoroscope} 
+        />
     </div>
     </div>  
     );
