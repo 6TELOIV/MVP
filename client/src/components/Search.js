@@ -4,15 +4,15 @@ import React, {useState} from 'react';
 const Search = (props) => {
 
 //State Variables for different fields
-    const [house, setHouseName] = useState('');
-    const [sign, setSign] = useState('');
+    const [house, setHouseName] = useState(0);
+    const [sign, setSign] = useState(0);
     const [text, setText] = useState('');
-    const [moon, setMoon] = useState(''); 
+    const [moon, setMoon] = useState(0); 
     
 //Submit function that allows you to pass filtered fields from this component into filterUpdate function    
     const handleSubmit = () => {
 
-        props.filterUpdate({
+        props.setFilterHoroscope({
             house: house, 
             sign: sign, 
             moon: moon, 
@@ -26,68 +26,52 @@ const Search = (props) => {
         var val = event.target.value;
         
         if (val.toLowerCase().indexOf("h=") === -1){
-
-           var house_1 = null; 
+           setHouseName(null) 
         }
         else {
-
-          house_1 = val.substring(
-            val.lastIndexOf("h=") + 1, 
-            val.lastIndexOf(" ")
-            
-           );
-           val.replace(house_1, ""); 
-           parseInt(house_1)
+           var house_1 = val.substring(val.lastIndexOf("h="));
+           var house_2 = house_1.substring(0,house_1.indexOf(" "));
+           var house_3 = house_2.substring(2);
+           val = val.replace(house_2+" ", "");
+           setHouseName(parseInt(house_3))         
         }
 
-       setHouseName(house_1)
 
     //Sign field
         if (val.toLowerCase().indexOf("s=") === -1){
-
-        var sign_1 = null; 
+            setSign(null) 
         }
-
         else {
-
-         sign_1 = val.substring(
-            val.lastIndexOf("s=") + 1, 
-            val.lastIndexOf(" ")
-        );
-
-        val.replace(sign_1, ""); 
-        parseInt(sign_1) 
-
-       } 
-
-        setSign(sign_1)
+            var sign_1 = val.substring(val.lastIndexOf("s="));
+            var sign_2 = sign_1.substring(0,sign_1.indexOf(" "));
+            var sign_3 = sign_2.substring(2);
+            val = val.replace(sign_2+" ", "");
+            setSign(parseInt(sign_3))         
+        }
 
     //Moon field
 
         if (val.toLowerCase().indexOf("m=") === -1){
-
-            var moon_1 = null; 
+            setMoon(null);
             }
         
         else {
-            moon_1 = val.substring(
-                val.lastIndexOf("m=") + 1, 
-                val.lastIndexOf(" ")
-            );
-            val.replace(moon_1, ""); 
-            parseInt(moon_1) 
-
-            if (moon_1 > 8 || moon_1 < 1){
-                moon_1 = null; 
+            var moon_1 = val.substring(val.lastIndexOf("m="));
+            var moon_2 = moon_1.substring(0,moon_1.indexOf(" "));
+            var moon_3 = moon_2.substring(2);
+            var ok = parseInt(moon_3)
+            val = val.replace(moon_2+" ", "");
+            if (ok > 8 || ok < 1){
+                ok = null; 
             }
+            setMoon(ok); 
         }
 
-        setMoon(moon_1); 
     //Text field
 
         if (val === -1){
 
-            var text_1 = null; 
+            var text_1 = ''; 
             }
 
          else{

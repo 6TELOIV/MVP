@@ -5,7 +5,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import { Redirect } from "react-router-dom";
-import "./Login.css";
+import "./Landing.css";
 
 //Style
 const useStyles = makeStyles(theme => ({

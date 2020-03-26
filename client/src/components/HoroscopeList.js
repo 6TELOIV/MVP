@@ -27,13 +27,13 @@ const HoroscopeList = props => {
 
   var i;
   for (i = 0; i < props.horoscopeList.length; i++) {
-    if(props.filterHoroscope.house!==-1 && props.filterHoroscope.house!==list[i].house){
+    if(props.filterHoroscope.house!==null && props.filterHoroscope.house!==list[i].house){
       continue;
     }
-    if(props.filterHoroscope.moon!==-1 && props.filterHoroscope.moon!==list[i].moon){
+    if(props.filterHoroscope.moon!==null && props.filterHoroscope.moon!==list[i].moon){
       continue;
     }
-    if(props.filterHoroscope.sign!==-1 && props.filterHoroscope.sign!==list[i].sign){
+    if(props.filterHoroscope.sign!==null && props.filterHoroscope.sign!==list[i].sign){
       continue;
     }
     if(props.filterHoroscope.text!=='' && !(list[i].text.toLowerCase().startsWith(props.filterHoroscope.text.toLowerCase()))){
@@ -50,10 +50,10 @@ const HoroscopeList = props => {
 
         <TableHead>
           <TableRow>
-            <TableCell>Sun</TableCell>
+            <TableCell>House</TableCell>
             <TableCell align="right">Moon</TableCell>
-            <TableCell align="right">Ascendent</TableCell>
-            <TableCell align="right">Horoscope</TableCell>
+            <TableCell align="right">Sign</TableCell>
+            <TableCell align="right">Text</TableCell>
           </TableRow>
         </TableHead>
 

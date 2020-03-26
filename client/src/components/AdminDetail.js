@@ -27,21 +27,21 @@ const useStyles = makeStyles(theme => ({
 }));
 const AdminDetail = props => {
   const hs = props.horoscopeView;
-  const sun = hs.sun;
+  const sign = hs.sign;
   const moon = hs.moon;
-  const ascendant = hs.ascendant;
-  const horoscope = hs.horoscope;
+  const house = hs.house;
+  const text = hs.text;
   const classes = useStyles();
   return (
     <Container maxWidth="xs" className={classes.ok}>
       <div className={classes.paper}>
         <div className={classes.header}>
-          <h5 className={classes.variable}>Sun<br></br>{sun}</h5>
-          <h5 className={classes.variable}>Ascendant<br></br>{ascendant}</h5>
+          <h5 className={classes.variable}>House<br></br>{house}</h5>
           <h5 className={classes.variable}>Moon<br></br>{moon}</h5>
+          <h5 className={classes.variable}>Sign<br></br>{sign}</h5>
         </div>
-        <h5>Horoscope</h5>
-        <p>{horoscope}</p>
+        <h5>Text</h5>
+        <p>{text}</p>
       </div>
     </Container>
   );

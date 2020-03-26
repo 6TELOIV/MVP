@@ -1,24 +1,20 @@
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import AdminDetail from "../Components/AdminDetail"
-import Search from "../Components/Search.js"
-
+import AdminDetail from "../components/AdminDetail"
+import HoroscopeList from "../components/HoroscopeList"
+import Search from "../components/Search"
 import "./Landing.css";
 
-const useStyles = makeStyles(theme => ({
-  
-}));
 
 export default function Admin() {
-  const classes = useStyles();
   const [filterHoroscope, setFilterHoroscope] = useState(
-        {
-          house: -1,
-          moon: -1,
-          sign: -1,
-          text: 's'
-        }
-      );
+    {
+      house: null,
+      moon: null,
+      sign: null,
+      text: ''
+    }
+  );
     const [selectedHoroscope, setSelectedHoroscope] = useState([]);
     const [horoscopeList, setHoroscopeList] = useState([
         {
@@ -40,13 +36,12 @@ export default function Admin() {
           text: 'ok bud'
         },
         {
-          house: 1,
+          house: 7,
           moon: 6,
           sign: 4,
           text: 'sssss'
         }
       ]);
-  const [FilterText, setFilterText] = useState('');
 
 //   async function getHoroscopes() {
 //     let response = await axios.post("/api/horoscopeList");
@@ -55,23 +50,18 @@ export default function Admin() {
 //     }
 //   }
 
-  const filterUpdate = (value) => {
-
-    setFilterText(value);
-
-  };
-
   return (
     <div>
     <div>
-    <Search
-    filterUpdate = {filterUpdate}
-    
-    />
-     </div>
+      <Search
+      setFilterHoroscope = {setFilterHoroscope}
+      />
+    </div>
     <div>
-        <AdminDetail horoscopeView={horoscopeList[0]}/>
-        <HoroscopeList horoscopeList={horoscopeList} 
+        <AdminDetail horoscopeView={selectedHoroscope}/> 
+    </div>
+    <div>
+      <HoroscopeList horoscopeList={horoscopeList} 
                        filterHoroscope={filterHoroscope} 
                        setSelectedHoroscope={setSelectedHoroscope} 
         />
