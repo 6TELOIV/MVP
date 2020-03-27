@@ -2,7 +2,10 @@ import horoscopeModel from '../models/horoscopeModel.js';
 
 	export const getEntries = async (req, res) => {
 		try{
-			console.log(req.session.passport.user);
+			if(!req.session.passport.user.isAdmin){
+				res.send("Not an administrator").status(401);
+				return;
+			}
 			horoscopeModel.find()
 			.then(entries => {
 				let revisedArray = [];
@@ -56,6 +59,10 @@ import horoscopeModel from '../models/horoscopeModel.js';
 			}
 		*/
 		try{	
+			if(!req.session.passport.user.isAdmin){
+				res.send("Not an administrator").status(401);
+				return;
+			}
 			horoscopeModel.findOneAndUpdate({sign: req.body.sign, house: req.body.house, moonPhase: req.body.moonPhase}, {
 				sign: req.body.sign, 
 				house: req.body.house, 
@@ -86,6 +93,10 @@ import horoscopeModel from '../models/horoscopeModel.js';
 
 	export const reset = async (req, res) => {
 		try{
+			if(!req.session.passport.user.isAdmin){
+				res.send("Not an administrator").status(401);
+				return;
+			}
 			if(!(req.body.resetPassword === "Heavenly Writing")) {
 				res.status(500).send({
 					errors: [

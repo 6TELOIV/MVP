@@ -37,6 +37,7 @@ export const signUp = async (req, res) => {
 				}
 			]
 		})
+		return;
 	}
 	
 	try {
@@ -57,9 +58,11 @@ export const signUp = async (req, res) => {
 				name: req.body.name,
 				username: req.body.email,
 				password: req.body.password,
+				isAdmin: false,
 				house: house + 1,
 				sign: sunHouse + 1
 			});
+			res.send("User created").status(200);
 		}
 	} catch (error) {
 		console.error(error);
@@ -71,6 +74,7 @@ export const signUp = async (req, res) => {
 				}
 			]
 		})
+		return;
 	}
 	
 	res.status(200).end();
@@ -85,8 +89,13 @@ export const signIn = async(req, res) => {
 	let foundRevised = {
 		name: req.user.name,
 		username: req.user.username,
+		isAdmin: req.user.isAdmin,
 		house: req.user.house,
 		sign: req.user.sign
+	}
+
+	if(req.user.isAdmin){
+		req.session.passport.user.isAdmin = true;
 	}
 	res.status(200).send(foundRevised);
 }
