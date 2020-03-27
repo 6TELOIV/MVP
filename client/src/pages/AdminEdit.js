@@ -6,6 +6,7 @@ import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import { Redirect } from "react-router-dom";
 import "./Landing.css";
+import axios from 'axios';
 
 //Style
 const useStyles = makeStyles(theme => ({
@@ -33,14 +34,26 @@ function AdminEdit(props) {
   /*States for the Text Fields */
   /*props.location.data receives the input to be edited from the AdminPage*/
 
-  const [quote, changeQuote] = useState(props.location.quote);
-  const [quoteAuthor, changeQuoteAuthor] = useState(props.location.quoteAuthor);
-  const [quoteSrc, changeQuoteSrc] = useState(props.location.quoteSrc);
-  const [summary, changeSummary] = useState(props.location.summary);
-  const [bestActivities, changeBestActivities] = useState(props.location.bestActivities);
-  const [moonThemes, changeMoonThemes] = useState(props.location.moonThemes);
-  const [signThemes, changeSignThemes] = useState(props.location.signThemes);
-  const [houseThemes, changeHouseThemes] = useState(props.location.houseThemes);
+  let horoscope = props.location.selHoro;
+  
+
+  const [quote, changeQuote] = useState(horoscope.quote);
+  const [quoteAuthor, changeQuoteAuthor] = useState(horoscope.quoteAuthor);
+  const [quoteSrc, changeQuoteSrc] = useState(horoscope.quoteSrc);
+  const [summary, changeSummary] = useState(horoscope.summary);
+  const [bestActivities, changeBestActivities] = useState(horoscope.bestActivities);
+  const [moonThemes, changeMoonThemes] = useState(horoscope.moonThemes);
+  const [signThemes, changeSignThemes] = useState(horoscope.signThemes);
+  const [houseThemes, changeHouseThemes] = useState(horoscope.houseThemes);
+
+  // const [quote, changeQuote] = useState(props.location.quote);
+  // const [quoteAuthor, changeQuoteAuthor] = useState(props.location.quoteAuthor);
+  // const [quoteSrc, changeQuoteSrc] = useState(props.location.quoteSrc);
+  // const [summary, changeSummary] = useState(props.location.summary);
+  // const [bestActivities, changeBestActivities] = useState(props.location.bestActivities);
+  // const [moonThemes, changeMoonThemes] = useState(props.location.moonThemes);
+  // const [signThemes, changeSignThemes] = useState(props.location.signThemes);
+  // const [houseThemes, changeHouseThemes] = useState(props.location.houseThemes);
 
   const [editInfo, setEditInfo] = useState();
   const [redirect, setRedirect] = useState(false);
@@ -49,6 +62,9 @@ function AdminEdit(props) {
   async function handleSave(e) {
     e.preventDefault();
     let info = {
+      sign: horoscope.sign,
+      house: horoscope.house,
+      moonPhase: horoscope.moonPhase,
       quote:quote,
       quoteAuthor:quoteAuthor,
       quoteSrc:quoteSrc,
@@ -59,6 +75,9 @@ function AdminEdit(props) {
       houseThemes:houseThemes
     };
     setEditInfo(info);
+
+    let res = await axios.put('/api/admin', info);
+
     setRedirect(true);
   }
 

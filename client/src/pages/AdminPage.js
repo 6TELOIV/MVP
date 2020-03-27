@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import AdminDetail from "../components/AdminDetail"
 import HoroscopeList from "../components/HoroscopeList"
 import Search from "../components/Search"
 import "./Landing.css";
+import axios from 'axios'
 
 
 export default function Admin() {
@@ -16,7 +17,7 @@ export default function Admin() {
     }
   );
     const [selectedHoroscope, setSelectedHoroscope] = useState([]);
-    const [horoscopeList, setHoroscopeList] = useState([
+    const [horoscopeList, setHoroscopeList] = useState([]); /*[
         {
           house: 5,
           moon: 3,
@@ -41,14 +42,18 @@ export default function Admin() {
           sign: 4,
           text: 'sssss'
         }
-      ]);
+      ]);*/
 
-//   async function getHoroscopes() {
-//     let response = await axios.post("/api/horoscopeList");
-//     if (response.status === 200) {
-//         setHoroscopeList(response.data);
-//     }
-//   }
+  async function getHoroscopes() {
+    let response = await axios.get("/api/admin");
+    if (response.status === 200) {
+        setHoroscopeList(response.data);
+    }
+  }
+
+  useEffect(() => {
+    getHoroscopes();
+  }, [])
 
   return (
     <div>

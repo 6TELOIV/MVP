@@ -50,9 +50,9 @@ const HoroscopeList = props => {
 
         <TableHead>
           <TableRow>
-            <TableCell>House</TableCell>
+            <TableCell>Sign</TableCell>
+            <TableCell align="right">House</TableCell>
             <TableCell align="right">Moon</TableCell>
-            <TableCell align="right">Sign</TableCell>
             <TableCell align="right">Text</TableCell>
           </TableRow>
         </TableHead>
@@ -60,10 +60,10 @@ const HoroscopeList = props => {
         <TableBody>
           {filteredList.map(row => (
             <TableRow className={classes.entry} key={list} onClick={()=>{props.setSelectedHoroscope(row);}}>
-              <TableCell component="th" scope="row">{row.house}</TableCell>
-              <TableCell align="right">{row.moon}</TableCell>
-              <TableCell align="right">{row.sign}</TableCell>
-              <TableCell align="right">{row.text}</TableCell>
+              <TableCell component="th" scope="row">{row.sign}</TableCell>
+              <TableCell align="right">{row.house}</TableCell>
+              <TableCell align="right">{row.moonPhase}</TableCell>
+              <TableCell align="right">{row.summary}</TableCell>
             </TableRow>
           ))}
         </TableBody>
