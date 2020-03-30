@@ -8,7 +8,6 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import axios from "axios";
 import { Redirect } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
@@ -32,15 +31,15 @@ function Login(props) {
   const classes = useStyles();
   const [email, changeEmail] = useState("");
   const [redirect, setRedirect] = useState(false);
-  const [profileInfo, setProfileInfo] = useState();
+  //const [profileInfo, setProfileInfo] = useState();
   const [password, setPassword]= useState("");
   async function signIn(e) {
     e.preventDefault();
-    signInRequest({username: email, password: password}, setProfileInfo.bind(this), setRedirect.bind(this));
+    signInRequest({username: email, password: password}, setRedirect.bind(this));
   }
   if (redirect) {
     return (
-      <Redirect to={{ pathname: "/Temp", state: { data: profileInfo } }} />
+      <Redirect to={{ pathname: "/Temp"}} />
     );
   }
   return (

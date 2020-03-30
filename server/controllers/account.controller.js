@@ -90,4 +90,23 @@ export const signIn = async(req, res) => {
 	}
 	res.status(200).send(foundRevised);
 }
+
+export const getUserInfo = async(req, res) => {
+	if(!req.session.passport){
+		res.status(200).send(null); //Sends null to trigger login
+		return;
+	}
+	let found = await userModel.find({_id: req.session.passport.user._id});
+
+	if(!found) res.status(400).end();
+
+	found = found[0];
+	let foundRevised = {
+		name: found.name,
+		username: found.username,
+		house: found.house,
+		sign: found.sign
+	}
+	res.status(200).send(foundRevised);
+}
 	
