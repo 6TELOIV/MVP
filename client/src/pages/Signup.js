@@ -26,7 +26,6 @@ function Signup(props) {
   const [email, changeEmail] = useState(props.location.email);
   const [password, changePassword] = useState("");
   const [birthplace, changeBirthplace] = useState("");
-  const [password,changePassword] = useState("");
   const [redirect, setRedirect] = useState(false);
   const [profileInfo, setProfileInfo] = useState();
   async function signupRequest(e) {

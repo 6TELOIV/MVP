@@ -19,7 +19,6 @@ function Login(props) {
   const [password, changePassword] = useState("");
   const [redirect, setRedirect] = useState(false);
   const [profileInfo, setProfileInfo] = useState();
-  const [password, setPassword]= useState("");
   async function signIn(e) {
     e.preventDefault();
     signInRequest({username: email, password: password}, setProfileInfo.bind(this), setRedirect.bind(this));
