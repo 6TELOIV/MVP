@@ -3,8 +3,9 @@ import { makeStyles } from "@material-ui/core/styles";
 import AdminDetail from "../components/AdminDetail"
 import HoroscopeList from "../components/HoroscopeList"
 import Search from "../components/Search"
-import "./Landing.css";
+import "./AdminPage.css";
 import axios from 'axios'
+import { Paper, Grid, AppBar, Typography, Button, IconButton, Toolbar } from '@material-ui/core'
 
 
 export default function Admin() {
@@ -16,38 +17,15 @@ export default function Admin() {
       text: ''
     }
   );
-    const [selectedHoroscope, setSelectedHoroscope] = useState([]);
-    const [horoscopeList, setHoroscopeList] = useState([]); /*[
-        {
-          house: 5,
-          moon: 3,
-          sign: 9,
-          text: 'ipsum dolores'
-        },
-        {
-          house: 2,
-          moon: 1,
-          sign: 6,
-          text: 'ssdf'
-        },
-        {
-          house: 7,
-          moon: 7,
-          sign: 6,
-          text: 'ok bud'
-        },
-        {
-          house: 7,
-          moon: 6,
-          sign: 4,
-          text: 'sssss'
-        }
-      ]);*/
-
+  const [selectedHoroscope, setSelectedHoroscope] = useState([]);
+  const [horoscopeList, setHoroscopeList] = useState([]);
+  const setSelectedHoroscopeWrapper = (selected) => {
+    setSelectedHoroscope(selected);
+  }
   async function getHoroscopes() {
     let response = await axios.get("/api/admin");
     if (response.status === 200) {
-        setHoroscopeList(response.data);
+      setHoroscopeList(response.data);
     }
   }
 
@@ -56,21 +34,41 @@ export default function Admin() {
   }, [])
 
   return (
-    <div>
-    <div>
-      <Search
-      setFilterHoroscope = {setFilterHoroscope}
-      />
-    </div>
-    <div>
-        <AdminDetail horoscopeView={selectedHoroscope}/> 
-    </div>
-    <div>
-      <HoroscopeList horoscopeList={horoscopeList} 
-                       filterHoroscope={filterHoroscope} 
-                       setSelectedHoroscope={setSelectedHoroscope} 
+    <div className="adminRoot">
+      <AppBar position="relative" className="header">
+        <Toolbar>
+          <div className="title">
+            <Typography variant="h6" >
+              Horoscopes Database Admin Access
+            </Typography>
+          </div>
+          <Search setFilterHoroscope={setFilterHoroscope} />
+        </Toolbar>
+      </AppBar>
+      <Paper className="search" square elevation="0">
+      </Paper>
+      <Paper className="description" square elevation="0">
+        <AdminDetail horoscopeView={selectedHoroscope} />
+      </Paper>
+      <Paper className="table" square elevation="0">
+        <HoroscopeList horoscopeList={horoscopeList}
+          filterHoroscope={filterHoroscope}
+          setSelectedHoroscope={setSelectedHoroscopeWrapper}
         />
+      </Paper>
     </div>
-    </div>  
-    );
+    // <div>
+    // <div>
+    //   
+    // </div>
+    // <div>
+    // </div>
+    // <div>
+    //   <HoroscopeList horoscopeList={horoscopeList} 
+    //                    filterHoroscope={filterHoroscope} 
+    //                    setSelectedHoroscope={setSelectedHoroscopeWrapper} 
+    //     />
+    // </div>
+    // </div>  
+  );
 }

@@ -1,6 +1,7 @@
 import React, { Suspense, lazy } from "react";
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Route, Switch, Redirect } from "react-router-dom";
+import "./App.css"
 
 //lazy load pages to improve load times
 const Landing = lazy(() => import("./pages/Landing"));

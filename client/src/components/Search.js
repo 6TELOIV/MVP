@@ -1,97 +1,131 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
+import { makeStyles, fade, InputBase } from '@material-ui/core';
+import SearchIcon from '@material-ui/icons/Search';
 
+//Helper to get and remove X=xxxxx substring value
+//Returns [ value, newString ] value = undefined if not found
+const getParam = (str, paramIdentifyer) => {
+  let start = str.indexOf(paramIdentifyer + '=');
+  if (start < 0) {
+    return [undefined, str];
+  }
+  let end = str.substring(start).indexOf(' ');
+  if (end < 0) {
+    end = str.length;
+  }
+  let paramStr = str.substring(start, end);
+  let param = paramStr.substring(paramIdentifyer.length + 1);
+  str = str.replace(paramStr, '');
+  return [param, str];
+}
+
+const useStyles = makeStyles((theme) => ({
+  search: {
+    position: 'relative',
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: fade(theme.palette.common.white, 0.15),
+    '&:hover': {
+      backgroundColor: fade(theme.palette.common.white, 0.25),
+    },
+    marginLeft: 0,
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+      marginLeft: theme.spacing(1),
+      width: 'auto',
+    },
+  },
+  searchIcon: {
+    padding: theme.spacing(0, 2),
+    height: '100%',
+    position: 'absolute',
+    pointerEvents: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  inputRoot: {
+    color: 'inherit',
+  },
+  inputInput: {
+    padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+      width: '12ch',
+      '&:focus': {
+        width: '20ch',
+      },
+    },
+  },
+}));
 
 const Search = (props) => {
 
-//State Variables for different fields
-    const [house, setHouseName] = useState(0);
-    const [sign, setSign] = useState(0);
-    const [text, setText] = useState('');
-    const [moon, setMoon] = useState(0); 
-    
-//Submit function that allows you to pass filtered fields from this component into filterUpdate function    
-    const handleSubmit = () => {
+  const classes = useStyles();
 
-        props.setFilterHoroscope({
-            house: house, 
-            sign: sign, 
-            moon: moon, 
-            text: text, 
-        });
-    }
-//Filter function that filters the different fields and then sets the state variables     
-    const filter = (event) => {
+  //State Variables for different fields
+  const [house, setHouse] = useState();
+  const [sign, setSign] = useState();
+  const [text, setText] = useState();
+  const [moon, setMoon] = useState();
 
+
+  //Submit function that allows you to pass filtered fields from this component into filterUpdate function    
+  const handleSubmit = () => {
+
+    props.setFilterHoroscope({
+      house: house,
+      sign: sign,
+      moon: moon,
+      text: text,
+    });
+  }
+  //Filter function that filters the different fields and then sets the state variables     
+  const filter = (event) => {
+    let value = event.target.value;
+    let houseParam;
+    let signParam;
+    let moonParam;
     //House field
-        var val = event.target.value;
-        
-        if (val.toLowerCase().indexOf("h=") === -1){
-           setHouseName(null) 
-        }
-        else {
-           var house_1 = val.substring(val.lastIndexOf("h="));
-           var house_2 = house_1.substring(0,house_1.indexOf(" "));
-           var house_3 = house_2.substring(2);
-           val = val.replace(house_2+" ", "");
-           setHouseName(parseInt(house_3))         
-        }
-
+    [houseParam, value] = getParam(value, "h");
+    houseParam = parseInt(houseParam);
 
     //Sign field
-        if (val.toLowerCase().indexOf("s=") === -1){
-            setSign(null) 
-        }
-        else {
-            var sign_1 = val.substring(val.lastIndexOf("s="));
-            var sign_2 = sign_1.substring(0,sign_1.indexOf(" "));
-            var sign_3 = sign_2.substring(2);
-            val = val.replace(sign_2+" ", "");
-            setSign(parseInt(sign_3))         
-        }
+    [signParam, value] = getParam(value, "s");
+    signParam = parseInt(signParam);
 
     //Moon field
+    [moonParam, value] = getParam(value, "m");
+    moonParam = parseInt(moonParam);
 
-        if (val.toLowerCase().indexOf("m=") === -1){
-            setMoon(null);
-            }
-        
-        else {
-            var moon_1 = val.substring(val.lastIndexOf("m="));
-            var moon_2 = moon_1.substring(0,moon_1.indexOf(" "));
-            var moon_3 = moon_2.substring(2);
-            var ok = parseInt(moon_3)
-            val = val.replace(moon_2+" ", "");
-            if (ok > 8 || ok < 1){
-                ok = null; 
-            }
-            setMoon(ok); 
-        }
-
-    //Text field
-
-        if (val === -1){
-
-            var text_1 = ''; 
-            }
-
-         else{
-            text_1 = val; 
-            }
-
-        setText(text_1)
-
-       
-    }
+    //Set States
+    setHouse(houseParam);
+    setSign(signParam);
+    setMoon(moonParam);
+    setText(value ? value : undefined);
+  }
 
 
-    return (
-        <form onSubmit={e => {e.preventDefault(); handleSubmit()}}>
-            <input onChange={event => filter(event)} type="string" placeholder="Type to Filter"/>
-            <button type="submit"> Search item</button>
-        </form>
-    );
+  return (
+    <form onSubmit={e => { e.preventDefault(); handleSubmit() }}>
+      <div className={classes.search}>
+        <div className={classes.searchIcon}>
+          <SearchIcon />
+        </div>
+        <InputBase
+          placeholder="Search…"
+          classes={{
+            root: classes.inputRoot,
+            input: classes.inputInput,
+          }}
+          inputProps={{ 'aria-label': 'search' }}
+        />
+      </div>
+    </form>
+  );
 
 };
 
 export default Search;
- 

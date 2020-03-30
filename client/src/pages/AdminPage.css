@@ -1,0 +1,34 @@
+.adminRoot {
+    width: 100%;
+    min-height: 100vh;
+    max-height: 100vh;
+    display: grid;
+    grid-template-columns: [side] calc(100vw - 300px) [body] 300px [description];
+    grid-template-rows: [head] 64px [header] calc(100vh - 64px) [body];
+}
+
+.title {
+    margin-right: 16px;
+}
+
+.header {
+    grid-column: side / description;
+    grid-row: head / header
+}
+
+.search {
+    grid-column: side / description;
+    grid-row: header / body;
+    border-bottom: 1px solid rgba(224, 224, 224, 1)
+}
+
+.description {
+    grid-column: body / description;
+    grid-row: header / body
+}
+
+.table {
+    grid-column: side / body;
+    grid-row: header / body;
+    border-right: 1px solid rgba(224, 224, 224, 1);
+}

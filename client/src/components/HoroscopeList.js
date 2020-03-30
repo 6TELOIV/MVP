@@ -10,7 +10,8 @@ import TableRow from '@material-ui/core/TableRow';
 
 const useStyles = makeStyles({
   table: {
-    width: 650,
+    width: "100%",
+    maxHeight: "100%",
     backgroundColor: 'white',
   },
   entry:{
@@ -18,36 +19,13 @@ const useStyles = makeStyles({
   }
 });
 
-const HoroscopeList = props => {
+const HoroscopeList = React.memo((props) => {
+
   const classes = useStyles();
 
-  const list = props.horoscopeList;
-  var filteredList = [];
-  console.log(props.filterHoroscope);
-
-  var i;
-  for (i = 0; i < props.horoscopeList.length; i++) {
-    if(props.filterHoroscope.house!==null && props.filterHoroscope.house!==list[i].house){
-      continue;
-    }
-    if(props.filterHoroscope.moon!==null && props.filterHoroscope.moon!==list[i].moon){
-      continue;
-    }
-    if(props.filterHoroscope.sign!==null && props.filterHoroscope.sign!==list[i].sign){
-      continue;
-    }
-    if(props.filterHoroscope.text!=='' && !(list[i].text.toLowerCase().startsWith(props.filterHoroscope.text.toLowerCase()))){
-      continue;
-    }
-    filteredList.push(list[i])
-  }
-
-  //filter shit
-
   return (
-    <TableContainer>
-      <Table className={classes.table} aria-label="simple table">
-
+    <TableContainer className={classes.table}>
+      <Table stickyHeader>
         <TableHead>
           <TableRow>
             <TableCell>Sign</TableCell>
@@ -58,19 +36,29 @@ const HoroscopeList = props => {
         </TableHead>
 
         <TableBody>
-          {filteredList.map(row => (
-            <TableRow className={classes.entry} key={list} onClick={()=>{props.setSelectedHoroscope(row);}}>
-              <TableCell component="th" scope="row">{row.sign}</TableCell>
-              <TableCell align="right">{row.house}</TableCell>
-              <TableCell align="right">{row.moonPhase}</TableCell>
-              <TableCell align="right">{row.summary}</TableCell>
-            </TableRow>
-          ))}
+          {props.horoscopeList.map((row, i) => {
+            let housematch = !props.filterHoroscope.house || props.filterHoroscope.house==row.house;
+            let signmatch = !props.filterHoroscope.sign || props.filterHoroscope.sign==row.sign;
+            let moonmatch = !props.filterHoroscope.moon || props.filterHoroscope.moon==row.moonPhase;
+            let textmatch = !props.filterHoroscope.text || (row.summary.toLowerCase().indexOf(props.filterHoroscope.text.toLowerCase()) >= 0);
+            if (housematch && signmatch && moonmatch && textmatch) {
+              return (
+                <TableRow className={classes.entry} key={i} onClick={()=>{props.setSelectedHoroscope(row);}}>
+                  <TableCell component="th" scope="row">{row.sign}</TableCell>
+                  <TableCell align="right">{row.house}</TableCell>
+                  <TableCell align="right">{row.moonPhase}</TableCell>
+                  <TableCell align="right">{row.summary}</TableCell>
+                </TableRow>
+              );
+            }
+          })}
         </TableBody>
 
       </Table>
     </TableContainer>
   );
-};
+}, (prevProps, nextProps) => {
+  return prevProps.horoscopeList.length === nextProps.horoscopeList.length && prevProps.filterHoroscope ===nextProps.filterHoroscope;
+});
 
 export default HoroscopeList;

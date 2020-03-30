@@ -6,27 +6,27 @@ import { Link } from "react-router-dom"; //Shaun added
 import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles(theme => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    padding: "10%"
-  },
-  header: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: "100%"
-  },
-  ok: {
-    backgroundColor: "white",
-    borderRadius: "5%"
-  },
-  variable: {
-    textAlign: "center",
-    lineHeight: "30px"
-  }
+  // paper: {
+  //   marginTop: theme.spacing(8),
+  //   display: "flex",
+  //   flexDirection: "column",
+  //   alignItems: "center",
+  //   padding: "10%"
+  // },
+  // header: {
+  //   display: "flex",
+  //   flexDirection: "row",
+  //   justifyContent: "space-between",
+  //   width: "100%"
+  // },
+  // ok: {
+  //   backgroundColor: "white",
+  //   borderRadius: "5%"
+  // },
+  // variable: {
+  //   textAlign: "center",
+  //   lineHeight: "30px"
+  // }
 }));
 const AdminDetail = props => {
   const hs = props.horoscopeView; //Changed some stuff here to better adapt to the current horoscope model - Shaun
@@ -47,15 +47,15 @@ const AdminDetail = props => {
         <p>{text}</p>
 
         <Link
-            to={{
-              pathname: "AdminEdit",
-              selHoro: hs
-            }}
-            style={{ textDecoration: "none" }}
+          to={{
+            pathname: "AdminEdit",
+            selHoro: hs
+          }}
+          style={{ textDecoration: "none" }}
         >
-            <Button className={classes.button} variant="outlined" size="small">
-              Edit
-            </Button>
+          <Button className={classes.button} variant="outlined" size="small">
+            Edit
+          </Button>
         </Link>
       </div>
     </Container>
