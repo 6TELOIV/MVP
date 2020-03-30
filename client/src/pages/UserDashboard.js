@@ -1,9 +1,12 @@
 import React from "react"
 
 const UserDashboard = props =>{
-    const 
-    return(<div>
+    const username = '';
+    const sunHouse = 7;
+    const moon = 3;
 
-    </div>)
+    return(<div>
+        
+    </div>);
 };
 export default UserDashboard;
