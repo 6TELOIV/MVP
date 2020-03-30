@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import {signInRequest} from "../helpers/loginFunction.js"
 import "./Signup.css";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
@@ -48,30 +49,25 @@ function Signup(props) {
   const [name, changeName] = useState("");
   const [email, changeEmail] = useState(props.location.email);
   const [birthplace, changeBirthplace] = useState("");
+  const [password,changePassword] = useState("");
   const [redirect, setRedirect] = useState(false);
   const [profileInfo, setProfileInfo] = useState();
-  async function signInRequest() {
-    let info = {
-      email: email
-    };
-    let response = await axios.post("/api/signin", info);
-    console.log(response.status);
-    if (response.status === 200) {
-      setProfileInfo(response.data);
-      setRedirect(true);
-    }
-  }
   async function signupRequest(e) {
     e.preventDefault();
     let info = {
       email: email,
+      password: password,
       name: name,
       address: birthplace,
       birthday: Math.floor(selectedDate.getTime() / 1000)
     };
-    let response = await axios.post("/api/signup", info);
+    let response = await axios.post("/api/signup", info)
     if (response.status === 200) {
-      signInRequest();
+      const loginInfo = {
+        username: email,
+        password: password
+      }
+      signInRequest(loginInfo, setProfileInfo.bind(this), setRedirect.bind(this));
     }
   }
   if (redirect) {
@@ -117,6 +113,20 @@ function Signup(props) {
                 value={email}
                 onChange={e => {
                   changeEmail(e.target.value);
+                }}
+              />
+            </Grid>
+
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                label="Password"
+                autoComplete="8 characters min"
+                value={password}
+                onChange={e => {
+                  changePassword(e.target.value);
                 }}
               />
             </Grid>

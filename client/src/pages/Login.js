@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import {signInRequest} from "../helpers/loginFunction.js"
 import "./Login.css";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -32,16 +33,10 @@ function Login(props) {
   const [email, changeEmail] = useState("");
   const [redirect, setRedirect] = useState(false);
   const [profileInfo, setProfileInfo] = useState();
-  async function signInRequest(e) {
+  const [password, setPassword]= useState("");
+  async function signIn(e) {
     e.preventDefault();
-    let info = {
-      email: email
-    };
-    let response = await axios.post("/api/signin", info);
-    if (response.status === 200) {
-      setProfileInfo(response.data);
-      setRedirect(true);
-    }
+    signInRequest({username: email, password: password}, setProfileInfo.bind(this), setRedirect.bind(this));
   }
   if (redirect) {
     return (
@@ -57,7 +52,7 @@ function Login(props) {
         <form
           className={classes.form}
           validate
-          onSubmit={e => signInRequest(e)}
+          onSubmit={e => signIn(e)}
         >
           <Grid item xs={12}>
             <TextField
@@ -71,6 +66,17 @@ function Login(props) {
             />
           </Grid>
 
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              variant="outlined"
+              label="Password"
+              autoComplete="password"
+              onChange={e => {
+                setPassword(e.target.value);
+              }}
+            />
+          </Grid>
           <Button
             type="submit"
             className={classes.submit}
