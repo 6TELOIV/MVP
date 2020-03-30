@@ -7,6 +7,7 @@ const Landing = lazy(() => import("./pages/Landing"));
 const Login = lazy(() => import("./pages/Login"));
 const Temp = lazy(() => import("./pages/Temp"));
 const Signup = lazy(() => import("./pages/Signup"));
+const UserDashboard = lazy(()=>import("./pages/UserDashboard"))
 //import NotFound from "./views/NotFound";
 
 //<Route component={NotFound}/>
@@ -18,6 +19,7 @@ const App = props => {
           <Route exact path="/Signup" component={Signup} />
           <Route exact path="/Landing" component={Landing} />
           <Route exact path="/Login" component={Login} />
+          <Route exact path="/UserDashboard" component={UserDashboard} />
           <Route exact path="/Temp" component={Temp} />
           <Route exact path="/">
             <Redirect to="/Landing" />
