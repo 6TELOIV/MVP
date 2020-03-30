@@ -22,7 +22,7 @@ const UserDashboard = props =>{
     const [redirect, setRedirect] = useState(false);
     const classes = useStyles();
     async function getInfo(){
-        let response = await axios.post("/api/getUserInfo");
+        let response = await axios.get("/api/getUserInfo");
         if(response.status === 200){
             setUsername(response.username);
             setSign(response.sign);
@@ -32,7 +32,7 @@ const UserDashboard = props =>{
     }
     async function logout(e){
         e.preventDefault();
-        await axios.post("/api/logout");
+        await axios.delete("/api/signout");
         setRedirect(true);
     };
     if(redirect){return(<Redirect to={ {pathname: "/Login"}} />);}
