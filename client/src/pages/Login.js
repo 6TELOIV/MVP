@@ -25,7 +25,7 @@ function Login(props) {
   }
   if (redirect) {
     return (
-      <Redirect to={{ pathname: "/Temp", state: { data: profileInfo } }} />
+      <Redirect to={{ pathname: "/UserDashboard", state: { data: profileInfo } }} />
     );
   }
   return (
