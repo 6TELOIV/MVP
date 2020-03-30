@@ -12,10 +12,14 @@ import axios from 'axios';
 import { Redirect } from "react-router-dom";
 
 const UserDashboard = props =>{
+    useEffect(()=>{
+        getInfo();
+    },[]);
     const [username, setUsername] = useState('ERROR');
     const [sign, setSign] = useState('ERROR');
     const [house, setHouse] = useState('ERROR');
     const [moon, setMoon] = useState('ERROR');
+    const [redirect, setRedirect] = useState(false);
     const classes = useStyles();
     async function getInfo(){
         let response = await axios.post("/api/getUserInfo");
@@ -26,15 +30,12 @@ const UserDashboard = props =>{
             setMoon(response.moon);
         }
     }
-    //Functionality not completed
     async function logout(e){
         e.preventDefault();
         await axios.post("/api/logout");
-        return(<Redirect to={ {pathname: "/Login"}} />);
-    }
-    useEffect(()=>{
-        getInfo();
-    },[]);
+        setRedirect(true);
+    };
+    if(redirect){return(<Redirect to={ {pathname: "/Login"}} />);}
     return(
         <Container component="main" maxWidth="xs">
         <CssBaseline />
