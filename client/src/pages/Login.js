@@ -17,15 +17,14 @@ function Login(props) {
   const [email, changeEmail] = useState("");
   const [password, changePassword] = useState("");
   const [redirect, setRedirect] = useState(false);
-  //const [profileInfo, setProfileInfo] = useState();
-  const [password, setPassword]= useState("");
+  
   async function signIn(e) {
     e.preventDefault();
     signInRequest({username: email, password: password}, setRedirect.bind(this));
   }
   if (redirect) {
     return (
-      <Redirect to={{ pathname: "/UserDashboard", state: { data: profileInfo } }} />
+      <Redirect to={{ pathname: "/UserDashboard"}} />
     );
   }
   return (
@@ -38,7 +37,6 @@ function Login(props) {
         </Typography>
         <form
           className={classes.form}
-          validate
           onSubmit={e => signIn(e)}
         >
           <Grid container spacing={2}>
@@ -48,6 +46,7 @@ function Login(props) {
               variant="outlined"
               label="Email Address"
               autoComplete="email"
+              required
               onChange={e => {
                 changeEmail(e.target.value);
               }}
@@ -60,6 +59,7 @@ function Login(props) {
               variant="outlined"
               label="Password"
               autoComplete="password"
+              required
               onChange={e => {
                 changePassword(e.target.value);
               }}

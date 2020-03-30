@@ -15,19 +15,20 @@ const UserDashboard = props =>{
     useEffect(()=>{
         getInfo();
     },[]);
-    const [username, setUsername] = useState('ERROR');
-    const [sign, setSign] = useState('ERROR');
-    const [house, setHouse] = useState('ERROR');
-    const [moon, setMoon] = useState('ERROR');
+    const [name, setName] = useState('');
+    const [username, setUsername] = useState('');
+    const [sign, setSign] = useState('');
+    const [house, setHouse] = useState('');
     const [redirect, setRedirect] = useState(false);
     const classes = useStyles();
     async function getInfo(){
         let response = await axios.get("/api/getUserInfo");
+        if(!response.data) setRedirect(true);
         if(response.status === 200){
-            setUsername(response.username);
-            setSign(response.sign);
-            setHouse(response.house);
-            setMoon(response.moon);
+            setName(response.data.name);
+            setUsername(response.data.username);
+            setSign(response.data.sign);
+            setHouse(response.data.house);
         }
     }
     async function logout(e){
@@ -49,6 +50,12 @@ const UserDashboard = props =>{
             
             <Grid item xs={12}>
                 <Typography component="h3" align="center">
+                    Name: {name}
+                </Typography>
+            </Grid>
+
+            <Grid item xs={12}>
+                <Typography component="h3" align="center">
                     Username: {username}
                 </Typography>
             </Grid>
@@ -62,12 +69,6 @@ const UserDashboard = props =>{
             <Grid item xs={12}>
                 <Typography component="h3" align="center">
                     House: {house}
-                </Typography>
-            </Grid>
-
-            <Grid item xs={12}>
-                <Typography component="h3" align="center">
-                    Moon: {moon}
                 </Typography>
             </Grid>
 
