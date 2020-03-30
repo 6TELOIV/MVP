@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./Signup.css";
+import "./Site.css";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -11,48 +11,26 @@ import {
 } from "@material-ui/pickers";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import DateFnsUtils from "@date-io/date-fns";
 import { Redirect } from "react-router-dom";
 import axios from "axios";
-
-const useStyles = makeStyles(theme => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center"
-  },
-  avatar: {
-    margin: theme.spacing(3),
-    backgroundColor: "#D74C3D"
-  },
-  form: {
-    width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(3)
-  },
-  submit: {
-    margin: theme.spacing(5, 0, 3),
-    backgroundColor: "#396384"
-  },
-  ok: {
-    backgroundColor: "white",
-    borderRadius: "5%"
-  }
-}));
+import { Card } from "@material-ui/core";
+import useStyles from "../assets/Style.js"
 
 function Signup(props) {
   const classes = useStyles();
   const [selectedDate, handleDateChange] = useState(new Date());
   const [name, changeName] = useState("");
   const [email, changeEmail] = useState(props.location.email);
+  const [password, changePassword] = useState("");
   const [birthplace, changeBirthplace] = useState("");
   const [redirect, setRedirect] = useState(false);
   const [profileInfo, setProfileInfo] = useState();
   async function signInRequest() {
     let info = {
-      email: email
+      email: email,
+      password: password
     };
     let response = await axios.post("/api/signin", info);
     console.log(response.status);
@@ -65,6 +43,7 @@ function Signup(props) {
     e.preventDefault();
     let info = {
       email: email,
+      password: password,
       name: name,
       address: birthplace,
       birthday: Math.floor(selectedDate.getTime() / 1000)
@@ -80,9 +59,9 @@ function Signup(props) {
     );
   }
   return (
-    <Container component="main" maxWidth="xs" className={classes.ok}>
+    <Container component="main" maxWidth="xs">
       <CssBaseline />
-      <div className={classes.paper}>
+      <Card className={classes.paper}>
         <Avatar className={classes.avatar} />
         <Typography component="h1" variant="h5">
           We just need a few more things
@@ -93,6 +72,7 @@ function Signup(props) {
           onSubmit={e => signupRequest(e)}
         >
           <Grid container spacing={2}>
+            
             <Grid item xs={12}>
               <TextField
                 autoComplete="fname"
@@ -122,6 +102,20 @@ function Signup(props) {
             </Grid>
 
             <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                label="Password"
+                autoComplete="password"
+                value={password}
+                onChange={e => {
+                  changePassword(e.target.value);
+                }}
+              />
+            </Grid>
+
+            <Grid item xs={12}>
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <DatePicker
                   disableFuture
@@ -131,15 +125,18 @@ function Signup(props) {
                   views={["year", "month", "date"]}
                   value={selectedDate}
                   onChange={handleDateChange}
+                  fullWidth
                 />
               </MuiPickersUtilsProvider>
-
+              </Grid>
+              <Grid item xs={12}>
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <TimePicker
                   autoOk
                   label="Time of Birth"
                   value={selectedDate}
                   onChange={handleDateChange}
+                  fullWidth
                 />
               </MuiPickersUtilsProvider>
             </Grid>
@@ -156,19 +153,23 @@ function Signup(props) {
                 }}
               />
             </Grid>
+
+            <Grid item xs={12}>
+                <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.button}
+              >
+                Sign Up
+              </Button>
+            </Grid>
+            
           </Grid>
 
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Sign Up
-          </Button>
         </form>
-      </div>
+      </Card>
     </Container>
   );
 }
