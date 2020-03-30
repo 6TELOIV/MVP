@@ -32,11 +32,10 @@ function AdminEdit(props) {
   const classes = useStyles();
 
   /*States for the Text Fields */
-  /*props.location.data receives the input to be edited from the AdminPage*/
+  /*props.location.selHoro receives the input to be edited from the AdminPage*/
 
   let horoscope = props.location.selHoro;
   
-
   const [quote, changeQuote] = useState(horoscope.quote);
   const [quoteAuthor, changeQuoteAuthor] = useState(horoscope.quoteAuthor);
   const [quoteSrc, changeQuoteSrc] = useState(horoscope.quoteSrc);
@@ -45,15 +44,6 @@ function AdminEdit(props) {
   const [moonThemes, changeMoonThemes] = useState(horoscope.moonThemes);
   const [signThemes, changeSignThemes] = useState(horoscope.signThemes);
   const [houseThemes, changeHouseThemes] = useState(horoscope.houseThemes);
-
-  // const [quote, changeQuote] = useState(props.location.quote);
-  // const [quoteAuthor, changeQuoteAuthor] = useState(props.location.quoteAuthor);
-  // const [quoteSrc, changeQuoteSrc] = useState(props.location.quoteSrc);
-  // const [summary, changeSummary] = useState(props.location.summary);
-  // const [bestActivities, changeBestActivities] = useState(props.location.bestActivities);
-  // const [moonThemes, changeMoonThemes] = useState(props.location.moonThemes);
-  // const [signThemes, changeSignThemes] = useState(props.location.signThemes);
-  // const [houseThemes, changeHouseThemes] = useState(props.location.houseThemes);
 
   const [editInfo, setEditInfo] = useState();
   const [redirect, setRedirect] = useState(false);
@@ -76,7 +66,7 @@ function AdminEdit(props) {
     };
     setEditInfo(info);
 
-    let res = await axios.put('/api/admin', info);
+    await axios.put('/api/admin', info);
 
     setRedirect(true);
   }

@@ -37,9 +37,9 @@ const HoroscopeList = React.memo((props) => {
 
         <TableBody>
           {props.horoscopeList.map((row, i) => {
-            let housematch = !props.filterHoroscope.house || props.filterHoroscope.house==row.house;
-            let signmatch = !props.filterHoroscope.sign || props.filterHoroscope.sign==row.sign;
-            let moonmatch = !props.filterHoroscope.moon || props.filterHoroscope.moon==row.moonPhase;
+            let housematch = !props.filterHoroscope.house || props.filterHoroscope.house === row.house;
+            let signmatch = !props.filterHoroscope.sign || props.filterHoroscope.sign === row.sign;
+            let moonmatch = !props.filterHoroscope.moon || props.filterHoroscope.moon === row.moonPhase;
             let textmatch = !props.filterHoroscope.text || (row.summary.toLowerCase().indexOf(props.filterHoroscope.text.toLowerCase()) >= 0);
             if (housematch && signmatch && moonmatch && textmatch) {
               return (

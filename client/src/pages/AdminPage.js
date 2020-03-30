@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import AdminDetail from "../components/AdminDetail"
 import HoroscopeList from "../components/HoroscopeList"
 import Search from "../components/Search"
 import "./AdminPage.css";
 import axios from 'axios'
-import { Paper, Grid, AppBar, Typography, Button, IconButton, Toolbar } from '@material-ui/core'
+import { Paper, AppBar, Typography, Toolbar } from '@material-ui/core'
 
 
 export default function Admin() {
