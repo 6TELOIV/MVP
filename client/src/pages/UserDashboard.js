@@ -26,6 +26,7 @@ const UserDashboard = props =>{
             setMoon(response.moon);
         }
     }
+    //Functionality not completed
     async function logout(e){
         e.preventDefault();
         await axios.post("/api/logout");
