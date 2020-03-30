@@ -10,12 +10,14 @@ const getParam = (str, paramIdentifyer) => {
     return [undefined, str];
   }
   let end = str.substring(start).indexOf(' ');
+  let noSpace = false;
   if (end < 0) {
+    noSpace = true;
     end = str.length;
   }
   let paramStr = str.substring(start, end);
   let param = paramStr.substring(paramIdentifyer.length + 1);
-  str = str.replace(paramStr, '');
+  str = str.replace(paramStr + (noSpace ? '' : ' '), '');
   return [param, str];
 }
 
@@ -120,6 +122,7 @@ const Search = (props) => {
             root: classes.inputRoot,
             input: classes.inputInput,
           }}
+          onChange={filter}
           inputProps={{ 'aria-label': 'search' }}
         />
       </div>
