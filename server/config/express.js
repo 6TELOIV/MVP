@@ -10,7 +10,6 @@ import passport from 'passport'
 import localStrategy from '../strategies/local.js'
 import apiRouter from '../routes/api.routes.js';
 import userModel from '../models/userModel.js';
-import config from './config.js';
 
 const MongoStore = mongoSession(session);
 
@@ -19,7 +18,7 @@ export const init = () => {
         connect to database
         - reference README for db uri
     */
-    mongoose.connect(process.env.DB_URI || config.db.uri, {
+    mongoose.connect(config.db.uri, {
         useNewUrlParser: true,
         useUnifiedTopology: true
     });
