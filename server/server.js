@@ -3,13 +3,10 @@ import * as express from './config/express.js';
 
 global.config = {
   db: {
-    //uri: 'mongodb+srv://user:test@cluster0-pyhne.mongodb.net/test?retryWrites=true&w=majority', //uri here
   },
   openCage: {
-    //key: '98507518777f40cc99608866808967d8'
   },
   session: {
-    //secret: 'IO9sCg7L41Eos5WPUFN8cUGcjzsfFstE'
   }
 }
 
