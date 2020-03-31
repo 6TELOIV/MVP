@@ -8,6 +8,7 @@ const apiRouter = express.Router();
 
 apiRouter.post('/signup', coordinatesController, accountController.signUp);
 apiRouter.post('/signin', passport.authenticate('local'), accountController.signIn)
+apiRouter.get('/getUserInfo', accountController.getUserInfo)
 apiRouter.get('/admin', adminController.getEntries)
 apiRouter.put('/admin', adminController.edit)
 apiRouter.post('/admin', adminController.reset)

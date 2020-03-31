@@ -2,7 +2,7 @@ import horoscopeModel from '../models/horoscopeModel.js';
 
 	export const getEntries = async (req, res) => {
 		try{
-			console.log(req.session.passport.user);
+			//console.log(req.session.passport.user);
 			horoscopeModel.find()
 			.then(entries => {
 				let revisedArray = [];

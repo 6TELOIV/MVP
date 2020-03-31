@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import {signInRequest} from "../helpers/loginFunction.js"
 import "./Site.css";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
@@ -25,20 +26,10 @@ function Signup(props) {
   const [email, changeEmail] = useState(props.location.email);
   const [password, changePassword] = useState("");
   const [birthplace, changeBirthplace] = useState("");
+  const [password,changePassword] = useState("");
   const [redirect, setRedirect] = useState(false);
   const [profileInfo, setProfileInfo] = useState();
-  async function signInRequest() {
-    let info = {
-      email: email,
-      password: password
-    };
-    let response = await axios.post("/api/signin", info);
-    console.log(response.status);
-    if (response.status === 200) {
-      setProfileInfo(response.data);
-      setRedirect(true);
-    }
-  }
+
   async function signupRequest(e) {
     e.preventDefault();
     let info = {
@@ -48,9 +39,13 @@ function Signup(props) {
       address: birthplace,
       birthday: Math.floor(selectedDate.getTime() / 1000)
     };
-    let response = await axios.post("/api/signup", info);
+    let response = await axios.post("/api/signup", info)
     if (response.status === 200) {
-      signInRequest();
+      const loginInfo = {
+        username: email,
+        password: password
+      }
+      signInRequest(loginInfo, setProfileInfo.bind(this), setRedirect.bind(this));
     }
   }
   if (redirect) {
