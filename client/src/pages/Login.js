@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import {signInRequest} from "../helpers/loginFunction.js"
-import "./Login.css";
+import { signInRequest } from "../helpers/loginFunction.js"
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
@@ -19,14 +18,13 @@ function Login(props) {
   const [password, changePassword] = useState("");
   const [redirect, setRedirect] = useState(false);
   //const [profileInfo, setProfileInfo] = useState();
-  const [password, setPassword]= useState("");
   async function signIn(e) {
     e.preventDefault();
-    signInRequest({username: email, password: password}, setRedirect.bind(this));
+    signInRequest({ username: email, password: password }, setRedirect.bind(this));
   }
   if (redirect) {
     return (
-      <Redirect to={{ pathname: "/Temp"}} />
+      <Redirect to={{ pathname: "/Temp" }} />
     );
   }
   return (
@@ -43,49 +41,38 @@ function Login(props) {
           onSubmit={e => signIn(e)}
         >
           <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              variant="outlined"
-              label="Email Address"
-              autoComplete="email"
-              onChange={e => {
-                changeEmail(e.target.value);
-              }}
-            />
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                variant="outlined"
+                label="Email Address"
+                autoComplete="email"
+                onChange={e => {
+                  changeEmail(e.target.value);
+                }}
+              />
+            </Grid>
+            <br></br>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                variant="outlined"
+                label="Password"
+                autoComplete="password"
+                onChange={e => {
+                  changePassword(e.target.value);
+                }}
+              />
+            </Grid>
+            <Button
+              type="submit"
+              className={classes.submit}
+              variant="contained"
+              color="primary"
+            >
+              Login
+            </Button>
           </Grid>
-          <br></br>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              variant="outlined"
-              label="Password"
-              autoComplete="password"
-              onChange={e => {
-                changePassword(e.target.value);
-              }}
-            />
-          </Grid>
-
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              variant="outlined"
-              label="Password"
-              autoComplete="password"
-              onChange={e => {
-                setPassword(e.target.value);
-              }}
-            />
-          </Grid>
-          <Button
-            type="submit"
-            className={classes.submit}
-            variant="contained"
-            color="primary"
-          >
-            Login
-          </Button>
         </form>
       </Card>
     </Container>
