@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { signInRequest } from "../helpers/loginFunction.js"
+import React, { useState, useEffect } from "react";
+import {signInRequest} from "../helpers/loginFunction.js"
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
@@ -10,23 +10,37 @@ import { Redirect } from "react-router-dom";
 import "./Site.css";
 import { Card } from "@material-ui/core";
 import Avatar from "@material-ui/core/Avatar";
-import useStyles from "../assets/Style.js"
+import useStyles from "../assets/Style.js";
+import axios from "axios";
 
 function Login(props) {
   const classes = useStyles();
   const [email, changeEmail] = useState("");
   const [password, changePassword] = useState("");
   const [redirect, setRedirect] = useState(false);
-  //const [profileInfo, setProfileInfo] = useState();
+  const [wrongPass, setWrongPass] = useState(false);
+
+  useEffect(()=>{
+      getInfo();
+  },[]);
+  async function getInfo(){
+      let response = await axios.get("/api/getUserInfo");
+      if(response.data) setRedirect(true);
+      
+  }
+  
   async function signIn(e) {
     e.preventDefault();
-    signInRequest({ username: email, password: password }, setRedirect.bind(this));
+    setWrongPass(false);
+    signInRequest({username: email, password: password}, setRedirect.bind(this), setWrongPass.bind(this));
   }
+
   if (redirect) {
     return (
-      <Redirect to={{ pathname: "/Temp" }} />
+      <Redirect to={{ pathname: "/UserDashboard"}} />
     );
   }
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -37,33 +51,45 @@ function Login(props) {
         </Typography>
         <form
           className={classes.form}
-          validate
           onSubmit={e => signIn(e)}
         >
           <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                variant="outlined"
-                label="Email Address"
-                autoComplete="email"
-                onChange={e => {
-                  changeEmail(e.target.value);
-                }}
-              />
-            </Grid>
-            <br></br>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                variant="outlined"
-                label="Password"
-                autoComplete="password"
-                onChange={e => {
-                  changePassword(e.target.value);
-                }}
-              />
-            </Grid>
+          {wrongPass && 
+          <Grid item xs={12}>
+            <p align="center" style={{color: 'red'}}>
+              Incorrect username/password combo
+            </p>
+          </Grid>}
+
+
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              variant="outlined"
+              label="Email Address"
+              autoComplete="email"
+              required
+              onChange={e => {
+                changeEmail(e.target.value);
+              }}
+            />
+          </Grid>
+          <br></br>
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              variant="outlined"
+              label="Password"
+              autoComplete="password"
+              type="password"
+              required
+              onChange={e => {
+                changePassword(e.target.value);
+              }}
+            />
+          </Grid>
+
+          <Grid item xs={12}>
             <Button
               type="submit"
               className={classes.submit}
@@ -72,6 +98,7 @@ function Login(props) {
             >
               Login
             </Button>
+          </Grid>
           </Grid>
         </form>
       </Card>
