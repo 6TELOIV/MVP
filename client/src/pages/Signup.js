@@ -27,7 +27,6 @@ function Signup(props) {
   const [password, changePassword] = useState("");
   const [birthplace, changeBirthplace] = useState("");
   const [redirect, setRedirect] = useState(false);
-  const [profileInfo, setProfileInfo] = useState();
 
   async function signupRequest(e) {
     e.preventDefault();
@@ -44,12 +43,12 @@ function Signup(props) {
         username: email,
         password: password
       }
-      signInRequest(loginInfo, setProfileInfo.bind(this), setRedirect.bind(this));
+      signInRequest(loginInfo, setRedirect.bind(this));
     }
   }
   if (redirect) {
     return (
-      <Redirect to={{ pathname: "/Temp", state: { data: profileInfo } }} />
+      <Redirect to={{ pathname: "/UserDashboard" }} />
     );
   }
   return (
@@ -103,6 +102,7 @@ function Signup(props) {
                 label="Password"
                 autoComplete="password"
                 value={password}
+                type="password"
                 onChange={e => {
                   changePassword(e.target.value);
                 }}

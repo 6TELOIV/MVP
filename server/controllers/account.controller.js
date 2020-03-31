@@ -91,6 +91,11 @@ export const signIn = async(req, res) => {
 	res.status(200).send(foundRevised);
 }
 
+export const signOut = async(req, res) => {
+	req.session.destroy();
+	res.status(200).send("Successfully Logged Out");
+}
+
 export const getUserInfo = async(req, res) => {
 	if(!req.session.passport){
 		res.status(200).send(null); //Sends null to trigger login
