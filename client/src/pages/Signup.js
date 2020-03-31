@@ -102,6 +102,7 @@ function Signup(props) {
                 label="Password"
                 autoComplete="password"
                 value={password}
+                type="password"
                 onChange={e => {
                   changePassword(e.target.value);
                 }}
