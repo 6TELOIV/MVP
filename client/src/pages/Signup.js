@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {signInRequest} from "../helpers/loginFunction.js"
 import "./Site.css";
 import Avatar from "@material-ui/core/Avatar";
@@ -27,6 +27,15 @@ function Signup(props) {
   const [password, changePassword] = useState("");
   const [birthplace, changeBirthplace] = useState("");
   const [redirect, setRedirect] = useState(false);
+
+  useEffect(()=>{
+      getInfo();
+  },[]);
+  async function getInfo(){
+      let response = await axios.get("/api/getUserInfo");
+      if(response.data) setRedirect(true);
+      
+  }
 
   async function signupRequest(e) {
     e.preventDefault();
