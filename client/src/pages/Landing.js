@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
@@ -10,10 +10,28 @@ import "./Site.css";
 import { Card } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import useStyles from "../assets/Style.js"
+import { Redirect }  from "react-router-dom";
+import axios from "axios";
 
 export default function Landing() {
   const classes = useStyles();
   const [email, setEmail] = useState("");
+  const [redirect, setRedirect] = useState(false);
+
+  useEffect(()=>{
+    getInfo();
+  },[]);
+  async function getInfo(){
+      let response = await axios.get("/api/getUserInfo");
+      if(response.data) setRedirect(true);
+      
+  }
+
+  if (redirect) {
+    return (
+      <Redirect to={{ pathname: "/UserDashboard"}} />
+    );
+  }
 
   return (
     <Container component="main" maxWidth="xs">
