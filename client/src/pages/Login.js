@@ -6,30 +6,17 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { Redirect } from "react-router-dom";
-
-const useStyles = makeStyles(theme => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center"
-  },
-  submit: {
-    margin: theme.spacing(5, 10, 3),
-    backgroundColor: "#396384"
-  },
-  ok: {
-    backgroundColor: "white",
-    borderRadius: "5%"
-  }
-}));
+import "./Site.css";
+import { Card } from "@material-ui/core";
+import Avatar from "@material-ui/core/Avatar";
+import useStyles from "../assets/Style.js"
 
 function Login(props) {
   const classes = useStyles();
   const [email, changeEmail] = useState("");
+  const [password, changePassword] = useState("");
   const [redirect, setRedirect] = useState(false);
   //const [profileInfo, setProfileInfo] = useState();
   const [password, setPassword]= useState("");
@@ -43,16 +30,19 @@ function Login(props) {
     );
   }
   return (
-    <Container component="main" maxWidth="xs" className={classes.ok}>
+    <Container component="main" maxWidth="xs">
       <CssBaseline />
-      <div className={classes.paper}>
-        <Typography variant="h3">Login</Typography>
-
+      <Card className={classes.paper}>
+        <Avatar className={classes.avatar} />
+        <Typography component="h1" variant="h5" align="center">
+          Welcome Back
+        </Typography>
         <form
           className={classes.form}
           validate
           onSubmit={e => signIn(e)}
         >
+          <Grid container spacing={2}>
           <Grid item xs={12}>
             <TextField
               fullWidth
@@ -61,6 +51,18 @@ function Login(props) {
               autoComplete="email"
               onChange={e => {
                 changeEmail(e.target.value);
+              }}
+            />
+          </Grid>
+          <br></br>
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              variant="outlined"
+              label="Password"
+              autoComplete="password"
+              onChange={e => {
+                changePassword(e.target.value);
               }}
             />
           </Grid>
@@ -85,7 +87,7 @@ function Login(props) {
             Login
           </Button>
         </form>
-      </div>
+      </Card>
     </Container>
   );
 }

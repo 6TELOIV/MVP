@@ -14,6 +14,7 @@ const AdminEdit = lazy(() => import("./pages/AdminEdit"));
 
 //<Route component={NotFound}/>
 const App = props => {
+  
   return (
     <Router>
       <Suspense fallback={<div>Loading...</div>}>
