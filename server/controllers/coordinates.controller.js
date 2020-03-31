@@ -1,4 +1,3 @@
-import config from '../config/config.js';
 import request from 'request';
 
 export default (req, res, next) => {
@@ -7,7 +6,7 @@ export default (req, res, next) => {
 
         const options = {
             q: addressTemp,
-            key: process.env.OPENCAGE_KEY || config.openCage.key,
+            key: config.openCage.key,
         };
 
         // The below code makes a GET request to the specified URL.
