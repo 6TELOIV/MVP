@@ -1,4 +1,5 @@
 .adminRoot {
+    overflow-x: hidden;
     width: 100%;
     min-height: 100vh;
     max-height: 100vh;
@@ -31,4 +32,18 @@
     grid-column: side / body;
     grid-row: header / body;
     border-right: 1px solid rgba(224, 224, 224, 1);
+}
+.edit {
+    grid-column: side / description;
+    grid-row: header / body;
+}
+.save {
+    background-color: "#396384"
+}
+.editForm {
+    margin: 0 64px 64px 64px
+}
+.backdrop {
+    z-index: 9999;
+    color: #fff;
 }

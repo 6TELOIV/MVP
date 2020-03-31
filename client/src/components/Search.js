@@ -5,19 +5,17 @@ import SearchIcon from '@material-ui/icons/Search';
 //Helper to get and remove X=xxxxx substring value
 //Returns [ value, newString ] value = undefined if not found
 const getParam = (str, paramIdentifyer) => {
-  let start = str.indexOf(paramIdentifyer + '=');
-  if (start < 0) {
+  let paramStr = str.match(new RegExp(paramIdentifyer + "=\\d*\\s*", ''));
+  if (!paramStr) {
     return [undefined, str];
   }
-  let end = str.substring(start).indexOf(' ');
-  let noSpace = false;
-  if (end < 0) {
-    noSpace = true;
-    end = str.length;
+  paramStr = paramStr[0];
+  let param = paramStr.match(new RegExp("=\\d*", ''));
+  console.log(param);
+  if (param) {
+    param = parseInt(param[0].substring(1));
   }
-  let paramStr = str.substring(start, end);
-  let param = paramStr.substring(paramIdentifyer.length + 1);
-  str = str.replace(paramStr + (noSpace ? '' : ' '), '');
+  str = str.replace(paramStr, '');
   return [param, str];
 }
 
@@ -102,6 +100,7 @@ const Search = (props) => {
     [moonParam, value] = getParam(value, "m");
     moonParam = parseInt(moonParam);
 
+    console.log(houseParam,signParam,moonParam,value)
     //Set States
     setHouse(houseParam);
     setSign(signParam);

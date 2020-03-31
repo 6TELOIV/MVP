@@ -16,7 +16,11 @@ export default function Admin() {
       text: ''
     }
   );
-  const [selectedHoroscope, setSelectedHoroscope] = useState([]);
+
+  const setFilterHoroscopeWrapper = (filter) => {
+    setFilterHoroscope(filter);
+  }
+  const [selectedHoroscope, setSelectedHoroscope] = useState();
   const [horoscopeList, setHoroscopeList] = useState([]);
   const setSelectedHoroscopeWrapper = (selected) => {
     setSelectedHoroscope(selected);
@@ -31,7 +35,6 @@ export default function Admin() {
   useEffect(() => {
     getHoroscopes();
   }, [])
-
   return (
     <div className="adminRoot">
       <AppBar position="relative" className="header">
@@ -41,11 +44,9 @@ export default function Admin() {
               Horoscopes Database Admin Access
             </Typography>
           </div>
-          <Search setFilterHoroscope={setFilterHoroscope} />
+          <Search setFilterHoroscope={setFilterHoroscopeWrapper} />
         </Toolbar>
       </AppBar>
-      <Paper className="search" square elevation="0">
-      </Paper>
       <Paper className="description" square elevation="0">
         <AdminDetail horoscopeView={selectedHoroscope} />
       </Paper>
@@ -56,18 +57,5 @@ export default function Admin() {
         />
       </Paper>
     </div>
-    // <div>
-    // <div>
-    //   
-    // </div>
-    // <div>
-    // </div>
-    // <div>
-    //   <HoroscopeList horoscopeList={horoscopeList} 
-    //                    filterHoroscope={filterHoroscope} 
-    //                    setSelectedHoroscope={setSelectedHoroscopeWrapper} 
-    //     />
-    // </div>
-    // </div>  
   );
 }

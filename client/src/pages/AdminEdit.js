@@ -1,35 +1,13 @@
 import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
-import Container from "@material-ui/core/Container";
-import { makeStyles } from "@material-ui/core/styles";
+import { AppBar, Typography, Toolbar } from '@material-ui/core'
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import { Redirect } from "react-router-dom";
-import "./Landing.css";
+import "./AdminPage.css";
 import axios from 'axios';
 
-//Style
-const useStyles = makeStyles(theme => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    marginBottom: theme.spacing(8),
-    backgroundColor: "white",
-    borderRadius: "5%",
-    padding: "0 50px"
-  },
-  container: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center"
-  },
-  save: {
-    margin: theme.spacing(5, 10, 3),
-    backgroundColor: "#396384"
-  }
-}));
-
 function AdminEdit(props) {
-  const classes = useStyles();
 
   /*States for the Text Fields */
   /*props.location.selHoro receives the input to be edited from the AdminPage*/
@@ -78,12 +56,18 @@ function AdminEdit(props) {
   }
 
   return (
-    <Container className={classes.container}>
-      <div className={classes.paper}>
-        <header>
-          <h1 align="center">Admin Edit Page</h1>
-        </header>
-        <form 
+    <div className="adminRoot">
+      <AppBar position="relative" className="header">
+        <Toolbar>
+          <div className="title">
+            <Typography variant="h6" >
+              Edit Horoscope
+            </Typography>
+          </div>
+        </Toolbar>
+      </AppBar>
+      <div className="edit">
+        <form className="editForm"
           onSubmit={e => handleSave(e)}>
 
           {/*Quote Edit Text Field*/}
@@ -232,7 +216,7 @@ function AdminEdit(props) {
             >
               <Button
                 type="submit"
-                className={classes.save}
+                className="save"
                 variant="contained"
                 color="primary"
               >
@@ -242,7 +226,7 @@ function AdminEdit(props) {
           </Grid>
         </form>
       </div>
-    </Container>
+    </div>
   );
 }
 
