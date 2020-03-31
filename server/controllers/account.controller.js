@@ -25,6 +25,7 @@ export const signUp = async (req, res) => {
 	let julday_ut, house, sunHouse;
 	try {
 		julday_ut = swisseph.swe_julday (year, month, day, hour, swisseph.SE_GREG_CAL);
+		//TO-DO If no bday time, use sunHouse as house
 		house = swisseph.swe_houses (julday_ut, req.body.lat, req.body.long, 'W').house[0] / 30;
 		sunHouse = Math.floor(swisseph.swe_calc_ut(julday_ut, swisseph.SE_SUN, flag).longitude / 30);
 	} catch (error) {
