@@ -5,7 +5,7 @@ import SearchIcon from '@material-ui/icons/Search';
 //Helper to get and remove X=xxxxx substring value
 //Returns [ value, newString ] value = undefined if not found
 const getParam = (str, paramIdentifyer) => {
-  let paramStr = str.match(new RegExp(paramIdentifyer + "=\\d*\\s*", ''));
+  let paramStr = str.match(new RegExp("\\s*" + paramIdentifyer + "=\\d*\\s*", ''));
   if (!paramStr) {
     return [undefined, str];
   }
