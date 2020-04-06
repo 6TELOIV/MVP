@@ -5,6 +5,8 @@ import Button from "@material-ui/core/Button";
 import { Typography, Toolbar } from "@material-ui/core";
 import "./AdminDetail.css";
 
+import { numberToSign, numberToPhase } from '../helpers/helpers.js'
+
 const AdminDetail = props => {
   const hs = props.horoscopeView; //Changed some stuff here to better adapt to the current horoscope model - Shaun
   return (
@@ -36,11 +38,11 @@ const AdminDetail = props => {
         {
           hs ?
             <React.Fragment>
-              <Typography variant="subtitle1" component="span">sign: </Typography><Typography variant="body2" component="span">{hs.sign}</Typography>
+              <Typography variant="subtitle1" component="span">sign: </Typography><Typography variant="body2" component="span">{numberToSign(hs.sign)}</Typography>
               <br />
-              <Typography variant="subtitle1" component="span">house: </Typography><Typography variant="body2" component="span">{hs.house}</Typography>
+              <Typography variant="subtitle1" component="span">house: </Typography><Typography variant="body2" component="span">{numberToSign(hs.house)}</Typography>
               <br />
-              <Typography variant="subtitle1" component="span">moon: </Typography><Typography variant="body2" component="span">{hs.moonPhase}</Typography>
+              <Typography variant="subtitle1" component="span">moon: </Typography><Typography variant="body2" component="span">{numberToPhase(hs.moonPhase)}</Typography>
               <br />
               <br />
               <Typography variant="subtitle1" component="span">summary: </Typography><Typography variant="body2" component="p">{hs.summary}</Typography>

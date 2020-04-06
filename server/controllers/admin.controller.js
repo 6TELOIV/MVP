@@ -3,7 +3,7 @@ import horoscopeModel from '../models/horoscopeModel.js';
 	export const getEntries = async (req, res) => {
 		try{
 			//console.log(req.session.passport.user);
-			horoscopeModel.find()
+			horoscopeModel.find().sort({sign: 1, house: 1, moonPhase: 1})
 			.then(entries => {
 				let revisedArray = [];
 				entries.forEach(entry=>{
