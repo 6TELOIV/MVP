@@ -7,6 +7,8 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
+import { numberToSign, numberToPhase } from '../helpers/helpers.js'
+
 
 const useStyles = makeStyles({
   table: {
@@ -44,9 +46,9 @@ const HoroscopeList = React.memo((props) => {
             if (housematch && signmatch && moonmatch && textmatch) {
               return (
                 <TableRow className={classes.entry} key={i} onClick={()=>{props.setSelectedHoroscope(row);}}>
-                  <TableCell component="th" scope="row">{row.sign}</TableCell>
-                  <TableCell align="right">{row.house}</TableCell>
-                  <TableCell align="right">{row.moonPhase}</TableCell>
+                  <TableCell component="th" scope="row">{numberToSign(row.sign)}</TableCell>
+                  <TableCell align="right">{numberToSign(row.house)}</TableCell>
+                  <TableCell align="right">{numberToPhase(row.moonPhase)}</TableCell>
                   <TableCell align="right">{row.summary}</TableCell>
                 </TableRow>
               );

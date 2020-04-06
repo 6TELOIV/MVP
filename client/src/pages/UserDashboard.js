@@ -11,14 +11,16 @@ import { Card } from "@material-ui/core";
 import axios from 'axios';
 import { Redirect } from "react-router-dom";
 
+import { numberToSign } from '../helpers/helpers.js'
+
 const UserDashboard = props =>{
     useEffect(()=>{
         getInfo();
     },[]);
     const [name, setName] = useState('');
     const [username, setUsername] = useState('');
-    const [sign, setSign] = useState('');
-    const [house, setHouse] = useState('');
+    const [sign, setSign] = useState(1);
+    const [house, setHouse] = useState(1);
     const [redirect, setRedirect] = useState(false);
     const classes = useStyles();
     async function getInfo(){
@@ -62,13 +64,13 @@ const UserDashboard = props =>{
                 
             <Grid item xs={12}>
                 <Typography component="h3" align="center">
-                    Sign: {sign}
+                    Sign: {numberToSign(sign)}
                 </Typography>
             </Grid>
                 
             <Grid item xs={12}>
                 <Typography component="h3" align="center">
-                    House: {house}
+                    House: {numberToSign(house)}
                 </Typography>
             </Grid>
 
