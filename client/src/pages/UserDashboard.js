@@ -12,7 +12,7 @@ import { Card } from "@material-ui/core";
 import axios from "axios";
 import { Redirect } from "react-router-dom";
 
-import UserDetail from "../components/UserDetail";
+import UserHoroscope from "../components/UserHoroscope";
 import { numberToSign } from "../helpers/helpers.js";
 
 const UserDashboard = (props) => {
@@ -94,8 +94,8 @@ const UserDashboard = (props) => {
             </Grid>
           </Grid>
         </Card>
+        <UserHoroscope hs={horoscope} />
       </Container>
-      <UserDetail hs={horoscope} />
     </div>
   );
 };
