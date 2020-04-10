@@ -7,6 +7,8 @@ global.config = {
   openCage: {
   },
   session: {
+  },
+  googleAuth: {
   }
 }
 
@@ -16,6 +18,8 @@ async function start() {
     global.config.db.uri = process.env.DB_URI;
     global.config.openCage.key = process.env.OC_KEY;
     global.config.session.secret = process.env.SES_SEC;
+    global.config.googleAuth.clientID = process.env.CLIENTID;
+    global.config.googleAuth.clientSecret = process.env.CLIENTSEC;
   } else {
     global.config = (await import('./config/config.js')).default;
   }

@@ -9,7 +9,8 @@ const Login = lazy(() => import("./pages/Login"));
 const Signup = lazy(() => import("./pages/Signup"));
 const AdminPage = lazy(() => import("./pages/AdminPage"));
 const AdminEdit = lazy(() => import("./pages/AdminEdit"));
-const UserDashboard = lazy(()=>import("./pages/UserDashboard"))
+const UserDashboard = lazy(()=>import("./pages/UserDashboard"));
+const GoogleAuth = lazy(() => import("./pages/GoogleAuth"));
 //import NotFound from "./views/NotFound";
 
 //<Route component={NotFound}/>
@@ -25,6 +26,7 @@ const App = props => {
           <Route exact path="/AdminPage" component={AdminPage} />
           <Route exact path="/UserDashboard" component={UserDashboard} />
           <Route exact path="/AdminEdit" component={AdminEdit} />
+          <Route exact path="/googleauth" component={GoogleAuth} />
           <Route exact path="/">
             <Redirect to="/Landing" />
           </Route>

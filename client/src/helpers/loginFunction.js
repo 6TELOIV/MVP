@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const signInRequest = async (info, setRedirect, setWrongPass) =>{
     try{
-      let response = await axios.post("/api/signin", info);
+      let response = await axios.post("/api/signin", info, {withCredentials: true});
       if (response.status === 200) {
         setRedirect(true);
       }

@@ -36,6 +36,7 @@
     "morgan": "^1.9.1",
     "nodemon": "^1.18.10",
     "passport": "^0.4.1",
+    "passport-google-oauth": "^2.0.0",
     "passport-local": "^1.0.0",
     "should": "^13.2.3",
     "supertest": "^4.0.2",

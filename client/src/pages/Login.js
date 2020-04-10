@@ -24,8 +24,8 @@ function Login(props) {
       getInfo();
   },[]);
   async function getInfo(){
-      let response = await axios.get("/api/getUserInfo");
-      if(response.data) setRedirect(true);
+    let response = await axios.get("/api/getUserInfo");
+    if(response.data) setRedirect(true);
       
   }
   
