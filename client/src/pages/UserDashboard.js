@@ -11,8 +11,7 @@ import Container from "@material-ui/core/Container";
 import { Card } from "@material-ui/core";
 import axios from "axios";
 import { Redirect } from "react-router-dom";
-
-import UserHoroscope from "../components/UserHoroscope";
+import { Link } from "react-router-dom";
 import { numberToSign } from "../helpers/helpers.js";
 
 const UserDashboard = (props) => {
@@ -81,6 +80,25 @@ const UserDashboard = (props) => {
             </Grid>
 
             <Grid item xs={12}>
+              <Link
+                to={{
+                  pathname: "UserHoroscope",
+                  horoscope: horoscope,
+                }}
+                style={{ textDecoration: "none" }}
+              >
+                <Button
+                  className={classes.button}
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+                >
+                  View Horoscope
+                </Button>
+              </Link>
+            </Grid>
+
+            <Grid item xs={12}>
               <Button
                 type="submit"
                 className={classes.button}
@@ -94,7 +112,6 @@ const UserDashboard = (props) => {
             </Grid>
           </Grid>
         </Card>
-        <UserHoroscope hs={horoscope} />
       </Container>
     </div>
   );
