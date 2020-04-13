@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import "./Site.css";
-import "./UserDashboard.css";
 import useStyles from "../assets/Style.js";
 import Grid from "@material-ui/core/Grid";
 import Avatar from "@material-ui/core/Avatar";
@@ -45,74 +44,72 @@ const UserDashboard = (props) => {
     return <Redirect to={{ pathname: "/Login" }} />;
   }
   return (
-    <div className="UserDashboardMain">
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Card className={classes.paper}>
-          <Avatar className={classes.avatar} />
-          <Typography component="h1" variant="h5" align="center">
-            Profile Information
-          </Typography>
-          <br></br>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <Typography component="h3" align="center">
-                Name: {name}
-              </Typography>
-            </Grid>
+    <div>
+      <div className={classes.navigation}>
+        <Button
+          className={classes.navButton}
+          variant="contained"
+          onClick={logout}
+        >
+          Logout
+        </Button>
+      </div>
+      <div className={classes.pageMain}>
+        <Container component="main" maxWidth="xs">
+          <CssBaseline />
+          <Card className={classes.paper}>
+            <Avatar className={classes.avatar} />
+            <Typography component="h1" variant="h5" align="center">
+              Profile Information
+            </Typography>
+            <br></br>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <Typography component="h3" align="center">
+                  Name: {name}
+                </Typography>
+              </Grid>
 
-            <Grid item xs={12}>
-              <Typography component="h3" align="center">
-                Username: {username}
-              </Typography>
-            </Grid>
+              <Grid item xs={12}>
+                <Typography component="h3" align="center">
+                  Username: {username}
+                </Typography>
+              </Grid>
 
-            <Grid item xs={12}>
-              <Typography component="h3" align="center">
-                Sign: {numberToSign(sign)}
-              </Typography>
-            </Grid>
+              <Grid item xs={12}>
+                <Typography component="h3" align="center">
+                  Sign: {numberToSign(sign)}
+                </Typography>
+              </Grid>
 
-            <Grid item xs={12}>
-              <Typography component="h3" align="center">
-                House: {numberToSign(house)}
-              </Typography>
-            </Grid>
+              <Grid item xs={12}>
+                <Typography component="h3" align="center">
+                  House: {numberToSign(house)}
+                </Typography>
+              </Grid>
 
-            <Grid item xs={12}>
-              <Link
-                to={{
-                  pathname: "UserHoroscope",
-                  horoscope: horoscope,
-                }}
-                style={{ textDecoration: "none" }}
-              >
-                <Button
-                  className={classes.button}
-                  variant="contained"
-                  color="primary"
-                  fullWidth
+              <Grid item xs={12}>
+                <Link
+                  to={{
+                    pathname: "UserHoroscope",
+                    horoscope: horoscope,
+                  }}
+                  style={{ textDecoration: "none" }}
                 >
-                  View Horoscope
-                </Button>
-              </Link>
+                  <Button
+                    className={classes.button}
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                  >
+                    View Horoscope
+                  </Button>
+                </Link>
+              </Grid>
             </Grid>
-
-            <Grid item xs={12}>
-              <Button
-                type="submit"
-                className={classes.button}
-                variant="contained"
-                color="primary"
-                fullWidth
-                onClick={logout}
-              >
-                Logout
-              </Button>
-            </Grid>
-          </Grid>
-        </Card>
-      </Container>
+          </Card>
+        </Container>
+      </div>
     </div>
   );
 };

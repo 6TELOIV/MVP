@@ -3,7 +3,7 @@ import { Typography, Toolbar } from "@material-ui/core";
 import { Card } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Redirect } from "react-router-dom";
-import { numberToPhase } from "../helpers/helpers.js";
+import { numberToPhase, numberToSign } from "../helpers/helpers.js";
 import Button from "@material-ui/core/Button";
 import axios from "axios";
 const useStyles = makeStyles((theme) => ({
@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     backgroundColor: "#FFFFFF",
-    padding: "15px",
+    padding: "50px",
     width: "800px",
   },
   title: {
@@ -72,7 +72,7 @@ const UserHoroscope = (props) => {
     return <Redirect to={{ pathname: "/Login" }} />;
   }
   return (
-    <div className={classes.page}>
+    <div>
       <div className={classes.navigation}>
         <Button
           className={classes.navButton}
@@ -92,7 +92,10 @@ const UserHoroscope = (props) => {
       <div className={classes.pageMain}>
         <Card className={classes.cardMain}>
           <div className={classes.titleFrame}>
-            <Typography className={classes.title}>Horoscope</Typography>
+            <Typography className={classes.title}>
+              {numberToSign(hs.sign)}, House {hs.house},{" "}
+              {numberToPhase(hs.moonPhase)} moon
+            </Typography>
           </div>
           <div>
             <Typography className={classes.quote}>
