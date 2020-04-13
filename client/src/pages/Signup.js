@@ -23,18 +23,18 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 function Signup(props) {
   const classes = useStyles();
-  const [selectedDate, handleDateChange] = useState(new Date());
-  const [selectedTime, handleTimeChange] = useState("2018-01-01T17:00:00.000Z");
+  const [date, setDate] = useState(new Date());
+  const [time, setTime] = useState(new Date("2018-01-01T17:00:00.000Z"));
   const [name, changeName] = useState("");
   const [email, changeEmail] = useState(props.location.email);
   const [password, changePassword] = useState("");
   const [birthplace, changeBirthplace] = useState("");
   const [redirect, setRedirect] = useState(false);
+  const [noDate, setNoDate] = useState(false)
 
-  const [noDate, setDateUsage] = useState(false)
-  const handleChange = (event) => {
-    setDateUsage(event.target.checked);
-    handleTimeChange("2018-01-01T17:00:00.000Z");
+  const handleNoDateChange = (event) => {
+    setNoDate(event.target.checked);
+    setTime(new Date("2018-01-01T17:00:00.000Z"));
   };
 
   useEffect(()=>{
@@ -48,12 +48,19 @@ function Signup(props) {
 
   async function signupRequest(e) {
     e.preventDefault();
+    date.setHours(0);
+    date.setMinutes(0);
+    date.setSeconds(0);
+    date.setMilliseconds(0);
+
+    console.log(time);
+
     let info = {
       email: email,
       password: password,
       name: name,
       address: birthplace,
-      birthday: Math.floor(selectedDate.getTime() / 1000)
+      birthday: Math.floor((date.getTime() / 1000) + (((time.getHours() * 60) + time.getMinutes()) * 60 + time.getSeconds()))
 
     };
     let response = await axios.post("/api/signup", info)
@@ -136,8 +143,8 @@ function Signup(props) {
                   format="MM/dd/yyyy"
                   label="Date of Birth"
                   views={["year", "month", "date"]}
-                  value={selectedDate}
-                  onChange={date => handleDateChange(date)}
+                  value={date}
+                  onChange={date => setDate(date)}
                   fullWidth
                 />
               </MuiPickersUtilsProvider>
@@ -148,8 +155,8 @@ function Signup(props) {
                   
                   label="Time of Birth"
                   mask="__:__ _M"
-                  value={selectedTime}
-                  onChange={date => handleTimeChange(date)}
+                  value={time}
+                  onChange={date => setTime(date)}
                   fullWidth
                   disabled={noDate}
                 />
@@ -160,7 +167,7 @@ function Signup(props) {
                     checked={noDate}
                     value="allowExtraEmails" 
                     color="primary" 
-                    onChange={handleChange}
+                    onChange={handleNoDateChange}
                   />
                 }
                 label="No time of birth"
