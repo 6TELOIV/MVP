@@ -1,6 +1,5 @@
 import * as express from './config/express.js';
 
-
 global.config = {
   db: {
   },
@@ -19,7 +18,6 @@ async function start() {
   } else {
     global.config = (await import('./config/config.js')).default;
   }
-
   // Use env port or default
   const port = process.env.PORT || 5000;
   

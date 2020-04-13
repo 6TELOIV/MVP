@@ -10,6 +10,7 @@ import passport from 'passport'
 import localStrategy from '../strategies/local.js'
 import apiRouter from '../routes/api.routes.js';
 import userModel from '../models/userModel.js';
+import emailer from '../helpers/emailer.js';
 
 const MongoStore = mongoSession(session);
 
