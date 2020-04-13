@@ -8,7 +8,7 @@ import {
   CssBaseline,
   Container,
   Card,
-} from "@material-ui/core/Grid";
+} from "@material-ui/core";
 import axios from "axios";
 import { Redirect, Link } from "react-router-dom";
 import { numberToSign } from "../helpers/helpers.js";
