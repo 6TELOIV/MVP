@@ -1,19 +1,22 @@
 import React, { useEffect, useState } from "react";
 import "./Site.css";
-import useStyles from "../assets/Style.js";
-import Grid from "@material-ui/core/Grid";
-import Avatar from "@material-ui/core/Avatar";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Container from "@material-ui/core/Container";
-import { Card } from "@material-ui/core";
+import {
+  Grid,
+  Avatar,
+  Button,
+  Typography,
+  CssBaseline,
+  Container,
+  Card,
+} from "@material-ui/core/Grid";
 import axios from "axios";
-import { Redirect } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 import { numberToSign } from "../helpers/helpers.js";
+import UserAppbar from "../components/UserAppbar.js";
+import useStyles from "../assets/Style.js";
 
-const UserDashboard = (props) => {
+function UserDashboard(props) {
+  const classes = useStyles();
   useEffect(() => {
     getInfo();
   }, []);
@@ -23,7 +26,6 @@ const UserDashboard = (props) => {
   const [house, setHouse] = useState(1);
   const [redirect, setRedirect] = useState(false);
   const [horoscope, setHoroscope] = useState("");
-  const classes = useStyles();
   async function getInfo() {
     let response = await axios.get("/api/getUserInfo");
     if (!response.data) setRedirect(true);
@@ -45,15 +47,12 @@ const UserDashboard = (props) => {
   }
   return (
     <div>
-      <div className={classes.navigation}>
-        <Button
-          className={classes.navButton}
-          variant="contained"
-          onClick={logout}
-        >
-          Logout
-        </Button>
-      </div>
+      <UserAppbar
+        position="sticky"
+        name={name}
+        showDashboardB={false}
+        setRedirect={setRedirect}
+      ></UserAppbar>
       <div className={classes.pageMain}>
         <Container component="main" maxWidth="xs">
           <CssBaseline />
@@ -92,6 +91,7 @@ const UserDashboard = (props) => {
                 <Link
                   to={{
                     pathname: "UserHoroscope",
+                    name: name,
                     horoscope: horoscope,
                   }}
                   style={{ textDecoration: "none" }}
@@ -112,5 +112,5 @@ const UserDashboard = (props) => {
       </div>
     </div>
   );
-};
+}
 export default UserDashboard;

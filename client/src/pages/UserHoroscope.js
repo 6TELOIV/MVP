@@ -1,17 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { Typography, Toolbar } from "@material-ui/core";
-import { Card } from "@material-ui/core";
+import React, { useState } from "react";
+import { Typography, Card } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Redirect } from "react-router-dom";
 import { numberToPhase, numberToSign } from "../helpers/helpers.js";
-import Button from "@material-ui/core/Button";
-import axios from "axios";
+import UserAppbar from "../components/UserAppbar.js";
 const useStyles = makeStyles((theme) => ({
   pageMain: {
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-evenly",
-    zIndex: "1",
+    margin: "10px",
   },
   cardMain: {
     marginTop: theme.spacing(8),
@@ -44,27 +42,17 @@ const useStyles = makeStyles((theme) => ({
     margin: "10px",
     float: "right",
   },
-  navigation: {
+  appbarTitle: {
     width: "100%",
-    zIndex: "2",
-    position: "absolute",
   },
 }));
 
 const UserHoroscope = (props) => {
   const hs = props.location.horoscope;
+  const name = props.location.name;
   const [redirect, setRedirect] = useState(false);
   const [returnDash, setReturnDash] = useState(false);
   const classes = useStyles();
-  async function logout(e) {
-    e.preventDefault();
-    await axios.delete("/api/signout");
-    setRedirect(true);
-  }
-  function returnDashboard(e) {
-    e.preventDefault();
-    setReturnDash(true);
-  }
   if (!hs || returnDash) {
     return <Redirect to={{ pathname: "/UserDashboard" }} />;
   }
@@ -73,35 +61,26 @@ const UserHoroscope = (props) => {
   }
   return (
     <div>
-      <div className={classes.navigation}>
-        <Button
-          className={classes.navButton}
-          variant="contained"
-          onClick={logout}
-        >
-          Logout
-        </Button>
-        <Button
-          className={classes.navButton}
-          variant="contained"
-          onClick={returnDashboard}
-        >
-          Dashboard
-        </Button>
-      </div>
+      <UserAppbar
+        position="sticky"
+        name={name}
+        showDashboardB={true}
+        setReturnDash={setReturnDash}
+        setRedirect={setRedirect}
+      ></UserAppbar>
       <div className={classes.pageMain}>
         <Card className={classes.cardMain}>
           <div className={classes.titleFrame}>
             <Typography className={classes.title}>
               {numberToSign(hs.sign)}, House {hs.house},{" "}
-              {numberToPhase(hs.moonPhase)} moon
+              {numberToPhase(hs.moonPhase)} Moon
             </Typography>
           </div>
           <div>
             <Typography className={classes.quote}>
-              {hs.quote}- {hs.quoteAuthor},{" "}
+              {hs.quote}-{" "}
               <a className={classes.quoteSource} href={hs.quoteSrc}>
-                Source
+                {hs.quoteAuthor}
               </a>
             </Typography>
             <br />
