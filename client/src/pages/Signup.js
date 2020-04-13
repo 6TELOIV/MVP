@@ -6,9 +6,9 @@ import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
 import {
-  DatePicker,
+  KeyboardDatePicker,
   MuiPickersUtilsProvider,
-  TimePicker
+  KeyboardTimePicker
 } from "@material-ui/pickers";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
@@ -18,15 +18,24 @@ import { Redirect } from "react-router-dom";
 import axios from "axios";
 import { Card } from "@material-ui/core";
 import useStyles from "../assets/Style.js"
+import { Checkbox } from '@material-ui/core';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 function Signup(props) {
   const classes = useStyles();
   const [selectedDate, handleDateChange] = useState(new Date());
+  const [selectedTime, handleTimeChange] = useState("2018-01-01T17:00:00.000Z");
   const [name, changeName] = useState("");
   const [email, changeEmail] = useState(props.location.email);
   const [password, changePassword] = useState("");
   const [birthplace, changeBirthplace] = useState("");
   const [redirect, setRedirect] = useState(false);
+
+  const [noDate, setDateUsage] = useState(false)
+  const handleChange = (event) => {
+    setDateUsage(event.target.checked);
+    handleTimeChange("2018-01-01T17:00:00.000Z");
+  };
 
   useEffect(()=>{
       getInfo();
@@ -45,6 +54,7 @@ function Signup(props) {
       name: name,
       address: birthplace,
       birthday: Math.floor(selectedDate.getTime() / 1000)
+
     };
     let response = await axios.post("/api/signup", info)
     if (response.status === 200) {
@@ -120,28 +130,41 @@ function Signup(props) {
 
             <Grid item xs={12}>
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <DatePicker
+                <KeyboardDatePicker
                   disableFuture
                   openTo="year"
                   format="MM/dd/yyyy"
                   label="Date of Birth"
                   views={["year", "month", "date"]}
                   value={selectedDate}
-                  onChange={handleDateChange}
+                  onChange={date => handleDateChange(date)}
                   fullWidth
                 />
               </MuiPickersUtilsProvider>
               </Grid>
               <Grid item xs={12}>
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <TimePicker
-                  autoOk
+                <KeyboardTimePicker
+                  
                   label="Time of Birth"
-                  value={selectedDate}
-                  onChange={handleDateChange}
+                  mask="__:__ _M"
+                  value={selectedTime}
+                  onChange={date => handleTimeChange(date)}
                   fullWidth
+                  disabled={noDate}
                 />
               </MuiPickersUtilsProvider>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={noDate}
+                    value="allowExtraEmails" 
+                    color="primary" 
+                    onChange={handleChange}
+                  />
+                }
+                label="No time of birth"
+              />
             </Grid>
 
             <Grid item xs={12}>
