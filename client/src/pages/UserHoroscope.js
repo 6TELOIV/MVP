@@ -8,11 +8,10 @@ import Button from "@material-ui/core/Button";
 import axios from "axios";
 const useStyles = makeStyles((theme) => ({
   pageMain: {
-    height: "100%",
-    width: "100%",
     display: "flex",
     flexDirection: "row",
-    justifyContent: "space-around",
+    justifyContent: "space-evenly",
+    zIndex: "1",
   },
   cardMain: {
     marginTop: theme.spacing(8),
@@ -37,12 +36,18 @@ const useStyles = makeStyles((theme) => ({
   quote: {
     fontSize: "20px",
   },
+  quoteSource: {
+    textDecoration: "none",
+    color: "#CD5C5C",
+  },
   navButton: {
     margin: "10px",
     float: "right",
   },
   navigation: {
     width: "100%",
+    zIndex: "2",
+    position: "absolute",
   },
 }));
 
@@ -91,13 +96,10 @@ const UserHoroscope = (props) => {
           </div>
           <div>
             <Typography className={classes.quote}>
-              {hs.quote}- {hs.quoteAuthor}
-            </Typography>
-            <Typography
-              className={classes.quote}
-              onClick={(e) => (window.location = hs.quoteSrc)}
-            >
-              Source
+              {hs.quote}- {hs.quoteAuthor},{" "}
+              <a className={classes.quoteSource} href={hs.quoteSrc}>
+                Source
+              </a>
             </Typography>
             <br />
             <Typography classname={classes.paragraph}>{hs.summary}</Typography>
