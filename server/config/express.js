@@ -53,42 +53,14 @@ export const init = () => {
 
     passport.use(localStrategy);
 
-    passport.use(new GoogleStrategy({
-        clientID: config.googleAuth.clientID,
-        clientSecret: config.googleAuth.clientSecret,
-        callbackURL: 'http://localhost:5000/api/authcallback'
-    },
-    (token, refreshToken, profile, done) => {
-        console.log(token);
-        console.log(profile.displayName);
-        return done(null, {
-            profile: profile,
-            token: token
-        })
-    }
-    ))
-
     passport.serializeUser((user, done) => {
         console.log('*** serializeUser called, user: ')
         console.log(user) // the whole raw user object!
         console.log('---------')
-
-        // if(!user._id) done(null, null);
-
-        // if(user._id.toString().length > 4){
-            done(null, { _id: user._id });
-        // }else{
-        //     done(null, null);
-        // }
-        
-
+        done(null, { _id: user._id });
     });
     passport.deserializeUser((id, done) => {
         console.log('DeserializeUser called')
-        
-        // if(id.toString().length < 4){
-        //     return done(null, null);
-        // }
 
         userModel.findOne(
             { _id: id },

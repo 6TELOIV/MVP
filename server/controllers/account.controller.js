@@ -106,18 +106,13 @@ export const getUserInfo = async(req, res) => {
 		let found = await userModel.find({_id: req.session.passport.user._id});
 		
 		if(!found) res.status(400).end();
-		let googleTkn = "Click to Login With Google";
-		if(req.session.passport.user.googleToken){
-			googleTkn = req.session.passport.user.googleToken;
-		}
 
 		found = found[0];
 		let foundRevised = {
 			name: found.name,
 			username: found.username,
 			house: found.house,
-			sign: found.sign,
-			googleToken: googleTkn
+			sign: found.sign
 		}
 		res.status(200).send(foundRevised);
 

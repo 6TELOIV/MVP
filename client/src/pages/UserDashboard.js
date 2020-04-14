@@ -19,7 +19,6 @@ const UserDashboard = props =>{
     },[]);
     const [name, setName] = useState('');
     const [username, setUsername] = useState('');
-    const [gTkn, setGTkn] = useState('');
     const [sign, setSign] = useState(1);
     const [house, setHouse] = useState(1);
     const [redirect, setRedirect] = useState(false);
@@ -32,7 +31,6 @@ const UserDashboard = props =>{
             setUsername(response.data.username);
             setSign(response.data.sign);
             setHouse(response.data.house);
-            setGTkn(response.data.googleToken);
         }
         
     }
@@ -84,11 +82,22 @@ const UserDashboard = props =>{
                     variant="contained"
                     color="primary"
                     fullWidth
-                    onClick={()=>{
-                        window.location.href = 'http://localhost:5000/api/auth/google'
-                    }}
-                    >
-                    {gTkn}
+                    href="http://localhost:5000/api/googleauth"
+                >
+                Sign In With Google
+                </Button>
+            </Grid>
+
+            <Grid item xs={12}>
+                <Button
+                    type="submit"
+                    className={classes.button}
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                    href="http://localhost:5000/api/googleCalAdd"
+                >
+                Calendar
                 </Button>
             </Grid>
 

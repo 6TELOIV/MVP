@@ -20,6 +20,7 @@ async function start() {
     global.config.session.secret = process.env.SES_SEC;
     global.config.googleAuth.clientID = process.env.CLIENTID;
     global.config.googleAuth.clientSecret = process.env.CLIENTSEC;
+    global.config.googleAuth.apiKey = process.env.GOOGLE_KEY;
   } else {
     global.config = (await import('./config/config.js')).default;
   }
