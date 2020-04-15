@@ -12,6 +12,8 @@ import axios from "axios";
 import { Redirect } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { numberToSign } from "../helpers/helpers.js";
+import MailOutlineIcon from "@material-ui/icons/MailOutline";
+import CalendarTodayIcon from "@material-ui/icons/CalendarToday";
 
 const UserDashboard = (props) => {
   useEffect(() => {
@@ -106,6 +108,33 @@ const UserDashboard = (props) => {
                   </Button>
                 </Link>
               </Grid>
+
+               {/*Preferences*/}
+               <Grid item xs={12}>
+                <Typography variant="h5" align="left">
+                  Preferences
+                </Typography>
+                <p>Link an account</p>
+
+                <Grid item xs={12}>
+                  <Button
+                    variant="contained"
+                    className={classes.button}
+                    startIcon={<CalendarTodayIcon />}
+                  >
+                    Google
+                  </Button>
+                  &nbsp;&nbsp;
+                  <Button
+                    variant="contained"
+                    className={classes.button}
+                    startIcon={<MailOutlineIcon />}
+                  >
+                    Email
+                  </Button>
+                </Grid>
+              </Grid>
+              
             </Grid>
           </Card>
         </Container>
