@@ -17,7 +17,6 @@ apiRouter.post('/admin', adminController.reset);
 apiRouter.get('/googleauth', googleController.auth);
 apiRouter.get('/googleauth/callback', googleController.callback);
 apiRouter.get('/googledeauth', googleController.deAuth);
-apiRouter.get('/googleCalList', googleController.calendarList);
 apiRouter.get('/googleCalAdd', googleController.calendarAdd);
 
 

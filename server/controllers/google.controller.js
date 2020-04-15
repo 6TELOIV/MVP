@@ -6,77 +6,54 @@ let callbackURL = 'http://localhost:5000/api/googleauth/callback';
 let dashboardURL = 'http://localhost:3000/UserDashboard';
 let authURL = 'http://localhost:5000/api/googleauth';
 
-function listEvents(oauth2Client) {
-    const calendar = google.google.calendar({version: 'v3', oauth2Client});
-    calendar.events.list({
-        auth: oauth2Client,
-        calendarId: 'primary',
-        timeMin: (new Date()).toISOString(),
-        maxResults: 10,
-        singleEvents: true,
-        orderBy: 'startTime',
-    }, (err, res) => {
-        if (err) return console.log('The API returned an error: ' + err);
-        const events = res.data.items;
-        if (events.length) {
-            console.log('Upcoming 10 events:');
-            events.map((event, i) => {
-                const start = event.start.dateTime || event.start.date;
-                console.log(`${start} - ${event.summary}`);
-            });
-        } else {
-            console.log('No upcoming events found.');
-        }
-    });
-  }
+export const calendarAddFromServer = async(user, horoscope, date) => { //Pass horoscope, user, and js date
+    const OAuth2 = google.google.auth.OAuth2;
+    const oauth2Client = new OAuth2(
+        config.googleAuth.clientID,
+        config.googleAuth.clientSecret,
+        callbackURL
+    );
+    let tokens = user.googleTokens;
 
-  function createEvent(oauth2Client) {
-    let user = {
-        username: "Shaun"
+    oauth2Client.setCredentials(tokens);
+
+    let dateString = '';
+    let day = date.getDate();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+
+    if(day < 10){
+        day = '0' + day;
     }
-    let horoscope = {
-        quote: "Hey its a quote",
-        summary: "This is the summary"
+
+    if(month < 10){
+        month = '0' + month;
     }
+
+    dateString = dateString + year + '-' + month + '-' + day;
 
     let html = 
         `
         <div>
-          <h1>Welcome ${user.username}</h1>
+          <h1>Welcome ${user.name}</h1>
           <q>${horoscope.quote}</q>
           <p>"Your Weekly Summary of the Stars: "${horoscope.summary}</p>
         </div>
         `;
 
     var event = {
-        'summary': 'Horoscope Test',
-        // 'location': '800 Howard St., San Francisco, CA 94103',
-        'description': html,//'Horoscopes are wild',
+        'summary': 'Daily Horoscope',
+        'description': html,
         'start': {
-          'date': '2020-04-14',
-          //'dateTime': '2020-04-14T09:00:00-07:00',
-          'timeZone': 'America/Los_Angeles',
+          'date': dateString,
         },
         'end': {
-          'date': '2020-04-14',
-          //'dateTime': '2020-04-14T17:00:00-07:00',
-          'timeZone': 'America/Los_Angeles',
+          'date': dateString,
         },
-        'transparency': 'transparent'
-        // 'recurrence': [
-        //   'RRULE:FREQ=DAILY;COUNT=2'
-        // ],
-        // 'attendees': [
-        //   {'email': 'lpage@example.com'},
-        //   {'email': 'sbrin@example.com'},
-        // ],
-        // 'reminders': {
-        //   'useDefault': true,
-        //   'overrides': [
-        //     {'method': 'email', 'minutes': 24 * 60},
-        //     {'method': 'popup', 'minutes': 10},
-        //   ],
-        //}
+        'transparency': 'transparent',
+        'reminders': {
+          'useDefault': 'useDeault',
+        }
       };
 
     const calendar = google.google.calendar({version: 'v3', oauth2Client});
@@ -88,10 +65,10 @@ function listEvents(oauth2Client) {
         if (err) return console.log('The API returned an error: ' + err);
         console.log("Event created successfully")
     });
-  }
+    
+}
 
 export const auth = async(req, res) => {
-
     if(!req.session.passport){
         res.redirect(dashboardURL);
         return;
@@ -179,74 +156,15 @@ export const callback = async(req, res) => {
     res.redirect(dashboardURL);
 }
 
-export const calendarList = async(req, res) => {
-    const OAuth2 = google.google.auth.OAuth2;
-    const oauth2Client = new OAuth2(
-        config.googleAuth.clientID,
-        config.googleAuth.clientSecret,
-        callbackURL
-    );
+export const calendarAdd = async(req, res) => { //Temp endpoint for testing
+    let user = await userModel.findOne({_id: req.session.passport.user._id});
+    let horoscope = {
+        quote: "Hey its a quote",
+        summary: "This is the summary"
+    }
 
-    userModel.find({_id: req.session.passport.user._id})
-    .then((user)=>{
-        let tokens = user[0].googleTokens;
+    let date = new Date();
 
-        if(!tokens || !tokens.refresh_token){
-            res.redirect(authURL);
-            return;
-        }
-
-        oauth2Client.setCredentials(tokens);
-
-        listEvents(oauth2Client);
-        res.send("Calendar entries listed");
-    })
-    .catch((err) => {
-        res.status(500).send({
-			errors: [
-				{
-					location: 'database',
-                    msg: 'User not found',
-                    err: err
-				}
-			]
-        })
-    });
-    
-}
-
-export const calendarAdd = async(req, res) => {
-    const OAuth2 = google.google.auth.OAuth2;
-    const oauth2Client = new OAuth2(
-        config.googleAuth.clientID,
-        config.googleAuth.clientSecret,
-        callbackURL
-    );
-
-    userModel.find({_id: req.session.passport.user._id})
-    .then((user)=>{
-        let tokens = user[0].googleTokens;
-
-        if(!tokens || !tokens.refresh_token){
-            res.redirect(authURL);
-            return;
-        }
-
-        oauth2Client.setCredentials(tokens);
-
-        createEvent(oauth2Client);
-        res.send("Calendar entry added");
-    })
-    .catch((err) => {
-        res.status(500).send({
-			errors: [
-				{
-					location: 'database',
-                    msg: 'User not found',
-                    err: err
-				}
-			]
-        })
-    });
+    calendarAddFromServer(user, horoscope, date);
     
 }
