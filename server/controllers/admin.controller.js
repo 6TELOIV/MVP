@@ -2,7 +2,11 @@ import horoscopeModel from '../models/horoscopeModel.js';
 
 	export const getEntries = async (req, res) => {
 		try{
-			//console.log(req.session.passport.user);
+
+			if(!req.session.passport){
+				res.send("Not an administrator").status(401);
+				return;
+			}
 			
 			if(!req.session.passport.user.isAdmin){
 				res.send("Not an administrator").status(401);
