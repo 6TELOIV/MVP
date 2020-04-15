@@ -32,6 +32,7 @@ const UserDashboard = props =>{
             setSign(response.data.sign);
             setHouse(response.data.house);
         }
+        
     }
     async function logout(e){
         e.preventDefault();
@@ -72,6 +73,32 @@ const UserDashboard = props =>{
                 <Typography component="h3" align="center">
                     House: {numberToSign(house)}
                 </Typography>
+            </Grid>
+
+            <Grid item xs={12}>
+                <Button
+                    type="submit"
+                    className={classes.button}
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                    href="http://localhost:5000/api/googleauth"
+                >
+                Sign In With Google
+                </Button>
+            </Grid>
+
+            <Grid item xs={12}>
+                <Button
+                    type="submit"
+                    className={classes.button}
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                    href="http://localhost:5000/api/googleCalAdd"
+                >
+                Calendar
+                </Button>
             </Grid>
 
             <Grid item xs={12}>

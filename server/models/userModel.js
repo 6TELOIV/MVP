@@ -25,6 +25,9 @@ const userSchema = new mongoose.Schema({
         required: true,
         min: 1,
         max: 12
+    },
+    googleTokens: {
+        type: {}
     }
 
 });

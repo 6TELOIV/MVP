@@ -98,21 +98,26 @@ export const signOut = async(req, res) => {
 }
 
 export const getUserInfo = async(req, res) => {
-	if(!req.session.passport){
-		res.status(200).send(null); //Sends null to trigger login
-		return;
-	}
-	let found = await userModel.find({_id: req.session.passport.user._id});
+	try{
+		if(!req.session.passport.user._id){
+			res.status(200).send(null); //Sends null to trigger login
+			return;
+		}
+		let found = await userModel.find({_id: req.session.passport.user._id});
+		
+		if(!found) res.status(400).end();
 
-	if(!found) res.status(400).end();
+		found = found[0];
+		let foundRevised = {
+			name: found.name,
+			username: found.username,
+			house: found.house,
+			sign: found.sign
+		}
+		res.status(200).send(foundRevised);
 
-	found = found[0];
-	let foundRevised = {
-		name: found.name,
-		username: found.username,
-		house: found.house,
-		sign: found.sign
+	}catch{
+		res.status(200).send(null);
 	}
-	res.status(200).send(foundRevised);
 }
 	
