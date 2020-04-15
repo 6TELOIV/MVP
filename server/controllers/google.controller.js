@@ -61,7 +61,8 @@ function listEvents(oauth2Client) {
           'date': '2020-04-14',
           //'dateTime': '2020-04-14T17:00:00-07:00',
           'timeZone': 'America/Los_Angeles',
-        }
+        },
+        'transparency': 'transparent'
         // 'recurrence': [
         //   'RRULE:FREQ=DAILY;COUNT=2'
         // ],
