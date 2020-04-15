@@ -1,6 +1,5 @@
 import * as express from './config/express.js';
 
-
 global.config = {
   db: {
   },
@@ -11,7 +10,6 @@ global.config = {
   googleAuth: {
   }
 }
-
 
 async function start() {
   if(process.env.NODE_ENV === 'production') {
@@ -24,10 +22,8 @@ async function start() {
   } else {
     global.config = (await import('./config/config.js')).default;
   }
-
   // Use env port or default
   const port = process.env.PORT || 5000;
-  
   const app = express.init();
   app.listen(port, () => console.log(`Server now running on port ${port}!`));
 }
