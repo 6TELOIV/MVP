@@ -166,5 +166,6 @@ export const calendarAdd = async(req, res) => { //Temp endpoint for testing
     let date = new Date();
 
     calendarAddFromServer(user, horoscope, date);
+    res.send("Entry added")
     
 }
