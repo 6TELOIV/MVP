@@ -1,7 +1,9 @@
-import React, { Suspense, lazy } from "react";
+import React, { useState, useEffect, Suspense, lazy } from "react";
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Route, Switch, Redirect } from "react-router-dom";
+import axios from 'axios';
 import "./App.css"
+import Script from 'react-load-script'
 
 //lazy load pages to improve load times
 const Landing = lazy(() => import("./pages/Landing"));
@@ -13,9 +15,11 @@ const UserDashboard = lazy(()=>import("./pages/UserDashboard"))
 //import NotFound from "./views/NotFound";
 
 //<Route component={NotFound}/>
+
 const App = props => {
   
   return (
+     
     <Router>
       <Suspense fallback={<div>Loading...</div>}>
         <Switch>

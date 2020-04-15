@@ -31,15 +31,20 @@
     "connect-mongo": "^3.2.0",
     "express": "^4.17.1",
     "express-session": "^1.17.0",
+    "fbjs": "^1.0.0",
     "mocha": "^6.2.1",
     "mongoose": "^5.7.1",
     "morgan": "^1.9.1",
+    "mui-places-autocomplete": "^2.0.0",
     "nodemon": "^1.18.10",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
+    "react-google-autocomplete": "^1.1.4",
+    "react-load-script": "0.0.6",
     "should": "^13.2.3",
     "supertest": "^4.0.2",
-    "swisseph": "^0.5.13"
+    "swisseph": "^0.5.13",
+    "use-places-autocomplete": "^1.1.2"
   },
   "engines": {
     "node": "13.6.x"

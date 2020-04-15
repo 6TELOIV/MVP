@@ -14,4 +14,8 @@ apiRouter.get('/admin', adminController.getEntries)
 apiRouter.put('/admin', adminController.edit)
 apiRouter.post('/admin', adminController.reset)
 
+apiRouter.post('/getGPAPIKEY', (req, res) =>{
+    res.send(config.googleAuth.apiKey);
+})
+
 export default apiRouter;
