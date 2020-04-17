@@ -8,7 +8,6 @@ import mongoSession from 'connect-mongo';
 import passport from 'passport'
 
 import localStrategy from '../strategies/local.js'
-import GoogleStrategy from 'passport-google-oauth20';
 import apiRouter from '../routes/api.routes.js';
 import userModel from '../models/userModel.js';
 
