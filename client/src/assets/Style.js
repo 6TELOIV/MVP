@@ -6,6 +6,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "row",
     justifyContent: "space-evenly",
     zIndex: "1",
+    margin: "10px",
   },
   paper: {
     marginTop: theme.spacing(8),
@@ -29,10 +30,9 @@ const useStyles = makeStyles((theme) => ({
     margin: "10px",
     float: "right",
   },
-  navigation: {
-    width: "100%",
-    zIndex: "2",
-    position: "absolute",
+  icon: {
+    color: theme.palette.text.secondary,
+    marginRight: theme.spacing(2),
   },
   preferencePaper: {
     marginTop:theme.spacing(1),

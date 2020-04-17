@@ -1,8 +1,10 @@
 import swisseph from "swisseph";
+import geoTz from "geo-tz";
+import ct from "countries-and-timezones";
+import isDST from "is-dst";
 import passport from "passport";
-
-import userModel from "../models/userModel.js";
 import horoscopeModel from "../models/horoscopeModel.js";
+import userModel from "../models/userModel.js";
 
 /* req: {
 	long,
@@ -14,16 +16,29 @@ import horoscopeModel from "../models/horoscopeModel.js";
 */
 export const signUp = async (req, res) => {
   let flag = swisseph.SEFLG_SPEED | swisseph.SEFLG_MOSEPH;
-
   let date = new Date(0);
-  date.setUTCSeconds(req.body.birthday);
-  let year = date.getFullYear();
-  let month = date.getMonth() + 1;
-  let day = date.getDate();
-  let hour = date.getHours() + date.getMinutes() / 60;
-
   let julday_ut, house, sunHouse;
+
   try {
+    date.setUTCSeconds(req.body.birthday);
+
+    //Shaun's Code for Handling Timezones and Daylight Savings
+    let tz = geoTz(req.body.lat, req.body.long);
+    console.log(tz);
+    let DST = isDST(date);
+    let off;
+    if (DST) {
+      off = -ct.getTimezone(tz).dstOffset;
+    } else {
+      off = -ct.getTimezone(tz).utcOffset;
+    }
+    off = off / 60;
+
+    let year = date.getFullYear();
+    let month = date.getMonth() + 1;
+    let day = date.getDate();
+    let hour = date.getHours() + off + date.getMinutes() / 60;
+
     julday_ut = swisseph.swe_julday(
       year,
       month,
@@ -31,13 +46,13 @@ export const signUp = async (req, res) => {
       hour,
       swisseph.SE_GREG_CAL
     );
-    //TO-DO If no bday time, use sunHouse as house
-    house =
-      swisseph.swe_houses(julday_ut, req.body.lat, req.body.long, "W")
-        .house[0] / 30;
-    sunHouse = Math.floor(
-      swisseph.swe_calc_ut(julday_ut, swisseph.SE_SUN, flag).longitude / 30
-    );
+
+    house = swisseph.swe_houses(julday_ut, req.body.lat, req.body.long, "W")
+      .ascendant;
+    house = Math.floor(house / 30) + 1;
+
+    sunHouse = swisseph.swe_calc_ut(julday_ut, swisseph.SE_SUN, flag).longitude;
+    sunHouse = Math.floor(sunHouse / 30) + 1;
   } catch (error) {
     console.error(error);
     res.status(500).send({
@@ -48,6 +63,7 @@ export const signUp = async (req, res) => {
         },
       ],
     });
+    return;
   }
 
   try {
@@ -68,9 +84,11 @@ export const signUp = async (req, res) => {
         name: req.body.name,
         username: req.body.email,
         password: req.body.password,
-        house: house + 1,
-        sign: sunHouse + 1,
+        isAdmin: false,
+        house: house,
+        sign: sunHouse,
       });
+      res.send("User created").status(200);
     }
   } catch (error) {
     console.error(error);
@@ -82,6 +100,7 @@ export const signUp = async (req, res) => {
         },
       ],
     });
+    return;
   }
 
   res.status(200).end();
@@ -96,9 +115,14 @@ export const signIn = async (req, res) => {
   let foundRevised = {
     name: req.user.name,
     username: req.user.username,
+    isAdmin: req.user.isAdmin,
     house: req.user.house,
     sign: req.user.sign,
   };
+
+  if (req.user.isAdmin) {
+    req.session.passport.user.isAdmin = true;
+  }
   res.status(200).send(foundRevised);
 };
 

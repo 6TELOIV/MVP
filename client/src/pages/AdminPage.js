@@ -5,6 +5,7 @@ import Search from "../components/Search"
 import "./AdminPage.css";
 import axios from 'axios'
 import { Paper, AppBar, Typography, Toolbar } from '@material-ui/core'
+import { Redirect } from "react-router-dom";
 
 
 export default function Admin() {
@@ -22,19 +23,31 @@ export default function Admin() {
   }
   const [selectedHoroscope, setSelectedHoroscope] = useState();
   const [horoscopeList, setHoroscopeList] = useState([]);
+  const [redirect, setRedirect] = useState(false);
   const setSelectedHoroscopeWrapper = (selected) => {
     setSelectedHoroscope(selected);
   }
   async function getHoroscopes() {
     let response = await axios.get("/api/admin");
     if (response.status === 200) {
-      setHoroscopeList(response.data);
+      if(!(response.data === "Not an administrator")){
+        setHoroscopeList(response.data);
+      }else{
+        setRedirect(true);
+      }
     }
   }
 
   useEffect(() => {
     getHoroscopes();
   }, [])
+
+  if (redirect) {
+    return (
+      <Redirect to={{ pathname: "/UserDashboard"}} />
+    );
+  }else{
+
   return (
     <div className="adminRoot">
       <AppBar position="relative" className="header">
@@ -58,4 +71,5 @@ export default function Admin() {
       </Paper>
     </div>
   );
+}
 }
