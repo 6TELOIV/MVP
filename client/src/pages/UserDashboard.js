@@ -14,6 +14,7 @@ import { Link } from "react-router-dom";
 import { numberToSign } from "../helpers/helpers.js";
 import MailOutlineIcon from "@material-ui/icons/MailOutline";
 import CalendarTodayIcon from "@material-ui/icons/CalendarToday";
+import Switch from "@material-ui/core/Switch";
 
 const UserDashboard = (props) => {
   useEffect(() => {
@@ -25,6 +26,11 @@ const UserDashboard = (props) => {
   const [house, setHouse] = useState(1);
   const [redirect, setRedirect] = useState(false);
   const [horoscope, setHoroscope] = useState("");
+  {/*Preferences link an account*/}
+  const [account, setAccount] = useState({
+    checkedA: false,
+    checkedB: true
+  });
   const classes = useStyles();
   async function getInfo() {
     let response = await axios.get("/api/getUserInfo");
@@ -45,6 +51,11 @@ const UserDashboard = (props) => {
   if (redirect) {
     return <Redirect to={{ pathname: "/Login" }} />;
   }
+
+  const handleAccount = event => {
+    setAccount({ ...account, [event.target.name]: event.target.checked });
+  };
+
   return (
     <div>
       <div className={classes.navigation}>
@@ -108,37 +119,59 @@ const UserDashboard = (props) => {
                   </Button>
                 </Link>
               </Grid>
-
-               {/*Preferences*/}
-               <Grid item xs={12}>
-                <Typography variant="h5" align="left">
-                  Preferences
-                </Typography>
-                <p>Link an account</p>
-
-                <Grid item xs={12}>
-                  <Button
-                    variant="contained"
-                    className={classes.button}
-                    startIcon={<CalendarTodayIcon />}
-                  >
-                    Google
-                  </Button>
-                  &nbsp;&nbsp;
-                  <Button
-                    variant="contained"
-                    className={classes.button}
-                    startIcon={<MailOutlineIcon />}
-                  >
-                    Email
-                  </Button>
-                </Grid>
-              </Grid>
-              
             </Grid>
           </Card>
         </Container>
       </div>
+
+{/*Preferences*/}
+<div className={classes.pageMain}>
+        <Container maxWidth="xs">
+          <Card className={classes.preferencePaper}>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <Typography variant="h5" align="left">
+                  Preferences
+                </Typography>
+                <Typography variant="body2" align="left">
+                  Link an account
+                </Typography>
+              </Grid>
+
+              <Grid item xs={12}>
+                <Typography align="right">
+                  <Typography variant="body1" align="left" color="primary">
+                    <CalendarTodayIcon fontSize="small" />
+                    &nbsp; Google Calendar &nbsp;
+                    <Switch
+                      checked={account.checked}
+                      onChange={handleAccount}
+                      color="primary"
+                      name="checkedA"
+                      inputProps={{ "aria-label": "primary checkbox" }}
+                    />
+                  </Typography>
+                </Typography>
+              </Grid>
+
+              <Grid item xs={12}>
+                <Typography align="right">
+                  <Typography variant="body1" align="left" color="primary">
+                    <MailOutlineIcon fontSize="small" />
+                    &nbsp; Email &nbsp;
+                    <Switch
+                      disabled
+                      checked
+                      inputProps={{ "aria-label": "primary checkbox" }}
+                    />
+                  </Typography>
+                </Typography>
+              </Grid>
+            </Grid>
+          </Card>
+        </Container>
+      </div>
+
     </div>
   );
 };

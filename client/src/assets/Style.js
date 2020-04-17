@@ -34,6 +34,14 @@ const useStyles = makeStyles((theme) => ({
     zIndex: "2",
     position: "absolute",
   },
+  preferencePaper: {
+    marginTop:theme.spacing(1),
+    marginBottom:theme.spacing(8),
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    padding: "20px"
+  },
 }));
 
 export default useStyles;
