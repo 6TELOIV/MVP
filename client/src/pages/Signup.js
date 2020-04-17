@@ -49,17 +49,12 @@ function Signup(props) {
   const [redirect, setRedirect] = useState(false);
   const [noDate, setNoDate] = useState(false);
   const [wrongPass, setWrongPass] = useState(false);
-  const [validEmail, setValidEmail] = useState(true);
+
 
   const handleNoDateChange = (event) => {
     setNoDate(event.target.checked);
     setTime(new Date("2018-01-01T17:00:00.000Z"));
   };
-
-  const validateEmail = _.debounce((email) => {
-    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    setValidEmail(re.test(String(email).toLowerCase()));
-  }, 1000);
 
   const [options, setOptions] = React.useState([]);
   const loaded = React.useRef(false);
@@ -204,9 +199,8 @@ function Signup(props) {
                 label="Email Address"
                 autoComplete="email"
                 value={email}
-                error={!validEmail}
-
-                onChange={e => validateEmail(e.target.value)}
+                type="email"
+                onChange={e => changeEmail(e.target.value)}
               />
             </Grid>
 
