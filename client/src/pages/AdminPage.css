@@ -25,7 +25,9 @@
 
 .description {
     grid-column: body / description;
-    grid-row: header / body
+    grid-row: header / body;
+    overflow-y: scroll;
+    overflow-wrap: break-word;
 }
 
 .table {
