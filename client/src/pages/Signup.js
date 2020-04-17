@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+ import React, { useState, useEffect } from "react";
 import {signInRequest} from "../helpers/loginFunction.js"
 import "./Site.css";
 import Avatar from "@material-ui/core/Avatar";
@@ -30,7 +30,8 @@ function Signup(props) {
   const [password, changePassword] = useState("");
   const [birthplace, changeBirthplace] = useState("");
   const [redirect, setRedirect] = useState(false);
-  const [noDate, setNoDate] = useState(false)
+  const [noDate, setNoDate] = useState(false);
+  const [wrongPass, setWrongPass] = useState(false);
 
   const handleNoDateChange = (event) => {
     setNoDate(event.target.checked);
@@ -63,14 +64,18 @@ function Signup(props) {
       birthday: Math.floor((date.getTime() / 1000) + (((time.getHours() * 60) + time.getMinutes()) * 60 + time.getSeconds()))
 
     };
-    let response = await axios.post("/api/signup", info)
-    if (response.status === 200) {
+    await axios.post("/api/signup", info).then(resolve=>{
       const loginInfo = {
         username: email,
         password: password
       }
+      console.log('200');
       signInRequest(loginInfo, setRedirect.bind(this));
     }
+    ).catch( error => {
+      setWrongPass(true);
+      console.log('400');}  
+    );
   }
   if (redirect) {
     return (
@@ -91,6 +96,12 @@ function Signup(props) {
           onSubmit={e => signupRequest(e)}
         >
           <Grid container spacing={2}>
+          {wrongPass && 
+          <Grid item xs={12}>
+            <p align="center" style={{color: 'red'}}>
+              Username Taken
+            </p>
+          </Grid>}
             
             <Grid item xs={12}>
               <TextField
