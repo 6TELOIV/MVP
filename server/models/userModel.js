@@ -14,6 +14,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    isAdmin: {
+        type: Boolean,
+        required: true
+    },
     house: {
         type: mongoose.Number,
         required: true,
@@ -25,6 +29,9 @@ const userSchema = new mongoose.Schema({
         required: true,
         min: 1,
         max: 12
+    },
+    googleTokens: {
+        type: {}
     }
 
 });

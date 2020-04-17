@@ -51,22 +51,26 @@ export const init = () => {
     app.use(passport.session()); //calls serializeUser and deserializeUser
 
     passport.use(localStrategy);
+
     passport.serializeUser((user, done) => {
         console.log('*** serializeUser called, user: ')
         console.log(user) // the whole raw user object!
         console.log('---------')
-        done(null, { _id: user._id })
+        done(null, { _id: user._id });
     });
     passport.deserializeUser((id, done) => {
         console.log('DeserializeUser called')
+
         userModel.findOne(
             { _id: id },
             'username',
             (err, user) => {
-                console.log('*** Deserialize user, user:')
-                console.log(user)
-                console.log('--------------')
-                done(null, user)
+                
+            console.log('*** Deserialize user, user:')
+            console.log(user)
+            console.log('--------------')
+            done(null, user)
+                
             }
         )
     });
