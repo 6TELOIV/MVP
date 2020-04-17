@@ -56,10 +56,10 @@ function Signup(props) {
     setTime(new Date("2018-01-01T17:00:00.000Z"));
   };
 
-  function validateEmail(email) {
+  const validateEmail = _.debounce((email) => {
     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     setValidEmail(re.test(String(email).toLowerCase()));
-  }
+  }, 1000);
 
   const [options, setOptions] = React.useState([]);
   const loaded = React.useRef(false);
@@ -102,7 +102,7 @@ function Signup(props) {
       birthday: Math.floor((date.getTime() / 1000) + (((time.getHours() * 60) + time.getMinutes()) * 60 + time.getSeconds()))
 
     };
-    await axios.post("/api/signup", info).then(resolve=>{
+    await axios.post("/api/signup", info).then(resolve => {
       const loginInfo = {
         username: email,
         password: password
@@ -110,9 +110,10 @@ function Signup(props) {
       console.log('200');
       signInRequest(loginInfo, setRedirect.bind(this));
     }
-    ).catch( error => {
+    ).catch(error => {
       setWrongPass(true);
-      console.log('400');}  
+      console.log('400');
+    }
     );
   }
 
@@ -174,13 +175,13 @@ function Signup(props) {
           onSubmit={e => signupRequest(e)}
         >
           <Grid container spacing={2}>
-          {wrongPass ? 
-          <Grid item xs={12}>
-            <p align="center" style={{color: 'red'}}>
-              Username Taken
+            {wrongPass ?
+              <Grid item xs={12}>
+                <p align="center" style={{ color: 'red' }}>
+                  Username Taken
             </p>
-          </Grid>:null}
-            
+              </Grid> : null}
+
             <Grid item xs={12}>
               <TextField
                 autoComplete="fname"
@@ -204,8 +205,8 @@ function Signup(props) {
                 autoComplete="email"
                 value={email}
                 error={!validEmail}
-                
-                onChange={e => {validateEmail(e.target.value);changeEmail(e.target.value);}}
+
+                onChange={e => validateEmail(e.target.value)}
               />
             </Grid>
 
@@ -242,7 +243,7 @@ function Signup(props) {
             <Grid item xs={12}>
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <KeyboardTimePicker
-                  
+
                   label="Time of Birth"
                   mask="__:__ _M"
                   value={time}
@@ -255,8 +256,8 @@ function Signup(props) {
                 control={
                   <Checkbox
                     checked={noDate}
-                    value="allowExtraEmails" 
-                    color="primary" 
+                    value="allowExtraEmails"
+                    color="primary"
                     onChange={handleNoDateChange}
                   />
                 }
