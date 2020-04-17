@@ -23,4 +23,8 @@ apiRouter.get('/googleCalAdd', googleController.calendarAdd);
 apiRouter.get('/testSwiss', swiss.testSwiss);
 
 
+apiRouter.post('/getGPAPIKEY', (req, res) =>{
+    res.send(config.googleAuth.apiKey);
+})
+
 export default apiRouter;

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import {signInRequest} from "../helpers/loginFunction.js"
+import React, { useState, useEffect, useRef } from "react";
+import { signInRequest } from "../helpers/loginFunction.js"
 import "./Site.css";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
@@ -16,10 +16,26 @@ import Container from "@material-ui/core/Container";
 import DateFnsUtils from "@date-io/date-fns";
 import { Redirect } from "react-router-dom";
 import axios from "axios";
-import { Card } from "@material-ui/core";
-import useStyles from "../assets/Style.js"
-import { Checkbox } from '@material-ui/core';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
+import { Card, ThemeProvider, Checkbox, FormControlLabel } from "@material-ui/core";
+import LocationOnIcon from '@material-ui/icons/LocationOn';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import parse from 'autosuggest-highlight/parse';
+import throttle from 'lodash/throttle';
+import useStyles from "../assets/Style.js";
+
+function loadScript(src, position, id) {
+  if (!position) {
+    return;
+  }
+
+  const script = document.createElement('script');
+  script.setAttribute('async', '');
+  script.setAttribute('id', id);
+  script.src = src;
+  position.appendChild(script);
+}
+
+const autocompleteService = { current: null };
 
 function Signup(props) {
   const classes = useStyles();
@@ -37,13 +53,28 @@ function Signup(props) {
     setTime(new Date("2018-01-01T17:00:00.000Z"));
   };
 
-  useEffect(()=>{
-      getInfo();
-  },[]);
-  async function getInfo(){
-      let response = await axios.get("/api/getUserInfo");
-      if(response.data) setRedirect(true);
-      
+  const [options, setOptions] = React.useState([]);
+  const loaded = React.useRef(false);
+
+  if (typeof window !== 'undefined' && !loaded.current) {
+    if (!document.querySelector('#google-maps')) {
+      loadScript(
+        'https://maps.googleapis.com/maps/api/js?key=AIzaSyDX7OfXArTUapg24Bmi44PlxXMEBvLs_tM&libraries=places',
+        document.querySelector('head'),
+        'google-maps',
+      );
+    }
+
+    loaded.current = true;
+  }
+
+  useEffect(() => {
+    getInfo();
+  }, []);
+  async function getInfo() {
+    let response = await axios.get("/api/getUserInfo");
+    if (response.data) setRedirect(true);
+
   }
 
   async function signupRequest(e) {
@@ -72,6 +103,46 @@ function Signup(props) {
       signInRequest(loginInfo, setRedirect.bind(this));
     }
   }
+
+  const handleChange = (event) => {
+    changeBirthplace(event.target.value);
+  };
+
+  const fetch = React.useMemo(
+    () =>
+      throttle((request, callback) => {
+        autocompleteService.current.getPlacePredictions(request, callback);
+      }, 200),
+    [],
+  );
+
+
+  React.useEffect(() => {
+    let active = true;
+
+    if (!autocompleteService.current && window.google) {
+      autocompleteService.current = new window.google.maps.places.AutocompleteService();
+    }
+    if (!autocompleteService.current) {
+      return undefined;
+    }
+
+    if (birthplace === '') {
+      setOptions([]);
+      return undefined;
+    }
+
+    fetch({ input: birthplace }, (results) => {
+      if (active) {
+        setOptions(results || []);
+      }
+    });
+
+    return () => {
+      active = false;
+    };
+  }, [birthplace, fetch]);
+
   if (redirect) {
     return (
       <Redirect to={{ pathname: "/UserDashboard" }} />
@@ -91,7 +162,7 @@ function Signup(props) {
           onSubmit={e => signupRequest(e)}
         >
           <Grid container spacing={2}>
-            
+
             <Grid item xs={12}>
               <TextField
                 autoComplete="fname"
@@ -148,8 +219,9 @@ function Signup(props) {
                   fullWidth
                 />
               </MuiPickersUtilsProvider>
-              </Grid>
-              <Grid item xs={12}>
+            </Grid>
+
+            <Grid item xs={12}>
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <KeyboardTimePicker
                   
@@ -175,20 +247,54 @@ function Signup(props) {
             </Grid>
 
             <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                label="Birthplace"
-                value={birthplace}
-                onChange={e => {
-                  changeBirthplace(e.target.value);
+              <Autocomplete
+                id="google-map-demo"
+                getOptionLabel={(option) => (typeof option === 'string' ? option : option.description)}
+                filterOptions={(x) => x}
+                options={options}
+                autoComplete
+                includeInputInList
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Birthplace"
+                    required
+                    variant="outlined"
+                    fullWidth
+                    onChange={handleChange}
+                  />
+                )}
+                renderOption={(option) => {
+                  const matches = option.structured_formatting.main_text_matched_substrings;
+                  const parts = parse(
+                    option.structured_formatting.main_text,
+                    matches.map((match) => [match.offset, match.offset + match.length]),
+                  );
+
+                  return (
+                    <Grid container alignItems="center">
+                      <Grid item>
+                        <LocationOnIcon className={classes.icon} />
+                      </Grid>
+                      <Grid item xs>
+                        {parts.map((part, index) => (
+                          <span key={index} style={{ fontWeight: part.highlight ? 700 : 400 }}>
+                            {part.text}
+                          </span>
+                        ))}
+
+                        <Typography variant="body2" color="textSecondary">
+                          {option.structured_formatting.secondary_text}
+                        </Typography>
+                      </Grid>
+                    </Grid>
+                  );
                 }}
               />
             </Grid>
 
             <Grid item xs={12}>
-                <Button
+              <Button
                 type="submit"
                 fullWidth
                 variant="contained"
@@ -198,13 +304,14 @@ function Signup(props) {
                 Sign Up
               </Button>
             </Grid>
-            
-          </Grid>
 
+          </Grid>
         </form>
       </Card>
     </Container>
   );
 }
+//PlacesAutocomplete();
+//};
 
 export default Signup;
