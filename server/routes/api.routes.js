@@ -27,4 +27,7 @@ apiRouter.post('/getGPAPIKEY', (req, res) =>{
     res.send(config.googleAuth.apiKey);
 })
 
+apiRouter.post('/toggleCal', accountController.toggleCal);
+apiRouter.post('/toggleEmail', accountController.toggleEmail);
+
 export default apiRouter;

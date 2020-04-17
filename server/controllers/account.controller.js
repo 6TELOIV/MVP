@@ -85,6 +85,8 @@ export const signUp = async (req, res) => {
         username: req.body.email,
         password: req.body.password,
         isAdmin: false,
+        calEnabled: false,
+				emailEnabled: false,
         house: house,
         sign: sunHouse,
       });
@@ -131,6 +133,36 @@ export const signOut = async (req, res) => {
   res.status(200).send("Successfully Logged Out");
 };
 
+export const toggleCal = async(req, res) => {
+	try{
+		userModel.find({_id: req.session.passport.user._id})
+		.then((user)=>{
+			userModel.findOneAndUpdate({_id: req.session.passport.user._id}, {$set: {calEnabled: !user[0].calEnabled}}, {new: true})
+			.then((usr)=>{
+				res.send(usr);
+			})
+		})
+
+	}catch{
+		res.status(200).send(null);
+	}
+}
+
+export const toggleEmail = async(req, res) => {
+	try{
+		userModel.find({_id: req.session.passport.user._id})
+		.then((user)=>{
+			userModel.findOneAndUpdate({_id: req.session.passport.user._id}, {$set: {emailEnabled: !user[0].emailEnabled}}, {new: true})
+			.then((usr)=>{
+				res.send(usr);
+			})
+		})
+
+	}catch{
+		res.status(200).send(null);
+	}
+}
+
 export const getUserInfo = async (req, res) => {
   if (!req.session.passport) {
     res.status(200).send(null); //Sends null to trigger login
@@ -153,6 +185,8 @@ export const getUserInfo = async (req, res) => {
     house: found.house,
     sign: found.sign,
     horoscope: userH,
+    calEnabled: found.calEnabled,
+		emailEnabled: found.emailEnabled,
   };
   res.status(200).send(foundRevised);
 };
