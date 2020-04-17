@@ -22,6 +22,7 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import parse from 'autosuggest-highlight/parse';
 import throttle from 'lodash/throttle';
 import useStyles from "../assets/Style.js";
+import _ from 'lodash';
 
 function loadScript(src, position, id) {
   if (!position) {
@@ -48,11 +49,17 @@ function Signup(props) {
   const [redirect, setRedirect] = useState(false);
   const [noDate, setNoDate] = useState(false);
   const [wrongPass, setWrongPass] = useState(false);
+  const [validEmail, setValidEmail] = useState(true);
 
   const handleNoDateChange = (event) => {
     setNoDate(event.target.checked);
     setTime(new Date("2018-01-01T17:00:00.000Z"));
   };
+
+  function validateEmail(email) {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    setValidEmail(re.test(String(email).toLowerCase()));
+  }
 
   const [options, setOptions] = React.useState([]);
   const loaded = React.useRef(false);
@@ -196,9 +203,9 @@ function Signup(props) {
                 label="Email Address"
                 autoComplete="email"
                 value={email}
-                onChange={e => {
-                  changeEmail(e.target.value);
-                }}
+                error={!validEmail}
+                
+                onChange={e => {validateEmail(e.target.value);changeEmail(e.target.value);}}
               />
             </Grid>
 
