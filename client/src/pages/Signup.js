@@ -132,7 +132,7 @@ function Signup(props) {
       return undefined;
     }
 
-    fetch({ input: birthplace }, (results) => {
+    fetch({ input: birthplace, types: ['(cities)'] }, (results) => {
       if (active) {
         setOptions(results || []);
       }
