@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import {signInRequest} from "../helpers/loginFunction.js"
+import { signInRequest } from "../helpers/loginFunction.js"
 import "./Site.css";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
@@ -17,10 +17,25 @@ import DateFnsUtils from "@date-io/date-fns";
 import { Redirect } from "react-router-dom";
 import axios from "axios";
 import { Card, ThemeProvider } from "@material-ui/core";
+import LocationOnIcon from '@material-ui/icons/LocationOn';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import parse from 'autosuggest-highlight/parse';
+import throttle from 'lodash/throttle';
 import useStyles from "../assets/Style.js";
 
-import usePlacesAutocomplete from 'use-places-autocomplete'
-process.env.GOOGLE_API_KEY = 'AIzaSyDX7OfXArTUapg24Bmi44PlxXMEBvLs_tM';
+function loadScript(src, position, id) {
+  if (!position) {
+    return;
+  }
+
+  const script = document.createElement('script');
+  script.setAttribute('async', '');
+  script.setAttribute('id', id);
+  script.src = src;
+  position.appendChild(script);
+}
+
+const autocompleteService = { current: null };
 
 function Signup(props) {
   const classes = useStyles();
@@ -31,13 +46,28 @@ function Signup(props) {
   const [birthplace, changeBirthplace] = useState("");
   const [redirect, setRedirect] = useState(false);
 
-  useEffect(()=>{
-      getInfo();
-  },[]);
-  async function getInfo(){
-      let response = await axios.get("/api/getUserInfo");
-      if(response.data) setRedirect(true);
-      
+  const [options, setOptions] = React.useState([]);
+  const loaded = React.useRef(false);
+
+  if (typeof window !== 'undefined' && !loaded.current) {
+    if (!document.querySelector('#google-maps')) {
+      loadScript(
+        'https://maps.googleapis.com/maps/api/js?key=AIzaSyDX7OfXArTUapg24Bmi44PlxXMEBvLs_tM&libraries=places',
+        document.querySelector('head'),
+        'google-maps',
+      );
+    }
+
+    loaded.current = true;
+  }
+
+  useEffect(() => {
+    getInfo();
+  }, []);
+  async function getInfo() {
+    let response = await axios.get("/api/getUserInfo");
+    if (response.data) setRedirect(true);
+
   }
 
   async function signupRequest(e) {
@@ -58,66 +88,45 @@ function Signup(props) {
       signInRequest(loginInfo, setRedirect.bind(this));
     }
   }
-  
 
-  //Auto
-  //const PlacesAutocomplete = () => {
-    const {
-      ready,
-      value,
-      suggestions: { status, data },
-      setValue,
-      clearSuggestions
-    } = usePlacesAutocomplete({
-      requestOptions:  { types: ['(cities)'] },
-      debounce: 300
+  const handleChange = (event) => {
+    changeBirthplace(event.target.value);
+  };
+
+  const fetch = React.useMemo(
+    () =>
+      throttle((request, callback) => {
+        autocompleteService.current.getPlacePredictions(request, callback);
+      }, 200),
+    [],
+  );
+
+
+  React.useEffect(() => {
+    let active = true;
+
+    if (!autocompleteService.current && window.google) {
+      autocompleteService.current = new window.google.maps.places.AutocompleteService();
+    }
+    if (!autocompleteService.current) {
+      return undefined;
+    }
+
+    if (birthplace === '') {
+      setOptions([]);
+      return undefined;
+    }
+
+    fetch({ input: birthplace }, (results) => {
+      if (active) {
+        setOptions(results || []);
+      }
     });
-    const ref = useRef();
-    // useOnclickOutside(ref, () => {
-    //   // When user clicks outside of the component, we can dismiss
-    //   // the searched suggestions by calling this method
-    //   clearSuggestions();
-    // });
-  
-    const handleInput = e => {
-      // Update the keyword of the input element
-      setValue(e.target.value);
+
+    return () => {
+      active = false;
     };
-  
-    const handleSelect = ({ description }) => () => {
-      // When user selects a place, we can replace the keyword without request data from API
-      // by setting the second parameter as "false"
-      setValue(description, false);
-      changeBirthplace(description);
-      clearSuggestions();
-  
-      // // Get latitude and longitude via utility functions
-      // getGeocode({ address: description })
-      //   .then(results => getLatLng(results[0]))
-      //   .then(({ lat, lng }) => {
-      //     console.log('📍 Coordinates: ', { lat, lng });
-      //   }).catch(error => {
-      //     console.log('😱 Error: ', error)
-      //   });
-    };
-  
-    const renderSuggestions = () =>
-      data.map(suggestion => {
-        const {
-          id,
-          structured_formatting: { main_text, secondary_text }
-        } = suggestion;
-  
-        return (
-          <li
-            key={id}
-            onClick={handleSelect(suggestion)}
-          >
-            <strong>{main_text}</strong> <small>{secondary_text}</small>
-          </li>
-        );
-      });
-    
+  }, [birthplace, fetch]);
 
   if (redirect) {
     return (
@@ -138,7 +147,7 @@ function Signup(props) {
           onSubmit={e => signupRequest(e)}
         >
           <Grid container spacing={2}>
-            
+
             <Grid item xs={12}>
               <TextField
                 autoComplete="fname"
@@ -195,8 +204,9 @@ function Signup(props) {
                   fullWidth
                 />
               </MuiPickersUtilsProvider>
-              </Grid>
-              <Grid item xs={12}>
+            </Grid>
+
+            <Grid item xs={12}>
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <TimePicker
                   autoOk
@@ -208,28 +218,55 @@ function Signup(props) {
               </MuiPickersUtilsProvider>
             </Grid>
 
-            <Grid item xs={11}>
-              <div ref={ref}>
-                <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
-                  label="Birthplace"
-                  value={value}
-                  onChange={(e) => handleInput(e)}
-                  disabled={!ready}
-                  // onChange={e => {
-                  //   changeBirthplace(e.target.value);
-                  // }}
-                />
-                {status === 'OK' && <ul>{renderSuggestions()}</ul>}
-              </div>
-            
+            <Grid item xs={12}>
+              <Autocomplete
+                id="google-map-demo"
+                getOptionLabel={(option) => (typeof option === 'string' ? option : option.description)}
+                filterOptions={(x) => x}
+                options={options}
+                autoComplete
+                includeInputInList
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Birthplace"
+                    required
+                    variant="outlined"
+                    fullWidth
+                    onChange={handleChange}
+                  />
+                )}
+                renderOption={(option) => {
+                  const matches = option.structured_formatting.main_text_matched_substrings;
+                  const parts = parse(
+                    option.structured_formatting.main_text,
+                    matches.map((match) => [match.offset, match.offset + match.length]),
+                  );
 
+                  return (
+                    <Grid container alignItems="center">
+                      <Grid item>
+                        <LocationOnIcon className={classes.icon} />
+                      </Grid>
+                      <Grid item xs>
+                        {parts.map((part, index) => (
+                          <span key={index} style={{ fontWeight: part.highlight ? 700 : 400 }}>
+                            {part.text}
+                          </span>
+                        ))}
+
+                        <Typography variant="body2" color="textSecondary">
+                          {option.structured_formatting.secondary_text}
+                        </Typography>
+                      </Grid>
+                    </Grid>
+                  );
+                }}
+              />
             </Grid>
 
             <Grid item xs={12}>
-                <Button
+              <Button
                 type="submit"
                 fullWidth
                 variant="contained"
@@ -239,9 +276,8 @@ function Signup(props) {
                 Sign Up
               </Button>
             </Grid>
-            
-          </Grid>
 
+          </Grid>
         </form>
       </Card>
     </Container>

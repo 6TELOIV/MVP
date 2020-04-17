@@ -15,6 +15,10 @@ const useStyles = makeStyles(theme => ({
     form: {
       marginTop: theme.spacing(3)
     },
+    icon: {
+      color: theme.palette.text.secondary,
+      marginRight: theme.spacing(2),
+    },
     button: {
       margin: theme.spacing(3, 0, 3),
       backgroundColor: "#396384"
