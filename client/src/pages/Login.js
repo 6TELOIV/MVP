@@ -12,6 +12,7 @@ import { Card } from "@material-ui/core";
 import Avatar from "@material-ui/core/Avatar";
 import useStyles from "../assets/Style.js";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 function Login(props) {
   const classes = useStyles();
@@ -88,17 +89,32 @@ function Login(props) {
               }}
             />
           </Grid>
-
+          
           <Grid item xs={12}>
             <Button
               type="submit"
-              className={classes.submit}
+              className={classes.button}
               variant="contained"
               color="primary"
+              fullWidth
             >
               Login
             </Button>
           </Grid>
+          
+          <Grid item xs={12}>
+          <Link
+            to={{
+              pathname: "Signup"
+            }}
+            style={{ textDecoration: "none" }}
+          >
+            <Typography component="h3" align="center">
+            Create an account
+          </Typography>
+          </Link>
+          </Grid>
+
           </Grid>
         </form>
       </Card>
