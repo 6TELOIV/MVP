@@ -1,7 +1,7 @@
 import userModel from '../models/userModel.js';
 import horoscopeModel from '../models/horoscopeModel.js';
 import { calendarAddFromServer } from '../controllers/google.controller.js';
-import { message } from './emailer';
+import  message from './emailer.js';
 
 export async function addCalendarAll(date, phase) { // date and number
     //add calendar event to all users with google setup for that date and their horoscope
@@ -10,7 +10,7 @@ export async function addCalendarAll(date, phase) { // date and number
         users.forEach((user)=>{
             horoscopeModel.find({sign: user.sign, house: user.house, moonPhase: phase})
             .then((hs)=>{
-                calendarAddFromServer(user, hs, date);
+                calendarAddFromServer(user, hs[0], date);
             })
             .catch((err)=>{
                 console.log("Error in finding hs: " + err);
@@ -30,7 +30,7 @@ export async function sendEmailAll(date, phase) { // date and number
         users.forEach((user)=>{
             horoscopeModel.find({sign: user.sign, house: user.house, moonPhase: phase})
             .then((hs)=>{
-                message(user, hs, date);
+                message(user, hs[0], date);
             })
             .catch((err)=>{
                 console.log("Error in finding hs: " + err);
