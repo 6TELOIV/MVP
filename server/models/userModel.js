@@ -32,7 +32,14 @@ const userSchema = new mongoose.Schema({
     },
     googleTokens: {
         type: {}
+    },
+    calEnabled: {
+        type: Boolean
+    },
+    emailEnabled: {
+        type: Boolean
     }
+
 
 });
 
