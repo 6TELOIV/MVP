@@ -35,13 +35,22 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(2),
   },
   preferencePaper: {
-    marginTop:theme.spacing(1),
     marginBottom:theme.spacing(8),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     padding: "20px"
   },
+  createAccountPaper: {
+    marginBottom:theme.spacing(1),
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    padding: "20px"
+  },
+  preferenceIcon:{
+    height:"25px"
+  }
 }));
 
 export default useStyles;

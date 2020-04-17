@@ -17,6 +17,7 @@ import CalendarTodayIcon from "@material-ui/icons/CalendarToday";
 import Switch from "@material-ui/core/Switch";
 import UserAppbar from "../components/UserAppbar.js";
 import useStyles from "../assets/Style.js";
+import googleIcon from "../assets/googleIcon.png"
 
 function UserDashboard(props) {
   const classes = useStyles();
@@ -34,7 +35,8 @@ function UserDashboard(props) {
     checkedA: false,
     checkedB: true
   });
-  const classes = useStyles();
+  const [emailPreference,setEmailPreference] =  useState(true);
+  const [googleCalendarPreference,setGoogleCalendarPreference] =  useState(false);
   async function getInfo() {
     let response = await axios.get("/api/getUserInfo");
     if (!response.data) setRedirect(true);
@@ -51,14 +53,34 @@ function UserDashboard(props) {
     await axios.delete("/api/signout");
     setRedirect(true);
   }
-  if (redirect) {
-    return <Redirect to={{ pathname: "/Login" }} />;
+  async function updateCalendarLink() {
+    await axios.post("/api/googleauth");
+  }
+  async function updateCalendarUnlink() {
+    await axios.post("/api/googledeauth");
+  }
+  async function updateCalendarToggle() {
+    await axios.post("/api/toggleCal");
+  }
+  function updateCalendar(e) {
+    e.preventDefault();
+    if(updateCalendar != true ){
+      setGoogleCalendarPreference(true);
+      updateCalendarLink();
+    }
+    if(updateCalendar == true ){
+      setGoogleCalendarPreference(false);
+      updateCalendarUnlink();
+    }
   }
 
   const handleAccount = event => {
     setAccount({ ...account, [event.target.name]: event.target.checked });
+    updateCalendarToggle();
   };
-
+  if (redirect) {
+    return <Redirect to={{ pathname: "/Login" }} />;
+  }
   return (
     <div>
       <UserAppbar
@@ -120,6 +142,8 @@ function UserDashboard(props) {
                   </Button>
                 </Link>
               </Grid>
+              <Grid item xs={12}>
+              </Grid>
             </Grid>
           </Card>
         </Container>
@@ -127,19 +151,31 @@ function UserDashboard(props) {
 
 {/*Preferences*/}
 <div className={classes.pageMain}>
-        <Container maxWidth="xs">
+      <Container maxWidth="xs">
+        <Card className={classes.createAccountPaper}>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <Typography variant="h5" align="left">
+                Account Management
+              </Typography>
+              <Typography variant="body2" align="left">
+                  Link an account
+                </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <Button onClick={(e)=>updateCalendar(e)}>Google</Button>
+            </Grid>
+          </Grid>
+            
+        </Card>
           <Card className={classes.preferencePaper}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <Typography variant="h5" align="left">
                   Preferences
                 </Typography>
-                <Typography variant="body2" align="left">
-                  Link an account
-                </Typography>
               </Grid>
-
-              <Grid item xs={12}>
+              {googleCalendarPreference &&(<Grid item xs={12}>
                 <Typography align="right">
                   <Typography variant="body1" align="left" color="primary">
                     <CalendarTodayIcon fontSize="small" />
@@ -153,26 +189,12 @@ function UserDashboard(props) {
                     />
                   </Typography>
                 </Typography>
-              </Grid>
-
-              <Grid item xs={12}>
-                <Typography align="right">
-                  <Typography variant="body1" align="left" color="primary">
-                    <MailOutlineIcon fontSize="small" />
-                    &nbsp; Email &nbsp;
-                    <Switch
-                      disabled
-                      checked
-                      inputProps={{ "aria-label": "primary checkbox" }}
-                    />
-                  </Typography>
-                </Typography>
-              </Grid>
+              </Grid>) }
             </Grid>
           </Card>
-        </Container>
+      </Container>
       </div>
-
+      
     </div>
   );
 }
