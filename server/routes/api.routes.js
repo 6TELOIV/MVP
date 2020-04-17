@@ -5,6 +5,7 @@ import * as accountController from '../controllers/account.controller.js';
 import coordinatesController from '../controllers/coordinates.controller.js'
 import * as adminController from '../controllers/admin.controller.js'
 import * as googleController from '../controllers/google.controller.js'
+import * as swiss from '../controllers/swiss.js'
 const apiRouter = express.Router();
 
 apiRouter.post('/signup', coordinatesController, accountController.signUp);
@@ -18,6 +19,8 @@ apiRouter.get('/googleauth', googleController.auth);
 apiRouter.get('/googleauth/callback', googleController.callback);
 apiRouter.get('/googledeauth', googleController.deAuth);
 apiRouter.get('/googleCalAdd', googleController.calendarAdd);
+
+apiRouter.get('/testSwiss', swiss.testSwiss);
 
 
 export default apiRouter;
