@@ -54,9 +54,6 @@ const horoscopeSchema = new mongoose.Schema({
         type: String,
         required: true
     }
-
-
-
 });
 
 export default mongoose.model('horoscopes', horoscopeSchema);

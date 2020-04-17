@@ -30,6 +30,10 @@ const useStyles = makeStyles((theme) => ({
     margin: "10px",
     float: "right",
   },
+  icon: {
+    color: theme.palette.text.secondary,
+    marginRight: theme.spacing(2),
+  },
 }));
 
 export default useStyles;
