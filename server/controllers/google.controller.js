@@ -18,9 +18,9 @@ export const calendarAddFromServer = async(user, horoscope, date) => { //Pass ho
     oauth2Client.setCredentials(tokens);
 
     let dateString = '';
-    let day = date.getDate();
-    let month = date.getMonth() + 1;
-    let year = date.getFullYear();
+    let day = date.getUTCDate();
+    let month = date.getUTCMonth() + 1;
+    let year = date.getUTCFullYear();
 
     if(day < 10){
         day = '0' + day;

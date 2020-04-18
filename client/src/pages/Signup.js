@@ -91,8 +91,8 @@ function Signup(props) {
       password: password,
       name: name,
       address: birthplace,
-      birthday: Math.floor((date.getTime() / 1000) + (((time.getHours() * 60) + time.getMinutes()) * 60 + time.getSeconds()))
-
+      birthday: Math.floor((date.getTime() / 1000) + (((time.getHours() * 60) + time.getMinutes()) * 60 + time.getSeconds())),
+      timezoneOffset: (new Date()).getTimezoneOffset()
     };
     let response = await axios.post("/api/signup", info)
     if (response.status === 200) {
@@ -104,8 +104,8 @@ function Signup(props) {
     }
   }
 
-  const handleChange = (event) => {
-    changeBirthplace(event.target.value);
+  const handleChange = (value) => {
+    changeBirthplace(value);
   };
 
   const fetch = React.useMemo(
@@ -253,6 +253,7 @@ function Signup(props) {
                 filterOptions={(x) => x}
                 options={options}
                 autoComplete
+                onInputChange={ (e, val) => handleChange(val) }
                 includeInputInList
                 renderInput={(params) => (
                   <TextField
@@ -261,7 +262,6 @@ function Signup(props) {
                     required
                     variant="outlined"
                     fullWidth
-                    onChange={handleChange}
                   />
                 )}
                 renderOption={(option) => {

@@ -25,7 +25,7 @@ async function message(user, horoscope, date) {
         `
         <div>
           <h1>Welcome ${user.username}</h1>
-          <h2>${date.toLocaleDateString()}</h2>
+          <h2>${date.toLocaleDateString('en-US', { timeZone: 'UTC' })}</h2>
           <q>${horoscope.quote}</q>
           <p>Your Weekly Summary of the Stars: "${horoscope.summary}"</p>
         </div>
