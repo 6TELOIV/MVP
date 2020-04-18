@@ -30,6 +30,7 @@ function Login(props) {
 
   async function signIn(e) {
     e.preventDefault();
+    console.log(email, password);
     setWrongPass(false);
     signInRequest(
       { username: email, password: password },

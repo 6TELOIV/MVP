@@ -21,6 +21,7 @@ const AdminPage = lazy(() => delayImport(import("./pages/AdminPage")));
 const AdminEdit = lazy(() => delayImport(import("./pages/AdminEdit")));
 const UserDashboard = lazy(() => delayImport(import("./pages/UserDashboard")));
 const UserHoroscope = lazy(() => delayImport(import("./pages/UserHoroscope")));
+const Privacy = lazy(() => delayImport(import("./pages/Privacy")));
 
 //<Route component={NotFound}/>
 const App = (props) => {
@@ -45,6 +46,7 @@ const App = (props) => {
           <Route exact path="/UserDashboard" component={UserDashboard} />
           <Route exact path="/AdminEdit" component={AdminEdit} />
           <Route exact path="/UserHoroscope" component={UserHoroscope} />
+          <Route exact path="/Privacy" component={Privacy} />
           <Redirect to="/Landing" />
         </Switch>
       </Suspense>

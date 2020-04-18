@@ -1,12 +1,12 @@
-import passport from "passport";
 import userModel from "../models/userModel.js";
 import google from "googleapis";
+import axios from "axios";
+import { numberToSign, numberToPhase } from "../helpers/helpers.js"
 
-let callbackURL = "http://localhost:5000/api/googleauth/callback";
-let dashboardURL = "http://localhost:3000/UserDashboard";
-let authURL = "http://localhost:5000/api/googleauth";
+let callbackURL = "/api/googleauth/callback";
+let dashboardURL = "/UserDashboard";
 
-export const calendarAddFromServer = async (user, horoscope, date) => {
+export const calendarAdd = async (user, horoscope, date) => {
   //Pass horoscope, user, and js date
   const OAuth2 = google.google.auth.OAuth2;
   const oauth2Client = new OAuth2(
@@ -33,16 +33,9 @@ export const calendarAddFromServer = async (user, horoscope, date) => {
 
   dateString = dateString + year + "-" + month + "-" + day;
 
-  let html = `
-        <div>
-          <h1>Welcome ${user.name}</h1>
-          <q>${horoscope.quote}</q>
-          <p>"Your Weekly Summary of the Stars: "${horoscope.summary}</p>
-        </div>
-        `;
-
+  let html = `<div><h1>Beginning of ${numberToPhase(horoscope.moonPhase)} Moon</h1><q>${horoscope.quote}</q><p>—${horoscope.quoteAuthor}</p><h3>Your Horoscope for This Moon Phase</h3><p>${horoscope.summary}</p><h4>Best Activities</h4><p>${horoscope.bestActivities}</p><h4>${numberToSign(horoscope.moonPhase)} Moon Themes</h4><p>${horoscope.moonThemes}</p><h4>${numberToSign(horoscope.sign)} Themes</h4><p>${horoscope.signThemes}</p><h4>House ${horoscope.house} Themes</h4><p>${horoscope.houseThemes}</p></div>`;
   var event = {
-    summary: "Daily Horoscope",
+    summary: `${numberToPhase(horoscope.moonPhase)} Moon`,
     description: html,
     start: {
       date: dateString,
@@ -52,7 +45,7 @@ export const calendarAddFromServer = async (user, horoscope, date) => {
     },
     transparency: "transparent",
     reminders: {
-      useDefault: "useDeault",
+      useDefault: "useDefault",
     },
   };
 
@@ -88,7 +81,7 @@ export const auth = async (req, res) => {
     const oauth2Client = new OAuth2(
       config.googleAuth.clientID,
       config.googleAuth.clientSecret,
-      callbackURL
+      req.protocol + "://" + req.get("Host") + callbackURL
     );
 
     const scopes = ["https://www.googleapis.com/auth/calendar.events"];
@@ -105,29 +98,53 @@ export const auth = async (req, res) => {
 
 export const deAuth = async (req, res) => {
   if (!req.session.passport) {
-    res.redirect(dashboardURL);
+    res.send(dashboardURL);
     return;
   }
 
-  userModel
-    .findOneAndUpdate(
-      { _id: req.session.passport.user._id },
-      { $unset: { googleTokens: "" } },
-      { new: true }
-    )
-    .catch((err) => {
+  userModel.findOne({ _id: req.session.passport.user._id }).then(async (user) => {
+    try {
+      await axios.get(`https://accounts.google.com/o/oauth2/revoke?token=${user.googleTokens.refresh_token}`);
+      try {
+        user.googleTokens = undefined;
+        user.isGoogleAuth = false;
+        user.preferences.googleCalUpdates = undefined;
+        user.markModified("preferences");
+        await user.save();
+        res.send(dashboardURL);
+      } catch (e) {
+        res.status(500).send({
+          errors: [
+            {
+              location: "database",
+              msg: "Database write error",
+              err: e,
+            },
+          ],
+        });
+      }
+    } catch (e) {
+      res.status(500).send({
+        errors: [
+          {
+            location: "google",
+            msg: "Failed to deauthenticate",
+            err: e,
+          },
+        ],
+      });
+    }
+  }).catch((err) => {
       res.status(500).send({
         errors: [
           {
             location: "database",
-            msg: "Database write error",
+            msg: "Database read error",
             err: err,
           },
         ],
       });
     });
-
-  res.send("Google DeAuthorized");
 };
 
 export const callback = async (req, res) => {
@@ -137,7 +154,7 @@ export const callback = async (req, res) => {
   const oauth2Client = new OAuth2(
     config.googleAuth.clientID,
     config.googleAuth.clientSecret,
-    callbackURL
+    req.protocol + "://" + req.get("Host") + callbackURL
   );
 
   let code = req.query.code;
@@ -147,7 +164,7 @@ export const callback = async (req, res) => {
   userModel
     .findOneAndUpdate(
       { _id: req.session.passport.user._id },
-      { $set: { googleTokens: tokens } },
+      { $set: { googleTokens: tokens, isGoogleAuth: true } },
       { new: true }
     )
     .catch((err) => {
@@ -161,20 +178,5 @@ export const callback = async (req, res) => {
         ],
       });
     });
-
   res.redirect(dashboardURL);
-};
-
-export const calendarAdd = async (req, res) => {
-  //Temp endpoint for testing
-  let user = await userModel.findOne({ _id: req.session.passport.user._id });
-  let horoscope = {
-    quote: "Hey its a quote",
-    summary: "This is the summary",
-  };
-
-  let date = new Date();
-
-  calendarAddFromServer(user, horoscope, date);
-  res.send("Entry added");
 };

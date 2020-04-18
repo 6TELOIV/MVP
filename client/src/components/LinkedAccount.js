@@ -1,18 +1,16 @@
 import React from "react";
 import {
   Typography,
-  Toolbar,
   Button,
   Card,
-  CardHeader,
   CardContent,
-  Container,
   Switch,
   Tooltip,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { Clear } from "@material-ui/icons";
-import axios from "axios";
+import { Clear } from "@material-ui/icons"
+
+
 const useStyles = makeStyles((theme) => ({
   main: {},
   cardHeader: {
@@ -45,24 +43,25 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const LinkedAccount = ({
-  info,
+  title,
+  prefs,
+  prefsDisabled,
   unlinkCallback,
+  prefCallback,
   disableUnlink,
   cardColorMain,
   cardColorHeader,
 }) => {
-  const link = info.link;
-  const prefs = info.pref;
   const classes = useStyles();
   return (
-    <Card className={classes.main} style={{ backgroundColor: cardColorMain }}>
+    <Card className={classes.main} style={{ backgroundColor: cardColorMain }} variant="outlined">
       <div
         className={classes.cardHeader}
         style={{ backgroundColor: cardColorHeader }}
       >
-        <Typography className={classes.title}>{link}</Typography>
+        <Typography className={classes.title}>{title}</Typography>
         {!disableUnlink && (
-          <Tooltip title="Unlink">
+          <Tooltip title="Unlink Account">
             <Button className={classes.unlink} onClick={unlinkCallback}>
               <Clear />
             </Button>
@@ -70,14 +69,17 @@ const LinkedAccount = ({
         )}
       </div>
       <CardContent className={classes.cardContent}>
-        {prefs.map((p) => (
-          <div className={classes.pref} key={p.key}>
-            <Typography className={classes.toggleName}>{p.toggle}</Typography>
+        {prefs.map((pref) => (
+          <div className={classes.pref} key={pref.name}>
+            <Typography className={classes.toggleName}>{pref.title}</Typography>
             <Switch
-              style={{ color: cardColorHeader }}
-              color={cardColorHeader}
+              disabled={prefsDisabled}
+              name={pref.name}
+              checked={pref.value}
+              color="primary"
               className={classes.toggle}
-            ></Switch>
+              onChange={prefCallback}
+            />
           </div>
         ))}
       </CardContent>

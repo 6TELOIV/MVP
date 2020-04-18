@@ -10,11 +10,19 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  passwordHashed: {
+    type: Boolean,
+    required: true
+  },
   password: {
     type: String,
     required: true,
   },
   isAdmin: {
+    type: Boolean,
+    required: true,
+  },
+  isGoogleAuth: {
     type: Boolean,
     required: true,
   },
@@ -51,12 +59,15 @@ userSchema.methods = {
 };
 
 userSchema.pre("save", function (next) {
-  if (!this.password) {
-    console.log("models/userModel.js =======NO PASSWORD PROVIDED=======");
+  if (this.passwordHashed) {
     next();
   } else {
-    console.log("models/userModel.js hashPassword in pre save");
-    this.password = this.hashPassword(this.password);
+    if (!this.password) {
+      console.log("SAVING USER: NO PASSWORD");
+    } else {
+      this.passwordHashed = true;
+      this.password = this.hashPassword(this.password);
+    }
     next();
   }
 });

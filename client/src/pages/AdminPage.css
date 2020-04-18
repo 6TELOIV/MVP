@@ -6,6 +6,7 @@
     display: grid;
     grid-template-columns: [side] calc(100vw - 300px) [body] 300px [description];
     grid-template-rows: [head] 64px [header] calc(100vh - 64px) [body];
+    background-color: white;
 }
 
 .title {
@@ -40,10 +41,10 @@
     grid-row: header / body;
 }
 .save {
-    background-color: "#396384"
+    background-color: #396384
 }
 .editForm {
-    margin: 0 64px 64px 64px
+    margin: 0 64px 64px 64px;
 }
 .backdrop {
     z-index: 9999;

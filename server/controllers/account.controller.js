@@ -84,10 +84,12 @@ export const signUp = async (req, res) => {
         username: req.body.email,
         password: req.body.password,
         isAdmin: false,
+        isGoogleAuth: false,
         preferences: {},
         house: house,
         sign: sunHouse,
-        timezoneOffset: req.body.timezoneOffset
+        timezoneOffset: req.body.timezoneOffset,
+        passwordHashed: false
       });
       res.send("User created").status(200);
     }
@@ -161,45 +163,9 @@ export const updatePreferences = async (req, res) => {
   }
 };
 
-export const toggleCal = async (req, res) => {
-  try {
-    userModel.find({ _id: req.session.passport.user._id }).then((user) => {
-      userModel
-        .findOneAndUpdate(
-          { _id: req.session.passport.user._id },
-          { $set: { calEnabled: !user[0].calEnabled } },
-          { new: true }
-        )
-        .then((usr) => {
-          res.send(usr);
-        });
-    });
-  } catch {
-    res.status(200).send(null);
-  }
-};
-
-export const toggleEmail = async (req, res) => {
-  try {
-    userModel.find({ _id: req.session.passport.user._id }).then((user) => {
-      userModel
-        .findOneAndUpdate(
-          { _id: req.session.passport.user._id },
-          { $set: { emailEnabled: !user[0].emailEnabled } },
-          { new: true }
-        )
-        .then((usr) => {
-          res.send(usr);
-        });
-    });
-  } catch {
-    res.status(200).send(null);
-  }
-};
-
 export const getUserInfo = async (req, res) => {
   if (!req.session.passport) {
-    res.status(200).send(null); //Sends null to trigger login
+    res.status(401).send(null); //Sends null to trigger login
     return;
   }
   let found = await userModel.find({ _id: req.session.passport.user._id });
@@ -220,6 +186,7 @@ export const getUserInfo = async (req, res) => {
     sign: found.sign,
     horoscope: userH,
     preferences: found.preferences,
+    isGoogleAuth: found.isGoogleAuth
   };
   res.status(200).send(foundRevised);
 };

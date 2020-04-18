@@ -22,12 +22,8 @@ apiRouter.post("/admin", adminController.reset);
 
 apiRouter.put("/googleauth", googleController.auth);
 apiRouter.get("/googleauth/callback", googleController.callback);
-apiRouter.get("/googledeauth", googleController.deAuth);
-apiRouter.get("/googleCalAdd", googleController.calendarAdd);
+apiRouter.put("/googledeauth", googleController.deAuth);
 
 apiRouter.put("/updatePreferences", accountController.updatePreferences);
-
-apiRouter.post("/toggleCal", accountController.toggleCal);
-apiRouter.post("/toggleEmail", accountController.toggleEmail);
 
 export default apiRouter;
