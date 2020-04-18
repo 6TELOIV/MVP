@@ -36,6 +36,9 @@ const userSchema = new mongoose.Schema({
   preferences: {
     type: {},
   },
+  timezoneOffset: {
+      type: mongoose.Number
+  }
 });
 
 userSchema.methods = {
