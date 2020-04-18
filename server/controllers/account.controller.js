@@ -24,7 +24,6 @@ export const signUp = async (req, res) => {
 
     //Shaun's Code for Handling Timezones and Daylight Savings
     let tz = geoTz(req.body.lat, req.body.long);
-    console.log(tz);
     let DST = isDST(date);
     let off;
     if (DST) {
@@ -89,6 +88,7 @@ export const signUp = async (req, res) => {
 				emailEnabled: false,
         house: house,
         sign: sunHouse,
+        timezoneOffset: req.body.timezoneOffset
       });
       res.send("User created").status(200);
     }

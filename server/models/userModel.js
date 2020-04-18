@@ -38,6 +38,9 @@ const userSchema = new mongoose.Schema({
     },
     emailEnabled: {
         type: Boolean
+    },
+    timezoneOffset: {
+        type: mongoose.Number
     }
 
 

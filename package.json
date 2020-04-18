@@ -49,6 +49,7 @@
     "react-google-autocomplete": "^1.1.4",
     "react-load-script": "0.0.6",
     "should": "^13.2.3",
+    "suncalc": "^1.8.0",
     "supertest": "^4.0.2",
     "swisseph": "^0.5.13",
     "timezone-name-offsets": "^1.0.2",
