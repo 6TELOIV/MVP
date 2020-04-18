@@ -85,8 +85,7 @@ export const signUp = async (req, res) => {
         username: req.body.email,
         password: req.body.password,
         isAdmin: false,
-        calEnabled: false,
-				emailEnabled: false,
+        preferences: {},
         house: house,
         sign: sunHouse,
       });
@@ -133,35 +132,70 @@ export const signOut = async (req, res) => {
   res.status(200).send("Successfully Logged Out");
 };
 
-export const toggleCal = async(req, res) => {
-	try{
-		userModel.find({_id: req.session.passport.user._id})
-		.then((user)=>{
-			userModel.findOneAndUpdate({_id: req.session.passport.user._id}, {$set: {calEnabled: !user[0].calEnabled}}, {new: true})
-			.then((usr)=>{
-				res.send(usr);
-			})
-		})
+export const updatePreferences = async (req, res) => {
+  if (!req.session.passport.user._id) {
+    res.status(401);
+  }
+  try {
+    let user = await userModel.findOne({ _id: req.session.passport.user._id });
+    let preferenceKeys = Object.keys(req.body);
+    if (!user.preferences) {
+      user.preferences = {};
+    }
+    preferenceKeys.forEach((key) => {
+      user.preferences[key] = req.body[key];
+    });
+    user.markModified("preferences");
+    await user.save();
+    res.send();
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({
+      errors: [
+        {
+          location: "database",
+          msg: "Database read error",
+        },
+      ],
+    });
+  }
+};
 
-	}catch{
-		res.status(200).send(null);
-	}
-}
+export const toggleCal = async (req, res) => {
+  try {
+    userModel.find({ _id: req.session.passport.user._id }).then((user) => {
+      userModel
+        .findOneAndUpdate(
+          { _id: req.session.passport.user._id },
+          { $set: { calEnabled: !user[0].calEnabled } },
+          { new: true }
+        )
+        .then((usr) => {
+          res.send(usr);
+        });
+    });
+  } catch {
+    res.status(200).send(null);
+  }
+};
 
-export const toggleEmail = async(req, res) => {
-	try{
-		userModel.find({_id: req.session.passport.user._id})
-		.then((user)=>{
-			userModel.findOneAndUpdate({_id: req.session.passport.user._id}, {$set: {emailEnabled: !user[0].emailEnabled}}, {new: true})
-			.then((usr)=>{
-				res.send(usr);
-			})
-		})
-
-	}catch{
-		res.status(200).send(null);
-	}
-}
+export const toggleEmail = async (req, res) => {
+  try {
+    userModel.find({ _id: req.session.passport.user._id }).then((user) => {
+      userModel
+        .findOneAndUpdate(
+          { _id: req.session.passport.user._id },
+          { $set: { emailEnabled: !user[0].emailEnabled } },
+          { new: true }
+        )
+        .then((usr) => {
+          res.send(usr);
+        });
+    });
+  } catch {
+    res.status(200).send(null);
+  }
+};
 
 export const getUserInfo = async (req, res) => {
   if (!req.session.passport) {
@@ -185,8 +219,7 @@ export const getUserInfo = async (req, res) => {
     house: found.house,
     sign: found.sign,
     horoscope: userH,
-    calEnabled: found.calEnabled,
-		emailEnabled: found.emailEnabled,
+    preferences: found.preferences,
   };
   res.status(200).send(foundRevised);
 };
