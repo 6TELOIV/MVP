@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import "./Site.css";
 import {
   Grid,
   Avatar,
