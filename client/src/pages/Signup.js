@@ -95,8 +95,6 @@ function Signup(props) {
     date.setUTCSeconds(0);
     date.setUTCMilliseconds(0);
 
-    console.log(date.toISOString());
-
     let info = {
       email: email,
       password: password,

@@ -40,8 +40,6 @@ export const signUp = async (req, res) => {
     let day = date.getUTCDate();
     let hour = date.getUTCHours() + (date.getUTCMinutes() / 60) + off;
 
-    console.log(month + '/' + day + '/' + year + ' at ' + (hour + (date.getUTCMinutes() / 60)))
-
     julday_ut = swisseph.swe_julday(
       year,
       month,
