@@ -38,7 +38,7 @@ export const signUp = async (req, res) => {
     let year = date.getUTCFullYear();
     let month = date.getUTCMonth() + 1;
     let day = date.getUTCDate();
-    let hour = date.getUTCHours() + (date.getUTCMinutes() / 60);// + off + ;
+    let hour = date.getUTCHours() + (date.getUTCMinutes() / 60) + off;
 
     console.log(month + '/' + day + '/' + year + ' at ' + (hour + (date.getUTCMinutes() / 60)))
 
