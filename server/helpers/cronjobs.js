@@ -5,15 +5,11 @@ import { getWeekMoons } from './moon.js'
 
 const startJobs = () => {
   // Run horoscope job every Sunday at midnight
-  const weeklyHoroscopeJob = new cron.CronJob("0 15 1 * * 0", () => { // change to "0 0 0 * * 0" to run every sunday at midnight
+  const weeklyHoroscopeJob = new cron.CronJob("0 0 0 * * 0", () => { // change to "0 0 0 * * 0" to run every sunday at midnight
     timestampLog("Running weekly horoscope job...");
 
     // Get the bounds of this week
     let now = new Date();
-    now.setUTCHours(0);
-    now.setUTCMinutes(0);
-    now.setUTCSeconds(0);
-    now.setUTCMilliseconds(0);
     let nextWeek = new Date(now.getTime());
     nextWeek.setUTCDate(now.getUTCDate() + 7);
 
