@@ -1,7 +1,7 @@
 import cron from 'cron';
 import { addCalendarAll, sendEmailAll } from './bulkFunctions.js';
 import { timestampLog } from './helpers.js';
-import getWeekMoon from './getWeekMoon.js'
+import { getWeekMoons } from './moon.js'
 
 const startJobs = () => {
   // Run horoscope job every Sunday at midnight
@@ -14,7 +14,7 @@ const startJobs = () => {
     nextWeek.setUTCDate(now.getUTCDate() + 7);
 
     // Get the dates and phases of moon-phase-changes
-    let phaseChanges = getWeekMoon(now, nextWeek);
+    let phaseChanges = getWeekMoons(now, nextWeek);
 
     // For every phase change, we need to add calendar events now, but defer the emails to the day they are happening.
     phaseChanges.forEach((phaseChange) => {

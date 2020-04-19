@@ -21,7 +21,6 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import parse from 'autosuggest-highlight/parse';
 import throttle from 'lodash/throttle';
 import useStyles from "../assets/Style.js";
-import _ from 'lodash';
 
 function loadScript(src, position, id) {
   if (!position) {
@@ -39,8 +38,8 @@ const autocompleteService = { current: null };
 
 function Signup(props) {
   const classes = useStyles();
-  const [date, setDate] = useState(new Date());
-  const [time, setTime] = useState(new Date("2018-01-01T17:00:00.000Z"));
+  const [date, setDate] = useState(null);
+  const [time, setTime] = useState(null);
   const [name, changeName] = useState("");
   const [email, changeEmail] = useState(props.location.email);
   const [password, changePassword] = useState("");
@@ -71,12 +70,11 @@ function Signup(props) {
   }
 
   useEffect(() => {
-    getInfo();
+    checkSignedIn();
   }, []);
-  async function getInfo() {
-    let response = await axios.get("/api/getUserInfo");
+  async function checkSignedIn() {
+    let response = await axios.get("/api/issignedin");
     if (response.data) setRedirect(true);
-
   }
 
   async function signupRequest(e) {
@@ -85,8 +83,6 @@ function Signup(props) {
     date.setMinutes(0);
     date.setSeconds(0);
     date.setMilliseconds(0);
-
-    console.log(time);
 
     let info = {
       email: email,
@@ -101,12 +97,10 @@ function Signup(props) {
         username: email,
         password: password
       }
-      console.log('200');
       signInRequest(loginInfo, setRedirect.bind(this));
     }
     ).catch(error => {
       setWrongPass(true);
-      console.log('400');
     }
     );
   }
@@ -165,14 +159,14 @@ function Signup(props) {
         </Typography>
         <form
           className={classes.form}
-          validate
+          validate="true"
           onSubmit={e => signupRequest(e)}
         >
           <Grid container spacing={2}>
             {wrongPass ?
               <Grid item xs={12}>
                 <p align="center" style={{ color: 'red' }}>
-                  Username Taken
+                  Email already in use.
             </p>
               </Grid> : null}
 
@@ -223,6 +217,9 @@ function Signup(props) {
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <KeyboardDatePicker
                   disableFuture
+                  clearable
+                  required
+                  inputVariant="outlined"
                   openTo="year"
                   format="MM/dd/yyyy"
                   label="Date of Birth"
@@ -237,7 +234,9 @@ function Signup(props) {
             <Grid item xs={12}>
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <KeyboardTimePicker
-
+                  clearable
+                  required
+                  inputVariant="outlined"
                   label="Time of Birth"
                   mask="__:__ _M"
                   value={time}

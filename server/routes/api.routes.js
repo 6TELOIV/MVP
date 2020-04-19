@@ -8,6 +8,7 @@ import * as googleController from "../controllers/google.controller.js";
 const apiRouter = express.Router();
 
 apiRouter.post("/signup", coordinatesController, accountController.signUp);
+apiRouter.get("/issignedin", accountController.isSignedIn)
 apiRouter.post(
   "/signin",
   passport.authenticate("local"),

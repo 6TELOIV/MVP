@@ -63,7 +63,7 @@ userSchema.pre("save", function (next) {
     next();
   } else {
     if (!this.password) {
-      console.log("SAVING USER: NO PASSWORD");
+      console.warn("SAVING USER: NO PASSWORD");
     } else {
       this.passwordHashed = true;
       this.password = this.hashPassword(this.password);

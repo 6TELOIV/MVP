@@ -61,10 +61,10 @@ export default function Admin() {
           <Search setFilterHoroscope={setFilterHoroscopeWrapper} />
         </Toolbar>
       </AppBar>
-      <Paper className="description" square elevation="0">
+      <Paper className="description" square elevation={0}>
         <AdminDetail horoscopeView={selectedHoroscope} />
       </Paper>
-      <Paper className="table" square elevation="0">
+      <Paper className="table" square elevation={0}>
         <HoroscopeList horoscopeList={horoscopeList}
           filterHoroscope={filterHoroscope}
           setSelectedHoroscope={setSelectedHoroscopeWrapper}

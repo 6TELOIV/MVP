@@ -69,7 +69,7 @@ import horoscopeModel from '../models/horoscopeModel.js';
 				res.send("Not an administrator").status(401);
 				return;
 			}
-			horoscopeModel.findOneAndUpdate({sign: req.body.sign, house: req.body.house, moonPhase: req.body.moonPhase}, {
+			await horoscopeModel.findOneAndUpdate({sign: req.body.sign, house: req.body.house, moonPhase: req.body.moonPhase}, {
 				sign: req.body.sign, 
 				house: req.body.house, 
 				moonPhase: req.body.moonPhase, 
@@ -81,8 +81,7 @@ import horoscopeModel from '../models/horoscopeModel.js';
 				moonThemes: req.body.moonThemes, 
 				signThemes: req.body.signThemes, 
 				houseThemes: req.body.houseThemes
-			}, {new: true})
-			.then(() => {console.log("Updated Successfully")})
+			}, {new: true});
 		} catch (error) {
 			console.error(error);
 			res.status(500).send({

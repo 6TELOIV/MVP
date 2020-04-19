@@ -1,10 +1,10 @@
 import SunCalc from 'suncalc';
 
-function getPhase(date) {
+export function getPhase(date) {
   return Math.floor(SunCalc.getMoonIllumination(date).phase * 8) + 1;
 }
 
-export default function getWeekMoon(start, end) { //Dates
+export function getWeekMoons(start, end) { //Dates
     let changedDates = [];
     let currDate = start;
     let currPhase = getPhase(currDate);

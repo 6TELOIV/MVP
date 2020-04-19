@@ -5,6 +5,7 @@ import isDST from "is-dst";
 import passport from "passport";
 import horoscopeModel from "../models/horoscopeModel.js";
 import userModel from "../models/userModel.js";
+import { getPhase } from "../helpers/moon.js"
 
 /* req: {
 	long,
@@ -108,6 +109,15 @@ export const signUp = async (req, res) => {
 
   res.status(200).end();
 };
+
+export const isSignedIn = (req, res) => {
+  if (req.session.passport) {
+    res.send(true);
+  } else {
+    res.send(false);
+  }
+}
+
 /**
  * req = {
  *   username,
@@ -165,28 +175,28 @@ export const updatePreferences = async (req, res) => {
 
 export const getUserInfo = async (req, res) => {
   if (!req.session.passport) {
-    res.status(401).send(null); //Sends null to trigger login
-    return;
-  }
-  let found = await userModel.find({ _id: req.session.passport.user._id });
+    res.status(401).send(null); //Sends null 401 to trigger login
+  } else {
+    let found = await userModel.find({ _id: req.session.passport.user._id });
 
-  if (!found) res.status(400).end();
-  found = found[0];
-  let userH = await horoscopeModel.find({
-    sign: found.sign,
-    house: found.house,
-    moonPhase: 1,
-  }); //moon phase temp will be updated later
-  if (!userH) res.status(400).end();
-  userH = userH[0];
-  let foundRevised = {
-    name: found.name,
-    username: found.username,
-    house: found.house,
-    sign: found.sign,
-    horoscope: userH,
-    preferences: found.preferences,
-    isGoogleAuth: found.isGoogleAuth
-  };
-  res.status(200).send(foundRevised);
+    if (!found) res.status(400).end();
+    found = found[0];
+    let userH = await horoscopeModel.find({
+      sign: found.sign,
+      house: found.house,
+      moonPhase: getPhase(new Date()),
+    });
+    if (!userH) res.status(400).end();
+    userH = userH[0];
+    let foundRevised = {
+      name: found.name,
+      username: found.username,
+      house: found.house,
+      sign: found.sign,
+      horoscope: userH,
+      preferences: found.preferences,
+      isGoogleAuth: found.isGoogleAuth
+    };
+    res.status(200).send(foundRevised);
+  }
 };

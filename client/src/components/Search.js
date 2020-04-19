@@ -11,7 +11,6 @@ const getParam = (str, paramIdentifyer) => {
   }
   paramStr = paramStr[0];
   let param = paramStr.match(new RegExp("=\\d*", ''));
-  console.log(param);
   if (param) {
     param = parseInt(param[0].substring(1));
   }
@@ -100,7 +99,6 @@ const Search = (props) => {
     [moonParam, value] = getParam(value, "m");
     moonParam = parseInt(moonParam);
 
-    console.log(houseParam,signParam,moonParam,value)
     //Set States
     setHouse(houseParam);
     setSign(signParam);

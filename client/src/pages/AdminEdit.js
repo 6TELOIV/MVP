@@ -13,7 +13,12 @@ function AdminEdit(props) {
   /*props.location.selHoro receives the input to be edited from the AdminPage*/
 
   let horoscope = props.location.selHoro;
-  
+  let noHoroscope = false;
+  if (!horoscope) {
+    noHoroscope = true;
+    horoscope = {};
+  }
+
   const [quote, changeQuote] = useState(horoscope.quote);
   const [quoteAuthor, changeQuoteAuthor] = useState(horoscope.quoteAuthor);
   const [quoteSrc, changeQuoteSrc] = useState(horoscope.quoteSrc);
@@ -24,7 +29,7 @@ function AdminEdit(props) {
   const [houseThemes, changeHouseThemes] = useState(horoscope.houseThemes);
 
   const [editInfo, setEditInfo] = useState();
-  const [redirect, setRedirect] = useState(false);
+  const [redirect, setRedirect] = useState(noHoroscope);
 
   /*Handles when the save button is clicked */
   async function handleSave(e) {

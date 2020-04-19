@@ -21,16 +21,15 @@ function Login(props) {
   const [wrongPass, setWrongPass] = useState(false);
 
   useEffect(() => {
-    getInfo();
+    checkSignedIn();
   }, []);
-  async function getInfo() {
-    let response = await axios.get("/api/getUserInfo");
+  async function checkSignedIn() {
+    let response = await axios.get("/api/issignedin");
     if (response.data) setRedirect(true);
   }
 
   async function signIn(e) {
     e.preventDefault();
-    console.log(email, password);
     setWrongPass(false);
     signInRequest(
       { username: email, password: password },

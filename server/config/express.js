@@ -38,13 +38,8 @@ export const init = () => {
         secret: config.session.secret,
         resave: false,
         saveUninitialized: true,
-        store: new MongoStore({ mongooseConnection: mongoose.connection})
+        store: new MongoStore({ mongooseConnection: mongoose.connection })
     }));
-    
-    app.use((req, res, next) => {
-        console.log('req.session', req.session);
-        next();
-    });
 
     //Passport
     app.use(passport.initialize());
@@ -53,24 +48,14 @@ export const init = () => {
     passport.use(localStrategy);
 
     passport.serializeUser((user, done) => {
-        console.log('*** serializeUser called, user: ')
-        console.log(user) // the whole raw user object!
-        console.log('---------')
         done(null, { _id: user._id });
     });
     passport.deserializeUser((id, done) => {
-        console.log('DeserializeUser called')
-
         userModel.findOne(
             { _id: id },
             'username',
             (err, user) => {
-                
-            console.log('*** Deserialize user, user:')
-            console.log(user)
-            console.log('--------------')
-            done(null, user)
-                
+                done(null, user)
             }
         )
     });

@@ -2,7 +2,7 @@ import React, { Suspense, lazy } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import { Route, Switch, Redirect } from "react-router-dom";
 import "./App.css";
-import { Container, Card, CardContent, CardHeader, CircularProgress } from "@material-ui/core";
+import { CircularProgress, Backdrop } from "@material-ui/core";
 import useStyles from "./assets/Style.js";
 
 
@@ -29,14 +29,9 @@ const App = (props) => {
   return (
     <Router>
       <Suspense fallback={
-        <Container maxWidth="xs">
-          <Card className={classes.paper}>
-            <CardHeader title="Loading..." />
-            <CardContent>
-              <CircularProgress />
-            </CardContent>
-          </Card>
-        </Container>
+        <Backdrop open={true} className={classes.backdrop}>
+          <CircularProgress />
+        </Backdrop>
       }>
         <Switch>
           <Route exact path="/Signup" component={Signup} />

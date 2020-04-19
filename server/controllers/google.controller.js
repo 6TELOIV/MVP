@@ -57,8 +57,7 @@ export const calendarAdd = async (user, horoscope, date) => {
       resource: event,
     },
     (err, res) => {
-      if (err) return console.log("The API returned an error: " + err);
-      console.log("Event created successfully");
+      if (err) return console.error("The API returned an error: " + err);
     }
   );
 };

@@ -17,13 +17,12 @@ export default function Landing() {
   const [email, setEmail] = useState("");
   const [redirect, setRedirect] = useState(false);
 
-  useEffect(()=>{
-    getInfo();
-  },[]);
-  async function getInfo(){
-      let response = await axios.get("/api/getUserInfo");
-      if(response.data) setRedirect(true);
-      
+  useEffect(() => {
+    checkSignedIn();
+  }, []);
+  async function checkSignedIn() {
+    let response = await axios.get("/api/issignedin");
+    if (response.data) setRedirect(true);
   }
 
   if (redirect) {

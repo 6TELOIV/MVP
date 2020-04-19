@@ -15,19 +15,18 @@ export async function addCalendarAll(date, phase) { // date and number
     userModel.find({ "preferences.googleCalUpdates": true })
     .then((users)=>{
         users.forEach((user)=>{
-            console.log("CAL PREF MATCH", user);
             horoscopeModel.find({sign: user.sign, house: user.house, moonPhase: phase})
             .then((hs)=>{
                 calendarAdd(user, hs[0], date);
             })
             .catch((err)=>{
-                console.log("Error in finding hs: " + err);
+                console.error("Error in finding hs: " + err);
             })
             
         })
     })
     .catch((err)=>{
-        console.log("Error in finding users: " + err);
+        console.error("Error in finding users: " + err);
     })
  }
 
@@ -36,7 +35,6 @@ export async function sendEmailAll(date, phase) { // date and number
     userModel.find({ "preferences.emailUpdates": true })
     .then((users)=>{
         users.forEach((user)=>{
-            console.log("EMAIL PREF MATCH", user);
             let context = {
                 date: date,
                 phase: phase
@@ -48,13 +46,13 @@ export async function sendEmailAll(date, phase) { // date and number
                     message(user, hs[0], date);
                 })
                 .catch((err)=>{
-                    console.log("Error in finding hs: " + err);
+                    console.error("Error in finding hs: " + err);
                 })
             }, undefined, undefined, undefined, context); // undefined = leaving out the parameter.
             emailJob.start();
         })
     })
     .catch((err)=>{
-        console.log("Error in finding users: " + err);
+        console.error("Error in finding users: " + err);
     })
  }

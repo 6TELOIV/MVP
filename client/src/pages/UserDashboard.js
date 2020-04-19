@@ -7,7 +7,9 @@ import {
   CssBaseline,
   Container,
   Card,
-  Paper
+  Paper,
+  CircularProgress,
+  Backdrop
 } from "@material-ui/core";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
@@ -28,6 +30,10 @@ const AccountButton = withStyles((theme) => ({
 }))(Button);
 
 const useStyles = makeStyles((theme) => ({
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: '#fff',
+  },
   paper: {
     height: "100%",
     display: "flex",
@@ -77,9 +83,19 @@ const useStyles = makeStyles((theme) => ({
 function UserDashboard(props) {
   const classes = useStyles();
   useEffect(() => {
-    getInfo();
+    async function blockNoSession() {
+      if(await checkSignedIn()) {
+        getInfo();
+      }
+    }
+    blockNoSession();
   }, []);
 
+  async function checkSignedIn() {
+    let response = await axios.get("/api/issignedin");
+    if (!response.data) setRedirect(true);
+    return response.data;
+  }
   //States--------------------------------------------------------------------
   const [userInfo, setUserInfo] = useState({
     name: "",
@@ -105,14 +121,14 @@ function UserDashboard(props) {
         {
           title: "Add Horoscopes to Google Calendar",
           name: "googleCalUpdates",
-          value: response.data.preferences.googleCalUpdates
+          value: !!response.data.preferences.googleCalUpdates
         }
       ])
       setEmailPrefs([
         {
           title: "Receive Horoscope Emails",
           name: "emailUpdates",
-          value: response.data.preferences.emailUpdates
+          value: !!response.data.preferences.emailUpdates
         }
       ]);
 
@@ -129,10 +145,11 @@ function UserDashboard(props) {
         window.location.href = response.data;
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
       });
   }
   async function updatePreferences(e) {
+    e.preventDefault();
     setPrefsDisabled(true);
     await axios
       .put("api/updatePreferences",
@@ -143,7 +160,7 @@ function UserDashboard(props) {
         getInfo();
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
       });
   }
   async function callGoogleDeAuth(e) {
@@ -151,7 +168,6 @@ function UserDashboard(props) {
     if (res.data) {
       window.location.href = res.data;
     }
-    console.log("unlinked!");
   }
 
   if (redirect) {
@@ -291,6 +307,9 @@ function UserDashboard(props) {
                   )}
                 </Grid>
               </Grid>
+              <Backdrop open={prefsDisabled} className={classes.backdrop}>
+                <CircularProgress />
+              </Backdrop>
             </Card>
           </Grid>
         </Grid>

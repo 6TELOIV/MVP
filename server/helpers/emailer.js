@@ -28,7 +28,7 @@ async function message(user, horoscope, date) {
   let msg = {
     from: 'heavenlywritingllc@gmail.com',
     to: user.username,
-    subject: `MoonFlow: ${numberToPhase(horoscope.moonPhase)} Moon Report`,
+    subject: `MoonFlow: Your ${date.getUTCMonth() + 1}/${date.getUTCDate()} ${numberToPhase(horoscope.moonPhase)} Moon Report`,
     html:
       `
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -235,9 +235,7 @@ async function message(user, horoscope, date) {
 
   transporter.sendMail(msg, function (error, info) {
     if (error) {
-      console.log(error);
-    } else {
-      console.log('Email sent: ' + info.response);
+      console.error(error);
     }
   });
 }
