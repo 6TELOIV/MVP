@@ -180,6 +180,7 @@ function Signup(props) {
               <TextField
                 autoComplete="fname"
                 variant="outlined"
+                required
                 fullWidth
                 label="First Name"
                 autoFocus
