@@ -33,7 +33,7 @@ export const calendarAdd = async (user, horoscope, date) => {
 
   dateString = dateString + year + "-" + month + "-" + day;
 
-  let html = `<div><h1>Beginning of ${numberToPhase(horoscope.moonPhase)} Moon</h1><q>${horoscope.quote}</q><p>—${horoscope.quoteAuthor}</p><h3>Your Horoscope for This Moon Phase</h3><p>${horoscope.summary}</p><h4>Best Activities</h4><p>${horoscope.bestActivities}</p><h4>${numberToSign(horoscope.moonPhase)} Moon Themes</h4><p>${horoscope.moonThemes}</p><h4>${numberToSign(horoscope.sign)} Themes</h4><p>${horoscope.signThemes}</p><h4>House ${horoscope.house} Themes</h4><p>${horoscope.houseThemes}</p></div>`;
+  let html = `<div><h1>Beginning of ${numberToPhase(horoscope.moonPhase)} Moon</h1><q>${horoscope.quote}</q><p>—${horoscope.quoteAuthor}</p><h3>Your Horoscope for This Moon Phase</h3><p>${horoscope.summary}</p><h4>Best Activities</h4><p>${horoscope.bestActivities}</p><h4>${numberToPhase(horoscope.moonPhase)} Moon Themes</h4><p>${horoscope.moonThemes}</p><h4>${numberToSign(horoscope.sign)} Themes</h4><p>${horoscope.signThemes}</p><h4>House ${horoscope.house} Themes</h4><p>${horoscope.houseThemes}</p></div>`;
   var event = {
     summary: `${numberToPhase(horoscope.moonPhase)} Moon`,
     description: html,
