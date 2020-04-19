@@ -23,7 +23,7 @@ export const signUp = async (req, res) => {
 
   try {
     date.setUTCSeconds(req.body.birthday);
-    date = timezoneDateToUTC(date, req.body.timezoneOffset);
+
     //Shaun's Code for Handling Timezones and Daylight Savings
     let tz = geoTz(req.body.lat, req.body.long);
     let DST = isDST(date);
@@ -38,7 +38,9 @@ export const signUp = async (req, res) => {
     let year = date.getUTCFullYear();
     let month = date.getUTCMonth() + 1;
     let day = date.getUTCDate();
-    let hour = date.getUTCHours() + off + date.getUTCMinutes() / 60;
+    let hour = date.getUTCHours() + (date.getUTCMinutes() / 60);// + off + ;
+
+    console.log(month + '/' + day + '/' + year + ' at ' + (hour + (date.getUTCMinutes() / 60)))
 
     julday_ut = swisseph.swe_julday(
       year,

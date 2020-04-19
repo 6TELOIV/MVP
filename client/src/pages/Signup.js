@@ -34,6 +34,16 @@ function loadScript(src, position, id) {
   position.appendChild(script);
 }
 
+function stdTimezoneOffset() {
+  var jan = new Date(this.getFullYear(), 0, 1);
+  var jul = new Date(this.getFullYear(), 6, 1);
+  return Math.max(jan.getTimezoneOffset(), jul.getTimezoneOffset());
+}
+
+function isDstObserved() {
+  return this.getTimezoneOffset() < this.stdTimezoneOffset();
+}
+
 const autocompleteService = { current: null };
 
 function Signup(props) {
@@ -79,10 +89,13 @@ function Signup(props) {
 
   async function signupRequest(e) {
     e.preventDefault();
-    date.setHours(0);
-    date.setMinutes(0);
-    date.setSeconds(0);
-    date.setMilliseconds(0);
+    date.setTime(date.getTime() + (date.getTimezoneOffset() * 60 * 1000));
+    date.setUTCHours(0);
+    date.setUTCMinutes(0);
+    date.setUTCSeconds(0);
+    date.setUTCMilliseconds(0);
+
+    console.log(date.toISOString());
 
     let info = {
       email: email,
