@@ -52,6 +52,8 @@ const HoroscopeList = React.memo((props) => {
                   <TableCell align="right">{row.summary}</TableCell>
                 </TableRow>
               );
+            } else {
+              return null;
             }
           })}
         </TableBody>

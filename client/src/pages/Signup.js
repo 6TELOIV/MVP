@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { signInRequest } from "../helpers/loginFunction.js"
-import "./Site.css";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -16,7 +15,7 @@ import Container from "@material-ui/core/Container";
 import DateFnsUtils from "@date-io/date-fns";
 import { Redirect } from "react-router-dom";
 import axios from "axios";
-import { Card, ThemeProvider, Checkbox, FormControlLabel } from "@material-ui/core";
+import { Card, Checkbox, FormControlLabel } from "@material-ui/core";
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import parse from 'autosuggest-highlight/parse';
@@ -94,8 +93,8 @@ function Signup(props) {
       password: password,
       name: name,
       address: birthplace,
-      birthday: Math.floor((date.getTime() / 1000) + (((time.getHours() * 60) + time.getMinutes()) * 60 + time.getSeconds()))
-
+      birthday: Math.floor((date.getTime() / 1000) + (((time.getHours() * 60) + time.getMinutes()) * 60 + time.getSeconds())),
+      timezoneOffset: (new Date()).getTimezoneOffset()
     };
     await axios.post("/api/signup", info).then(resolve => {
       const loginInfo = {
@@ -112,8 +111,8 @@ function Signup(props) {
     );
   }
 
-  const handleChange = (event) => {
-    changeBirthplace(event.target.value);
+  const handleChange = (value) => {
+    changeBirthplace(value);
   };
 
   const fetch = React.useMemo(
@@ -266,6 +265,7 @@ function Signup(props) {
                 filterOptions={(x) => x}
                 options={options}
                 autoComplete
+                onInputChange={ (e, val) => handleChange(val) }
                 includeInputInList
                 renderInput={(params) => (
                   <TextField
@@ -274,7 +274,6 @@ function Signup(props) {
                     required
                     variant="outlined"
                     fullWidth
-                    onChange={handleChange}
                   />
                 )}
                 renderOption={(option) => {

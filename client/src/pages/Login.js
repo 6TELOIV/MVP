@@ -7,7 +7,6 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import { Redirect } from "react-router-dom";
-import "./Site.css";
 import { Card } from "@material-ui/core";
 import Avatar from "@material-ui/core/Avatar";
 import useStyles from "../assets/Style.js";
@@ -31,6 +30,7 @@ function Login(props) {
 
   async function signIn(e) {
     e.preventDefault();
+    console.log(email, password);
     setWrongPass(false);
     signInRequest(
       { username: email, password: password },

@@ -1,5 +1,9 @@
 //Signs
 
+export const timestampLog = (message) => {
+    console.log('[' + new Date().toUTCString() + '] ' + message);
+}
+
 const signs = [
     {number: 1, sign: 'Aries'},
     {number: 2, sign: 'Taurus'}, 

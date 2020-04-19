@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import "./Site.css";
 import {
   Grid,
   Avatar,
@@ -8,91 +7,216 @@ import {
   CssBaseline,
   Container,
   Card,
+  Paper
 } from "@material-ui/core";
 import axios from "axios";
+import { makeStyles } from "@material-ui/core/styles";
 import { Redirect, Link } from "react-router-dom";
 import { numberToSign } from "../helpers/helpers.js";
 import UserAppbar from "../components/UserAppbar.js";
-import useStyles from "../assets/Style.js";
+import googleIcon from "../assets/googleIcon.png";
+import LinkedAccount from "../components/LinkedAccount.js";
+import { withStyles } from "@material-ui/styles";
+
+const AccountButton = withStyles((theme) => ({
+  root: {
+    backgroundColor: "#CCC",
+    '&:hover': {
+      backgroundColor: "#AAA",
+    },
+  },
+}))(Button);
+
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    height: "100%",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: "15px",
+  },
+  avatar: {
+    margin: theme.spacing(3),
+    backgroundColor: "#D74C3D",
+  },
+  form: {
+    marginTop: theme.spacing(3),
+  },
+  button: {
+    margin: theme.spacing(3, 0, 3),
+    backgroundColor: "#396384",
+  },
+  navButton: {
+    margin: "10px",
+    float: "right",
+  },
+  icon: {
+    color: theme.palette.text.secondary,
+    marginRight: theme.spacing(2),
+  },
+  lowerMargin: {
+    marginBottom: theme.spacing(2),
+  },
+  createAccountPaper: {
+    height: "100%",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    padding: "20px",
+  },
+  preferenceIcon: {
+    height: "25px",
+  },
+  linkAccountsPaper: {
+    padding: theme.spacing(2),
+    backgroundColor: "#EEE"
+  },
+}));
 
 function UserDashboard(props) {
   const classes = useStyles();
   useEffect(() => {
     getInfo();
   }, []);
-  const [name, setName] = useState("");
-  const [username, setUsername] = useState("");
-  const [sign, setSign] = useState(1);
-  const [house, setHouse] = useState(1);
+
+  //States--------------------------------------------------------------------
+  const [userInfo, setUserInfo] = useState({
+    name: "",
+    sign: 1,
+    house: 1,
+    username: "",
+    horoscope: {},
+    isGoogleAuth: false
+  });
   const [redirect, setRedirect] = useState(false);
-  const [horoscope, setHoroscope] = useState("");
+  const [googlePrefs, setGooglePrefs] = useState([]);
+  const [emailPrefs, setEmailPrefs] = useState([]);
+  const [prefsDisabled, setPrefsDisabled] = useState(true);
+
+  //Async Functions--------------------------------------------------------------------
   async function getInfo() {
-    let response = await axios.get("/api/getUserInfo");
-    if (!response.data) setRedirect(true);
-    if (response.status === 200) {
-      setName(response.data.name);
-      setUsername(response.data.username);
-      setSign(response.data.sign);
-      setHouse(response.data.house);
-      setHoroscope(response.data.horoscope);
+    try {
+      let response = await axios.get("/api/getUserInfo");
+      setUserInfo(response.data);
+      if (!response.data.preferences)
+        response.data.preferences = {};
+      setGooglePrefs([
+        {
+          title: "Add Horoscopes to Google Calendar",
+          name: "googleCalUpdates",
+          value: response.data.preferences.googleCalUpdates
+        }
+      ])
+      setEmailPrefs([
+        {
+          title: "Receive Horoscope Emails",
+          name: "emailUpdates",
+          value: response.data.preferences.emailUpdates
+        }
+      ]);
+
+    } catch (e) {
+      setRedirect(true);
     }
+    setPrefsDisabled(false);
   }
-  async function logout(e) {
+  async function callGoogleAuth(e) {
     e.preventDefault();
-    await axios.delete("/api/signout");
-    setRedirect(true);
+    await axios
+      .put("api/googleauth")
+      .then((response) => {
+        window.location.href = response.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
+  async function updatePreferences(e) {
+    setPrefsDisabled(true);
+    await axios
+      .put("api/updatePreferences",
+        {
+          [e.target.name]: e.target.checked
+        })
+      .then(() => {
+        getInfo();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+  async function callGoogleDeAuth(e) {
+    let res = await axios.put("api/googledeauth");
+    if (res.data) {
+      window.location.href = res.data;
+    }
+    console.log("unlinked!");
+  }
+
   if (redirect) {
     return <Redirect to={{ pathname: "/Login" }} />;
   }
+
+  //HTML
   return (
     <div>
       <UserAppbar
-        position="sticky"
-        name={name}
+        position="static"
         showDashboardB={false}
         setRedirect={setRedirect}
-      ></UserAppbar>
-      <div className={classes.pageMain}>
-        <Container component="main" maxWidth="xs">
-          <CssBaseline />
-          <Card className={classes.paper}>
-            <Avatar className={classes.avatar} />
-            <Typography component="h1" variant="h5" align="center">
-              Profile Information
-            </Typography>
-            <br></br>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <Typography component="h3" align="center">
-                  Name: {name}
+      />
+      <Container maxWidth="lg">
+        <Grid
+          style={{
+            padding: "10px",
+          }}
+          spacing={2}
+          container
+          className={classes.userDashboardGrid}
+          direction="row"
+          justify="center"
+        >
+          <Grid item xs={12} md={6}>
+            <CssBaseline />
+            <Card className={classes.paper}>
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                <Avatar className={classes.avatar} />
+                <Typography component="h1" variant="h5" align="center">
+                  Profile Information
                 </Typography>
-              </Grid>
+              </div>
+              <Grid container spacing={3}>
+                <Grid item xs={12}>
+                  <Typography component="h3" align="center">
+                    Name: {userInfo.name}
+                  </Typography>
+                </Grid>
 
-              <Grid item xs={12}>
-                <Typography component="h3" align="center">
-                  Username: {username}
-                </Typography>
-              </Grid>
+                <Grid item xs={12}>
+                  <Typography component="h3" align="center">
+                    Username: {userInfo.username}
+                  </Typography>
+                </Grid>
 
-              <Grid item xs={12}>
-                <Typography component="h3" align="center">
-                  Sign: {numberToSign(sign)}
-                </Typography>
-              </Grid>
+                <Grid item xs={12}>
+                  <Typography component="h3" align="center">
+                    Sign: {numberToSign(userInfo.sign)}
+                  </Typography>
+                </Grid>
 
-              <Grid item xs={12}>
-                <Typography component="h3" align="center">
-                  House: {numberToSign(house)}
-                </Typography>
+                <Grid item xs={12}>
+                  <Typography component="h3" align="center">
+                    House {userInfo.house} - {numberToSign(userInfo.house)}
+                  </Typography>
+                </Grid>
               </Grid>
-
-              <Grid item xs={12}>
+              <div>
                 <Link
                   to={{
                     pathname: "UserHoroscope",
-                    name: name,
-                    horoscope: horoscope,
+                    name: userInfo.name,
+                    horoscope: userInfo.horoscope,
                   }}
                   style={{ textDecoration: "none" }}
                 >
@@ -103,13 +227,74 @@ function UserDashboard(props) {
                     fullWidth
                   >
                     View Horoscope
-                  </Button>
+                    </Button>
                 </Link>
+              </div>
+            </Card>
+          </Grid>
+
+          {/*Preferences*/}
+
+          <Grid item xs={12} md={6}>
+            <Card className={classes.createAccountPaper}>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <Typography variant="h5" align="left">
+                    Account Management
+                    </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <Paper variant="outlined" className={classes.linkAccountsPaper}>
+                    <Typography variant="body2" align="left">
+                      Link an account
+                    </Typography>
+                    {
+                      userInfo.isGoogleAuth ?
+                        <p>
+                          Accounts that you have not yet linked will appear here.
+                        </p> :
+                        <AccountButton onClick={(e) => callGoogleAuth(e)}>
+                          <img
+                            alt="Google"
+                            className={classes.preferenceIcon}
+                            src={googleIcon}
+                          />
+                        </AccountButton>
+                    }
+                  </Paper>
+                </Grid>
+                <Grid item xs={12}>
+                  <div className={classes.lowerMargin}>
+                    <LinkedAccount
+                      title="Email"
+                      prefs={emailPrefs}
+                      disableUnlink
+                      unlinkCallback={callGoogleDeAuth}
+                      prefCallback={updatePreferences}
+                      cardColorHeader={"#21bf73"}
+                      cardColorMain={"#b0eacd"}
+                      prefsDisabled={prefsDisabled}
+                    />
+                  </div>
+                  {userInfo.isGoogleAuth && (
+                    <div className={classes.lowerMargin}>
+                      <LinkedAccount
+                        title="Google Calendar"
+                        prefs={googlePrefs}
+                        unlinkCallback={callGoogleDeAuth}
+                        prefCallback={updatePreferences}
+                        cardColorHeader={"#1a73e8"}
+                        cardColorMain={"#69a1ff"}
+                        prefsDisabled={prefsDisabled}
+                      />
+                    </div>
+                  )}
+                </Grid>
               </Grid>
-            </Grid>
-          </Card>
-        </Container>
-      </div>
+            </Card>
+          </Grid>
+        </Grid>
+      </Container>
     </div>
   );
 }

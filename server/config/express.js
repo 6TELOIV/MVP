@@ -86,6 +86,11 @@ export const init = () => {
         app.get('*', function (req, res) {
             res.sendFile(path.join(path.resolve(), './client/build', 'index.html'));
         });
+    } else {
+        // Redirect to react server
+        app.get('*', (req, res) => {
+            res.redirect("http://localhost:3000" + req.path);
+        })
     }
 
     return app

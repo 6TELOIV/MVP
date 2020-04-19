@@ -1,4 +1,7 @@
 import * as express from './config/express.js';
+import startJobs from './helpers/cronjobs.js';
+import message from './helpers/emailer.js';
+import { calendarAdd } from './controllers/google.controller.js';
 
 global.config = {
   db: {
@@ -8,7 +11,7 @@ global.config = {
   session: {
   },
   googleAuth: {
-  }
+  },
 }
 
 async function start() {
@@ -19,6 +22,7 @@ async function start() {
     global.config.googleAuth.clientID = process.env.CLIENTID;
     global.config.googleAuth.clientSecret = process.env.CLIENTSEC;
     global.config.googleAuth.apiKey = process.env.GOOGLE_KEY;
+    global.config.emailPass = process.env.EMAIL_PASS;
   } else {
     global.config = (await import('./config/config.js')).default;
   }
@@ -26,6 +30,7 @@ async function start() {
   const port = process.env.PORT || 5000;
   const app = express.init();
   app.listen(port, () => console.log(`Server now running on port ${port}!`));
+  startJobs();
 }
 
 start();

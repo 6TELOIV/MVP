@@ -6,7 +6,6 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import { TextField } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import Container from "@material-ui/core/Container";
-import "./Site.css";
 import { Card } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import useStyles from "../assets/Style.js"

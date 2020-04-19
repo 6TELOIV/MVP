@@ -1,25 +1,43 @@
-import React, { useState, useEffect, Suspense, lazy } from "react";
+import React, { Suspense, lazy } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import { Route, Switch, Redirect } from "react-router-dom";
-import axios from "axios";
 import "./App.css";
-import Script from "react-load-script";
+import { Container, Card, CardContent, CardHeader, CircularProgress } from "@material-ui/core";
+import useStyles from "./assets/Style.js";
+
+
+const delayImport = (promise) => {
+  return Promise.all([
+    promise,
+    new Promise(resolve => setTimeout(resolve, 500))
+  ]).then(([moduleExports]) => moduleExports);
+}
 
 //lazy load pages to improve load times
-const Landing = lazy(() => import("./pages/Landing"));
-const Login = lazy(() => import("./pages/Login"));
-const Signup = lazy(() => import("./pages/Signup"));
-const AdminPage = lazy(() => import("./pages/AdminPage"));
-const AdminEdit = lazy(() => import("./pages/AdminEdit"));
-const UserDashboard = lazy(() => import("./pages/UserDashboard"));
-const UserHoroscope = lazy(() => import("./pages/UserHoroscope"));
-//import NotFound from "./views/NotFound";
+const Landing = lazy(() => delayImport(import("./pages/Landing")));
+const Login = lazy(() => delayImport(import("./pages/Login")));
+const Signup = lazy(() => delayImport(import("./pages/Signup")));
+const AdminPage = lazy(() => delayImport(import("./pages/AdminPage")));
+const AdminEdit = lazy(() => delayImport(import("./pages/AdminEdit")));
+const UserDashboard = lazy(() => delayImport(import("./pages/UserDashboard")));
+const UserHoroscope = lazy(() => delayImport(import("./pages/UserHoroscope")));
+const Privacy = lazy(() => delayImport(import("./pages/Privacy")));
 
 //<Route component={NotFound}/>
 const App = (props) => {
+  const classes = useStyles();
   return (
     <Router>
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={
+        <Container maxWidth="xs">
+          <Card className={classes.paper}>
+            <CardHeader title="Loading..." />
+            <CardContent>
+              <CircularProgress />
+            </CardContent>
+          </Card>
+        </Container>
+      }>
         <Switch>
           <Route exact path="/Signup" component={Signup} />
           <Route exact path="/Landing" component={Landing} />
@@ -28,9 +46,8 @@ const App = (props) => {
           <Route exact path="/UserDashboard" component={UserDashboard} />
           <Route exact path="/AdminEdit" component={AdminEdit} />
           <Route exact path="/UserHoroscope" component={UserHoroscope} />
-          <Route exact path="/">
-            <Redirect to="/Landing" />
-          </Route>
+          <Route exact path="/Privacy" component={Privacy} />
+          <Redirect to="/Landing" />
         </Switch>
       </Suspense>
     </Router>
