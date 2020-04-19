@@ -64,6 +64,9 @@ export const init = () => {
     app.use('/api/', apiRouter);
 
     if (process.env.NODE_ENV === 'production') {
+        // Trust heroku https proxy
+        app.enable('trust proxy');
+
         // Serve any static files
         app.use(express.static(path.join(path.resolve(), './client/build')));
 
