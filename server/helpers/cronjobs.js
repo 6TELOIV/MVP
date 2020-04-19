@@ -5,7 +5,7 @@ import { getWeekMoons } from './moon.js'
 
 const startJobs = () => {
   // Run horoscope job every Sunday at midnight
-  const weeklyHoroscopeJob = new cron.CronJob("0 0 0 * * 0", () => { // change to "0 0 0 * * 0" to run every sunday at midnight
+  const weeklyHoroscopeJob = new cron.CronJob("0 0 1 * * 0", () => { // change to "0 0 0 * * 0" to run every sunday at midnight
     timestampLog("Running weekly horoscope job...");
 
     // Get the bounds of this week
