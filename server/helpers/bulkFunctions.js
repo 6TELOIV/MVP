@@ -4,9 +4,15 @@ import { calendarAdd } from '../controllers/google.controller.js';
 import  message from './emailer.js';
 import cron from 'cron';
 
-function UTCDateToTimezone(date, timezoneOffset) {
+export function UTCDateToTimezone(date, timezoneOffset) {
     let localDate = new Date(date.getTime());
     localDate.setUTCMinutes(localDate.getUTCMinutes() + timezoneOffset);
+    return localDate;
+}
+
+export function timezoneDateToUTC(date, timezoneOffset) {
+    let localDate = new Date(date.getTime());
+    localDate.setUTCMinutes(localDate.getUTCMinutes() - timezoneOffset);
     return localDate;
 }
 

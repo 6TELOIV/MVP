@@ -6,6 +6,7 @@ import passport from "passport";
 import horoscopeModel from "../models/horoscopeModel.js";
 import userModel from "../models/userModel.js";
 import { getPhase } from "../helpers/moon.js"
+import { timezoneDateToUTC } from "../helpers/bulkFunctions.js";
 
 /* req: {
 	long,
@@ -22,7 +23,7 @@ export const signUp = async (req, res) => {
 
   try {
     date.setUTCSeconds(req.body.birthday);
-
+    date = timezoneDateToUTC(date, req.body.timezoneOffset);
     //Shaun's Code for Handling Timezones and Daylight Savings
     let tz = geoTz(req.body.lat, req.body.long);
     let DST = isDST(date);
@@ -34,10 +35,10 @@ export const signUp = async (req, res) => {
     }
     off = off / 60;
 
-    let year = date.getFullYear();
-    let month = date.getMonth() + 1;
-    let day = date.getDate();
-    let hour = date.getHours() + off + date.getMinutes() / 60;
+    let year = date.getUTCFullYear();
+    let month = date.getUTCMonth() + 1;
+    let day = date.getUTCDate();
+    let hour = date.getUTCHours() + off + date.getUTCMinutes() / 60;
 
     julday_ut = swisseph.swe_julday(
       year,

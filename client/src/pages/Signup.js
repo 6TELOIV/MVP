@@ -92,6 +92,7 @@ function Signup(props) {
       birthday: Math.floor((date.getTime() / 1000) + (((time.getHours() * 60) + time.getMinutes()) * 60 + time.getSeconds())),
       timezoneOffset: (new Date()).getTimezoneOffset()
     };
+
     await axios.post("/api/signup", info).then(resolve => {
       const loginInfo = {
         username: email,
