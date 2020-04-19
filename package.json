@@ -39,6 +39,7 @@
     "googleapis": "^48.0.0",
     "is-dst": "^1.0.0",
     "mocha": "^6.2.1",
+    "moment-timezone": "^0.5.28",
     "mongoose": "^5.9.9",
     "morgan": "^1.9.1",
     "mui-places-autocomplete": "^2.0.0",

@@ -1,12 +1,10 @@
 import swisseph from "swisseph";
 import geoTz from "geo-tz";
-import ct from "countries-and-timezones";
-import isDST from "is-dst";
-import passport from "passport";
 import horoscopeModel from "../models/horoscopeModel.js";
 import userModel from "../models/userModel.js";
 import { getPhase } from "../helpers/moon.js"
-import { timezoneDateToUTC } from "../helpers/bulkFunctions.js";
+import moment from "moment-timezone";
+
 
 /* req: {
 	long,
@@ -23,22 +21,26 @@ export const signUp = async (req, res) => {
 
   try {
     date.setUTCSeconds(req.body.birthday);
+    let timeString = (date.getUTCMonth() + 1) + "/" + date.getUTCDate() + "/" + date.getUTCFullYear() + " " + date.getUTCHours() + ":" + date.getUTCMinutes();
 
     //Shaun's Code for Handling Timezones and Daylight Savings
     let tz = geoTz(req.body.lat, req.body.long);
-    let DST = isDST(date);
-    let off;
-    if (DST) {
-      off = -ct.getTimezone(tz).dstOffset;
-    } else {
-      off = -ct.getTimezone(tz).utcOffset;
-    }
-    off = off / 60;
+    date = moment.tz(timeString, "M/D/YYYY H:m", tz[0]).toDate();
+    // let DST = isDST(date);
+    // let off;
+    // if (DST) {
+    //   off = -ct.getTimezone(tz).dstOffset;
+    // } else {
+    //   off = -ct.getTimezone(tz).utcOffset;
+    // }
+    // off = off / 60;
 
     let year = date.getUTCFullYear();
     let month = date.getUTCMonth() + 1;
     let day = date.getUTCDate();
-    let hour = date.getUTCHours() + (date.getUTCMinutes() / 60) + off;
+    let hour = date.getUTCHours() + (date.getUTCMinutes() / 60);
+
+    console.log(month + '/' + day + '/' + year + ' at ' + (hour + (date.getUTCMinutes() / 60)))
 
     julday_ut = swisseph.swe_julday(
       year,
