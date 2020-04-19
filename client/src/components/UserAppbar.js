@@ -4,17 +4,15 @@ import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
 const useStyles = makeStyles((theme) => ({
   navButton: {
-    margin: "10px",
-    float: "right",
+    margin: "10px"
   },
   appbarTitle: {
-    width: "100%",
+    flexGrow: 1
   },
 }));
 
 const UserAppbar = (props) => {
-  const name = props.name;
-  const classes = useStyles();
+  const classes = useStyles();  
   async function logout(e) {
     e.preventDefault();
     await axios.delete("/api/signout");
@@ -24,50 +22,30 @@ const UserAppbar = (props) => {
     e.preventDefault();
     props.setReturnDash(true);
   }
-  if (!props.showDashboardB) {
-    return (
-      <div>
-        <AppBar className="header">
-          <Toolbar>
-            <Typography variant="h6" className={classes.appbarTitle}>
-              {name}
-            </Typography>
-            <Button
-              className={classes.navButton}
-              variant="contained"
-              onClick={logout}
-            >
-              Logout
-            </Button>
-          </Toolbar>
-        </AppBar>
-      </div>
-    );
-  } else
-    return (
-      <div>
-        <AppBar className="header">
-          <Toolbar>
-            <Typography variant="h6" className={classes.appbarTitle}>
-              {name}
-            </Typography>
-            <Button
-              className={classes.navButton}
-              variant="contained"
-              onClick={logout}
-            >
-              Logout
-            </Button>
-            <Button
-              className={classes.navButton}
-              variant="contained"
-              onClick={returnDashboard}
-            >
-              Dashboard
-            </Button>
-          </Toolbar>
-        </AppBar>
-      </div>
-    );
+  return (
+    <AppBar className="header" position="sticky">
+      <Toolbar>
+        <Typography variant="h6" className={classes.appbarTitle}>
+          Moon Flow
+        </Typography>
+        <Button
+          className={classes.navButton}
+          variant="contained"
+          onClick={logout}
+        >
+          Logout
+        </Button>
+        {props.showDashboardB && (
+          <Button
+            className={classes.navButton}
+            variant="contained"
+            onClick={returnDashboard}
+          >
+            Dashboard
+          </Button>
+        )}
+      </Toolbar>
+    </AppBar>
+  );
 };
 export default UserAppbar;

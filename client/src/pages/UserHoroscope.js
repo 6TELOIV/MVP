@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Typography, Card } from "@material-ui/core";
+import { Typography, Card, Container } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Redirect } from "react-router-dom";
 import { numberToPhase, numberToSign } from "../helpers/helpers.js";
@@ -10,26 +10,27 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "row",
     justifyContent: "space-evenly",
     margin: "10px",
+    maxHeight: "100%"
   },
   cardMain: {
-    marginTop: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
     backgroundColor: "#FFFFFF",
-    padding: "50px",
-    width: "800px",
+    padding: theme.spacing(3),
+    width: "100%",
   },
   title: {
     textDecoration: "none",
     fontSize: "30px",
-    margin: "30px",
+    margin: "10px",
   },
   titleFrame: {
     textAlign: "center",
   },
   paragraph: {
     variant: "body2",
-    component: "p",
+    textAlign: "justify",
+    textJustify: "inter-word"
   },
   quote: {
     fontSize: "20px",
@@ -68,6 +69,7 @@ const UserHoroscope = (props) => {
         setReturnDash={setReturnDash}
         setRedirect={setRedirect}
       ></UserAppbar>
+      <Container maxWidth="md">
       <div className={classes.pageMain}>
         <Card className={classes.cardMain}>
           <div className={classes.titleFrame}>
@@ -84,33 +86,33 @@ const UserHoroscope = (props) => {
               </a>
             </Typography>
             <br />
-            <Typography classname={classes.paragraph}>{hs.summary}</Typography>
+            <Typography className={classes.paragraph}>{hs.summary}</Typography>
             <br />
             <div className={classes.titleFrame}>
               <Typography className={classes.title}>Best Activities</Typography>
             </div>
-            <Typography classname={classes.paragraph}>
+            <Typography className={classes.paragraph}>
               {hs.bestActivities}
             </Typography>
             <div className={classes.titleFrame}>
               <Typography className={classes.title}>Themes</Typography>
             </div>
             <Typography variant="subtitle1" component="span">
-              {numberToPhase(hs.moonPhase)} Moon themes:{" "}
+              {numberToPhase(hs.moonPhase)} Moon Themes:{" "}
             </Typography>
             <Typography variant="body2" component="span">
               {hs.moonThemes}
             </Typography>
             <br />
             <Typography variant="subtitle1" component="span">
-              Sign themes:{" "}
+            {numberToSign(hs.sign)} Sign Themes:{" "}
             </Typography>
             <Typography variant="body2" component="span">
               {hs.signThemes}
             </Typography>
             <br />
             <Typography variant="subtitle1" component="span">
-              House themes:{" "}
+             House {hs.house} Themes:{" "}
             </Typography>
             <Typography variant="body2" component="span">
               {hs.houseThemes}
@@ -118,6 +120,7 @@ const UserHoroscope = (props) => {
           </div>
         </Card>
       </div>
+      </Container>
     </div>
   );
 };

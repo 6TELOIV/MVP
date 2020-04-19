@@ -24,6 +24,7 @@ export default function Admin() {
   const [selectedHoroscope, setSelectedHoroscope] = useState();
   const [horoscopeList, setHoroscopeList] = useState([]);
   const [redirect, setRedirect] = useState(false);
+  const [loaded, setLoaded] = useState(false);
   const setSelectedHoroscopeWrapper = (selected) => {
     setSelectedHoroscope(selected);
   }
@@ -32,6 +33,7 @@ export default function Admin() {
     if (response.status === 200) {
       if(!(response.data === "Not an administrator")){
         setHoroscopeList(response.data);
+        setLoaded(true);
       }else{
         setRedirect(true);
       }
@@ -44,12 +46,11 @@ export default function Admin() {
 
   if (redirect) {
     return (
-      <Redirect to={{ pathname: "/UserDashboard"}} />
+      <Redirect to={{ pathname: "/Login"}} />
     );
   }else{
 
-  return (
-    <div className="adminRoot">
+  return (loaded && <div className="adminRoot">
       <AppBar position="relative" className="header">
         <Toolbar>
           <div className="title">

@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { signInRequest } from "../helpers/loginFunction.js"
-import "./Site.css";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -16,7 +15,7 @@ import Container from "@material-ui/core/Container";
 import DateFnsUtils from "@date-io/date-fns";
 import { Redirect } from "react-router-dom";
 import axios from "axios";
-import { Card, ThemeProvider, Checkbox, FormControlLabel } from "@material-ui/core";
+import { Card, Checkbox, FormControlLabel } from "@material-ui/core";
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import parse from 'autosuggest-highlight/parse';
