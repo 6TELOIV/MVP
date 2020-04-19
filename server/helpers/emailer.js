@@ -7,7 +7,6 @@ then call message(user, horoscope) to email them the horoscope
 
 import nodemailer from 'nodemailer';
 import { numberToSign, numberToPhase } from "../helpers/helpers.js"
-import config from '../config/config.js';
 
 //emails a user a horoscope
 async function message(user, horoscope, date) {
