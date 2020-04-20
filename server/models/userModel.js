@@ -45,7 +45,13 @@ const userSchema = new mongoose.Schema({
     type: {},
   },
   timezoneOffset: {
-      type: mongoose.Number
+    type: mongoose.Number
+  },
+  emailInitialized: {
+    type: Boolean
+  },
+  googleCalendarInitialized: {
+    type: Boolean
   }
 });
 

@@ -2,8 +2,10 @@ import swisseph from "swisseph";
 import geoTz from "geo-tz";
 import horoscopeModel from "../models/horoscopeModel.js";
 import userModel from "../models/userModel.js";
-import { getPhase } from "../helpers/moon.js"
+import { getPhase, getWeekMoons } from "../helpers/moon.js"
 import moment from "moment-timezone";
+import { getWeekBounds } from "../helpers/cronjobs.js";
+import { sendEmailUser, addCalendarUser } from "../helpers/bulkFunctions.js";
 
 
 /* req: {
@@ -160,6 +162,27 @@ export const updatePreferences = async (req, res) => {
     preferenceKeys.forEach((key) => {
       user.preferences[key] = req.body[key];
     });
+
+    if ((!user.emailInitialized) && user.preferences.emailUpdates) {
+      let [sunday, nextSunday] = getWeekBounds();
+      let phaseChanges = getWeekMoons(new Date(), nextSunday);
+      phaseChanges.forEach((phaseChange) => {
+        sendEmailUser(user, phaseChange.date, phaseChange.phase);
+      });
+      user.emailInitialized = true;
+      user.markModified("emailInitialized");
+    }
+    
+    if ((!user.googleCalendarInitialized) && user.preferences.googleCalUpdates) {
+      let [sunday, nextSunday] = getWeekBounds();
+      let phaseChanges = getWeekMoons(new Date(), nextSunday);
+      phaseChanges.forEach((phaseChange) => {
+        addCalendarUser(user, phaseChange.date, phaseChange.phase);
+      });
+      user.googleCalendarInitialized = true;
+      user.markModified("googleCalendarInitialized");
+    }
+
     user.markModified("preferences");
     await user.save();
     res.send();
