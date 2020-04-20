@@ -4,7 +4,7 @@ MoonFlow is a web app built on the MERN stack that provides users with astrologi
 
 ### API
 
-The Documentation for the API that runs on the express server can be found [here](https://www.notion.so/Documentation-b45dfafc60044a82a5897eececf1f267)
+The Documentation for the API that runs on the express server can be found [here](DOCUMENTATION.md)
 
 ## Setting up for Development
 
