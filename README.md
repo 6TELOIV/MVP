@@ -1,6 +1,31 @@
+## Setting up for Development
+
+To set up your system for development please do the following steps:
+1. Install [Node](https://nodejs.org/en/)
+   - _Note: Ensure you install the additional build tools, one of the later steps in the install process. If you've already installed Node, you can mondify your installation through the Windows Settings Apps and Features "Modify" button_
+2. Clone the repository  
+   - `git clone git@github.com:6XAM/MVP.git MVP` or `https://github.com/6XAM/MVP.git MVP`  
+3. `cd` into the project  
+   - `cd MVP`  
+4. Install npm packages  
+   - `npm install`  
+   - _Note: you only need to run this on initial setup to get `concurrently`, which is needed for the `install-all` script_  
+5. Install all npm packages (including client)  
+6. Copy `config.js` to `server/config/config.js`  
+7. Run the desired development script  
+   - `npm run-script dev` for express server and react server  
+   - `npm run-script client` for react server  
+   - `npm run-script server` for express server  
+
+
+## Deploying to Heroku
+
+
+
+
 ## Available Scripts
 
-Please note that any time the server is run in these scripts `nodemon` is used in place of `node` for easier development. If you are interested in how this works follow the nodemon In the project directory, you can run:
+Please note that any time the server is run in these scripts `nodemon` is used in place of `node` for easier development. In the project directory, you can run:
 
 ### `npm run-script dev`
 
