@@ -20,7 +20,16 @@ To set up your system for development please do the following steps:
 
 ## Deploying to Heroku
 
-
+To deploy to Heroku please do the following steps:
+1. Install [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli)
+2. Login to Heroku
+   - `heroku login` and follow the prompts
+3. From the root of your project, add the Heroku git remote
+   - `heroku git:remote a mvp-heaven`
+4. Push your code to the Heroku remote
+   - `git push heroku master` to push local master to Heroku master
+   - `git push heroku development:master` to push local development to Heroku master
+5. When it is done deploying, it can be viewed at [https://mvp-heaven.herokuapp.com](https://mvp-heaven.herokuapp.com). If issues occur, you can use `heroku log --tail` to see the console output.
 
 
 ## Available Scripts
