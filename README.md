@@ -1,3 +1,11 @@
+# About this project
+
+MoonFlow is a web app built on the MERN stack that provides users with astrological guidance based on their star sign and house, as well as the current moon phase
+
+### API
+
+The Documentation for the API that runs on the express server can be found [here](https://www.notion.so/Documentation-b45dfafc60044a82a5897eececf1f267)
+
 ## Setting up for Development
 
 To set up your system for development please do the following steps:
