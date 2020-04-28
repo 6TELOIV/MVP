@@ -1,10 +1,14 @@
-# About this project
+## About this project
 
 MoonFlow is a web app built on the MERN stack that provides users with astrological guidance based on their star sign and house, as well as the current moon phase
 
 ### API
 
 The Documentation for the API that runs on the express server can be found in [DOCUMENTATION.md](DOCUMENTATION.md)
+
+### Email Bug
+
+Apps deployed to heroku are restarted once a day to ensure the app stays responsive and in a healthy state (see [here](https://www.heroku.com/dynos/lifecycle) for more info). When the server restarts, the cron jobs that were started to send out the emails are lost, and on any day except sunday, the emails will not be sent. We suggest moving the email scheduling code to the npm package [agenda](https://www.npmjs.com/package/agenda), as it maintains its task list in the database, and will ensure that the jobs still run, even if the server is restarted.
 
 ## Setting up for Development
 
